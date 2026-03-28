@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>5.1 - Quiz | Weather Lab Kids</title>
+    <link rel="stylesheet" href="../design-system.css">
+    <style>
+        .quiz-screen { width: var(--screen-width); height: var(--screen-height); background: linear-gradient(135deg, #8E44AD 0%, #9B59B6 100%); position: relative; overflow: hidden; }
+        .quiz-panel { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(236, 240, 241, 0.98); border: 8px solid var(--wood-dark); padding: 40px; width: 800px; border-radius: 16px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5); }
+        .progress-bar { height: 20px; background: #BDC3C7; border: 4px solid var(--wood-dark); border-radius: 10px; margin-bottom: 24px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #2ECC71, #27AE60); width: 0%; transition: width 0.3s; }
+        .question-counter { text-align: center; font-size: 18px; color: #8E44AD; margin-bottom: 16px; }
+        .question-text { font-size: 24px; color: var(--text-dark); text-align: center; margin-bottom: 32px; line-height: 1.6; }
+        .answers-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .answer-btn { padding: 24px; font-size: 18px; text-align: center; line-height: 1.6; }
+    </style>
+</head>
+<body>
+    <div class="screen-container quiz-screen">
+        <div class="quiz-panel">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            
+            <div class="question-counter" id="questionCounter">Vraag 1 / 10</div>
+            
+            <div class="question-text" id="questionText">
+                Wat is een wolk?
+            </div>
+            
+            <div class="answers-grid" id="answersGrid">
+                <button class="btn-pixel btn-wood answer-btn" onclick="checkAnswer(0)">
+                    Verdampt water<br>hoog in de lucht
+                </button>
+                <button class="btn-pixel btn-wood answer-btn" onclick="checkAnswer(1)">
+                    Rook van<br>fabrieken
+                </button>
+                <button class="btn-pixel btn-wood answer-btn" onclick="checkAnswer(2)">
+                    Schuim van<br>de zee
+                </button>
+                <button class="btn-pixel btn-wood answer-btn" onclick="checkAnswer(3)">
+                    Stof uit<br>de ruimte
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            { q: "Wat is een wolk?", a: ["Verdampt water hoog in de lucht", "Rook van fabrieken", "Schuim van de zee", "Stof uit de ruimte"], correct: 0 },
+            { q: "Waarom waait het?", a: ["Omdat de maan trekt", "Verschil tussen warme en koude lucht", "Bomen maken wind", "De aarde draait"], correct: 1 },
+            { q: "Wat betekent 'H' op een weerkaart?", a: ["Heet weer", "Hoge druk (mooi weer)", "Hagel", "Harde wind"], correct: 1 },
+            { q: "Welke wolk brengt onweer?", a: ["Cirrus", "Stratus", "Cumulonimbus", "Altocumulus"], correct: 2 },
+            { q: "Wat gebeurt er bij lage druk?", a: ["Mooi weer", "Wind stopt", "Regen en wolken", "Het wordt warmer"], correct: 2 },
+            { q: "Hoe ontstaat bliksem?", a: ["De zon schijnt te fel", "Ijskristallen botsen in de wolk", "Wolken wrijven over elkaar", "Warme lucht ontploft"], correct: 1 },
+            { q: "Warme lucht...", a: ["Zakt naar beneden", "Stijgt omhoog", "Blijft op zijn plek", "Wordt kouder"], correct: 1 },
+            { q: "Wat meet een windmolen?", a: ["Temperatuur", "Regen", "Windsnelheid", "Luchtvochtigheid"], correct: 2 },
+            { q: "Wind waait van...", a: ["Laag naar hoog", "Hoog naar laag", "Noord naar zuid", "Oost naar west"], correct: 1 },
+            { q: "Wat is de Beaufort-schaal?", a: ["Regenmeter", "Windkracht-meter", "Temperatuurschaal", "Wolkensoorten"], correct: 1 }
+        ];
+        
+        let currentQuestion = 0;
+        let score = 0;
+        
+        function checkAnswer(selected) {
+            if (selected === questions[currentQuestion].correct) {
+                score++;
+                alert("✅ CORRECT!");
+            } else {
+                alert("❌ Helaas, dat was niet het juiste antwoord.");
+            }
+            
+            currentQuestion++;
+            
+            if (currentQuestion < questions.length) {
+                loadQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+        
+        function loadQuestion() {
+            const q = questions[currentQuestion];
+            document.getElementById('questionCounter').textContent = `Vraag ${currentQuestion + 1} / 10`;
+            document.getElementById('questionText').textContent = q.q;
+            document.getElementById('progressFill').style.width = ((currentQuestion + 1) / 10 * 100) + '%';
+            
+            const grid = document.getElementById('answersGrid');
+            grid.innerHTML = '';
+            q.a.forEach((answer, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-pixel btn-wood answer-btn';
+                btn.textContent = answer;
+                btn.onclick = () => checkAnswer(i);
+                grid.appendChild(btn);
+            });
+        }
+        
+        function finishQuiz() {
+            sessionStorage.setItem('quizScore', score);
+            window.location.href = '5.2-victory.html';
+        }
+    </script>
+</body>
+</html>

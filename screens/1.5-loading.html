@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1.5 - Loading | Weather Lab Kids</title>
+    <link rel="stylesheet" href="../design-system.css">
+    <style>
+        .loading-screen {
+            width: var(--screen-width);
+            height: var(--screen-height);
+            background: linear-gradient(135deg, #5DADE2 0%, #3498DB 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Moving Clouds */
+        .cloud-layer {
+            position: absolute;
+            width: 200%;
+            height: 100%;
+            top: 0;
+            left: -100%;
+            animation: slide-clouds 4s linear infinite;
+        }
+
+        @keyframes slide-clouds {
+            0% { left: -100%; }
+            100% { left: 0; }
+        }
+
+        .loading-cloud {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 100px;
+        }
+
+        .loading-cloud::before,
+        .loading-cloud::after {
+            content: '';
+            position: absolute;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 100px;
+        }
+
+        /* Cloud 1 */
+        .cloud-big-1 {
+            width: 180px;
+            height: 60px;
+            top: 20%;
+            left: 10%;
+        }
+        .cloud-big-1::before {
+            width: 90px;
+            height: 90px;
+            top: -40px;
+            left: 30px;
+        }
+        .cloud-big-1::after {
+            width: 110px;
+            height: 70px;
+            top: -30px;
+            left: 70px;
+        }
+
+        /* Cloud 2 */
+        .cloud-big-2 {
+            width: 200px;
+            height: 70px;
+            top: 50%;
+            left: 40%;
+        }
+        .cloud-big-2::before {
+            width: 100px;
+            height: 100px;
+            top: -45px;
+            left: 40px;
+        }
+        .cloud-big-2::after {
+            width: 120px;
+            height: 80px;
+            top: -35px;
+            left: 85px;
+        }
+
+        /* Cloud 3 */
+        .cloud-big-3 {
+            width: 160px;
+            height: 55px;
+            top: 70%;
+            left: 70%;
+        }
+        .cloud-big-3::before {
+            width: 80px;
+            height: 80px;
+            top: -38px;
+            left: 25px;
+        }
+        .cloud-big-3::after {
+            width: 100px;
+            height: 65px;
+            top: -28px;
+            left: 60px;
+        }
+
+        /* Character Flying */
+        .flying-character {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 120px;
+            animation: fly-bounce 1.5s ease-in-out infinite;
+            filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.3));
+            z-index: 10;
+        }
+
+        @keyframes fly-bounce {
+            0%, 100% { transform: translate(-50%, -50%) translateY(0) rotate(-5deg); }
+            50% { transform: translate(-50%, -50%) translateY(-30px) rotate(5deg); }
+        }
+
+        /* Loading Text Panel */
+        .loading-panel {
+            position: absolute;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(236, 240, 241, 0.95);
+            border: 6px solid var(--wood-dark);
+            padding: 24px 60px;
+            border-radius: 16px;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+            text-align: center;
+        }
+
+        .loading-title {
+            font-size: 24px;
+            color: var(--storm-purple);
+            margin-bottom: 12px;
+            text-shadow: 2px 2px 0 rgba(255, 255, 255, 0.5);
+        }
+
+        .loading-subtitle {
+            font-size: var(--font-size-md);
+            color: var(--text-dark);
+        }
+
+        /* Loading Bar */
+        .loading-bar-container {
+            width: 400px;
+            height: 30px;
+            background: rgba(189, 195, 199, 0.5);
+            border: 4px solid var(--wood-dark);
+            margin: 16px auto 0;
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .loading-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2ECC71, #27AE60);
+            width: 0%;
+            animation: fill-bar 2s ease-out forwards;
+            box-shadow: 0 0 20px rgba(46, 204, 113, 0.6);
+        }
+
+        @keyframes fill-bar {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        /* Animated Dots */
+        .loading-dots {
+            display: inline-block;
+        }
+
+        .dot {
+            animation: blink 1.4s infinite;
+            opacity: 0;
+        }
+
+        .dot:nth-child(1) { animation-delay: 0s; }
+        .dot:nth-child(2) { animation-delay: 0.2s; }
+        .dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes blink {
+            0%, 20% { opacity: 0; }
+            40% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        /* Birds */
+        .bird {
+            position: absolute;
+            font-size: 24px;
+            animation: fly-bird 8s linear infinite;
+        }
+
+        .bird-1 { top: 15%; animation-delay: 0s; }
+        .bird-2 { top: 35%; animation-delay: 2s; }
+
+        @keyframes fly-bird {
+            0% { left: -50px; }
+            100% { left: 110%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="screen-container loading-screen">
+        <!-- Cloud Layers -->
+        <div class="cloud-layer">
+            <div class="loading-cloud cloud-big-1"></div>
+            <div class="loading-cloud cloud-big-2"></div>
+            <div class="loading-cloud cloud-big-3"></div>
+        </div>
+
+        <!-- Flying Birds -->
+        <div class="bird bird-1">🐦</div>
+        <div class="bird bird-2">🐦</div>
+
+        <!-- Flying Character -->
+        <div class="flying-character" id="flyingCharacter">👩‍🔬</div>
+
+        <!-- Loading Panel -->
+        <div class="loading-panel">
+            <div class="loading-title">
+                REIZEN<span class="loading-dots"><span class="dot">.</span><span class="dot">.</span><span class="dot">.</span></span>
+            </div>
+            <div class="loading-subtitle" id="destinationText">
+                Naar het Observatorium
+            </div>
+            <div class="loading-bar-container">
+                <div class="loading-bar-fill"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Character emoji mapping
+        const characterEmojis = {
+            'pam': '👩‍🔬',
+            'lily': '👧',
+            'eric': '👦'
+        };
+
+        // Destination mapping
+        const destinationNames = {
+            'observatory': 'Naar het Observatorium',
+            'storm': 'Naar het Storm Lab',
+            'discovery': 'Naar het Discovery Lab',
+            'hub': 'Terug naar de Eilanden'
+        };
+
+        // Destination URLs
+        const destinationURLs = {
+            'observatory': '2.0-observatory-main.html',
+            'storm': '3.0-storm-main.html',
+            'discovery': '4.0-discovery-main.html',
+            'hub': '1.0-hub-map.html'
+        };
+
+        window.onload = function() {
+            // Load character
+            const selectedCharacter = sessionStorage.getItem('selectedCharacter') || 'pam';
+            document.getElementById('flyingCharacter').textContent = characterEmojis[selectedCharacter];
+
+            // Load destination
+            const destination = sessionStorage.getItem('destination') || 'observatory';
+            document.getElementById('destinationText').textContent = destinationNames[destination];
+
+            // Redirect after loading (2 seconds to match animation)
+            setTimeout(() => {
+                window.location.href = destinationURLs[destination];
+            }, 2500);
+        };
+    </script>
+</body>
+</html>

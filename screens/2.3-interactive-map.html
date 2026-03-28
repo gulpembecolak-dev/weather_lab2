@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2.3 - Interactieve Weerkaart | Weather Lab Kids</title>
+    <link rel="stylesheet" href="../design-system.css">
+    <script src="../js/dialogue.js"></script>
+    <style>
+        .map-screen {
+            width: var(--screen-width);
+            height: var(--screen-height);
+            background: linear-gradient(180deg, #87CEEB 0%, #5DADE2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .map-container {
+            position: absolute;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 550px;
+            background: var(--cloud-white);
+            border: 8px solid var(--wood-dark);
+            border-radius: 16px;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .map-title {
+            position: absolute;
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(236, 240, 241, 0.95);
+            border: 6px solid var(--wood-dark);
+            padding: 12px 32px;
+            border-radius: 12px;
+            font-size: 24px;
+            color: var(--storm-purple);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            white-space: nowrap;
+        }
+
+        .belgium-map {
+            width: 500px;
+            height: 400px;
+            background: #E8F8F5;
+            border: 6px solid var(--wood-dark);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Swirling Arrows Animation */
+        .swirl-container {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            pointer-events: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .swirl-arrow {
+            position: absolute;
+            font-size: 30px;
+            color: rgba(255, 255, 255, 0.8);
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+
+        /* High Pressure: Clockwise, outward */
+        .swirl-h .swirl-arrow {
+            animation: swirl-clockwise 4s linear infinite;
+        }
+
+        @keyframes swirl-clockwise {
+            0% { transform: rotate(0deg) translateX(40px) rotate(0deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: rotate(360deg) translateX(60px) rotate(-360deg); opacity: 0; }
+        }
+
+        /* Low Pressure: Counter-clockwise, inward */
+        .swirl-l .swirl-arrow {
+            animation: swirl-counter-clockwise 4s linear infinite;
+        }
+
+        @keyframes swirl-counter-clockwise {
+            0% { transform: rotate(360deg) translateX(70px) rotate(-360deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: rotate(0deg) translateX(30px) rotate(0deg); opacity: 0; }
+        }
+
+        .pressure-marker {
+            position: absolute;
+            cursor: pointer;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            border: 4px solid var(--wood-dark);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s;
+            z-index: 10;
+        }
+
+        .pressure-marker:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+        }
+
+        .marker-h { background: #E74C3C; top: 25%; left: 20%; color: white; }
+        .marker-l { background: #3498DB; bottom: 25%; right: 20%; color: white; }
+
+        .legend {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(44, 62, 80, 0.9);
+            border: 4px solid var(--wood-dark);
+            padding: 16px;
+            border-radius: 8px;
+            z-index: 20;
+        }
+
+        .legend-item {
+            color: white;
+            font-size: 12px;
+            margin: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .legend-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .extreme-toggle {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            z-index: 20;
+        }
+    </style>
+</head>
+<body>
+    <div class="screen-container map-screen">
+        <button class="btn-pixel btn-wood btn-back" onclick="window.location.href='2.0-observatory-main.html'">
+            ← TERUG
+        </button>
+        
+        <button class="btn-pixel btn-wood btn-home" onclick="window.location.href='1.0-hub-map.html'">
+            🏠
+        </button>
+        
+        <div class="map-container">
+            <div class="map-title">🗺️ INTERACTIEVE WEERKAART</div>
+            
+            <div class="belgium-map" id="belgiumMap">
+                <!-- Swirl High -->
+                <div class="swirl-container swirl-h" style="top: 25%; left: 20%; transform: translate(-50%, -50%);">
+                    <span class="swirl-arrow" style="animation-delay: 0s">➔</span>
+                    <span class="swirl-arrow" style="animation-delay: 1s">➔</span>
+                    <span class="swirl-arrow" style="animation-delay: 2s">➔</span>
+                    <span class="swirl-arrow" style="animation-delay: 3s">➔</span>
+                </div>
+
+                <!-- Swirl Low -->
+                <div class="swirl-container swirl-l" style="bottom: 25%; right: 20%; transform: translate(50%, 50%);">
+                    <span class="swirl-arrow" style="animation-delay: 0s">➔</span>
+                    <span class="swirl-arrow" style="animation-delay: 1s">➔</span>
+                    <span class="swirl-arrow" style="animation-delay: 2s">➔</span>
+                    <span class="swirl-arrow" style="animation-delay: 3s">➔</span>
+                </div>
+                
+                <!-- Pressure Markers -->
+                <div class="pressure-marker marker-h" onclick="showPressureInfo('high')">H</div>
+                <div class="pressure-marker marker-l" onclick="showPressureInfo('low')">L</div>
+            </div>
+            
+            <!-- Legend -->
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-icon" style="background: #E74C3C;">H</div>
+                    <span><strong>HOGE DRUK</strong> = Mooi weer ☀️</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-icon" style="background: #3498DB;">L</div>
+                    <span><strong>LAGE DRUK</strong> = Regen 🌧️</span>
+                </div>
+            </div>
+            
+            <!-- Extreme Weather Toggle -->
+            <div class="extreme-toggle">
+                <button class="btn-pixel btn-wood" style="padding: 12px 20px; font-size: 14px;" onclick="toggleExtreme()">
+                    ⚡ EXTREME WEER
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showPressureInfo(type) {
+            if (type === 'high') {
+                showDialogue("Bij HOGE DRUK wordt de lucht naar beneden gedrukt. Dat houdt de wolken weg. Daarom is het dan vaak zonnig en droog!", "happy");
+            } else {
+                showDialogue("Bij LAGE DRUK stijgt de lucht op. De lucht koelt af en vormt wolken. Daarom regent het vaak als de druk laag is!", "surprised");
+            }
+        }
+
+        function toggleExtreme() {
+            const map = document.getElementById('belgiumMap');
+            map.style.transition = 'background 0.5s';
+            map.style.background = '#4A235A';
+            
+            showDialogue("OEI! Extreme lage druk zorgt voor een zware storm! Zie je de bliksem?", "surprised");
+            
+            setTimeout(() => {
+                map.style.background = '#E8F8F5';
+            }, 3000);
+        }
+
+        window.onload = function() {
+            setTimeout(() => {
+                showDialogue("Klik op de H of de L om te leren wat ze betekenen voor het weer in België!", "happy");
+            }, 500);
+        };
+    </script>
+</body>
+</html>
