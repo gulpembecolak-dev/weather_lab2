@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2.0 - Observatorium | Weather Lab Kids</title>
+    <link rel="stylesheet" href="../design-system.css">
+    <style>
+        .observatory-screen {
+            width: var(--screen-width);
+            height: var(--screen-height);
+            background: linear-gradient(180deg, #8B7355 0%, #6E5A3C 50%, #5A4A2F 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Window View Background */
+        .window-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 300px;
+            background: linear-gradient(180deg, #87CEEB 0%, #5DADE2 100%);
+            border-bottom: 8px solid var(--wood-dark);
+        }
+
+        /* Sun through window */
+        .window-sun {
+            position: absolute;
+            top: 60px;
+            right: 150px;
+            width: 80px;
+            height: 80px;
+            background: var(--sun-yellow);
+            border-radius: 50%;
+            box-shadow: 0 0 40px rgba(247, 220, 111, 0.8);
+        }
+
+        /* Floor */
+        .floor {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 480px;
+            background: linear-gradient(180deg, #8B7355 0%, #6E5A3C 100%);
+        }
+
+        /* Floor planks (pixel art style) */
+        .floor-plank {
+            position: absolute;
+            width: 100%;
+            height: 40px;
+            border-bottom: 3px solid var(--wood-dark);
+            background: repeating-linear-gradient(
+                90deg,
+                #8B7355 0px, #8B7355 150px,
+                #7A6444 150px, #7A6444 152px
+            );
+        }
+
+        /* Title Panel */
+        .location-title {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(236, 240, 241, 0.95);
+            border: 6px solid var(--wood-dark);
+            padding: 16px 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            font-size: 24px;
+            color: var(--storm-purple);
+            z-index: 100;
+        }
+
+        /* Interactive Objects Container */
+        .objects-container {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 900px;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+        }
+
+        /* Clickable Object Base */
+        .interactive-object {
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .interactive-object:hover {
+            transform: scale(1.1) translateY(-10px);
+        }
+
+        .interactive-object::before {
+            content: '👆';
+            position: absolute;
+            top: -60px;
+            font-size: 40px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            animation: bounce-indicator 1s ease-in-out infinite;
+        }
+
+        .interactive-object:hover::before {
+            opacity: 1;
+        }
+
+        /* Thermometer */
+        .thermometer-obj {
+            width: 100px;
+            height: 280px;
+            position: relative;
+            filter: drop-shadow(0 0 15px rgba(231, 76, 60, 0.4));
+            animation: glow-pulse 2s infinite alternate;
+        }
+
+        @keyframes glow-pulse {
+            from { filter: drop-shadow(0 0 5px rgba(231, 76, 60, 0.4)); }
+            to { filter: drop-shadow(0 0 20px rgba(231, 76, 60, 0.8)); }
+        }
+
+        .thermometer-bulb {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 60px;
+            background: #E74C3C;
+            border-radius: 50%;
+            border: 4px solid var(--wood-dark);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .thermometer-tube {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 240px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 4px solid var(--wood-dark);
+            border-radius: 15px 15px 0 0;
+        }
+
+        .thermometer-mercury {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60%;
+            background: linear-gradient(180deg, #E74C3C, #C0392B);
+            border-radius: 0 0 15px 15px;
+            animation: mercury-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes mercury-pulse {
+            0%, 100% { height: 60%; }
+            50% { height: 65%; }
+        }
+
+        /* Windmill */
+        .windmill-obj {
+            width: 160px;
+            height: 300px;
+            position: relative;
+        }
+
+        .windmill-tower {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 40px solid transparent;
+            border-right: 40px solid transparent;
+            border-bottom: 200px solid var(--wood-light);
+            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
+        }
+
+        .windmill-blades {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 100px;
+            animation: rotate-blades 3s linear infinite;
+        }
+
+        @keyframes rotate-blades {
+            0% { transform: translateX(-50%) rotate(0deg); }
+            100% { transform: translateX(-50%) rotate(360deg); }
+        }
+
+        .windmill-blade {
+            position: absolute;
+            width: 80px;
+            height: 20px;
+            background: var(--wood-dark);
+            top: 50%;
+            left: 50%;
+            transform-origin: 10px center;
+            border-radius: 10px;
+        }
+
+        .windmill-blade:nth-child(1) { transform: translate(-10px, -50%) rotate(0deg); }
+        .windmill-blade:nth-child(2) { transform: translate(-10px, -50%) rotate(90deg); }
+        .windmill-blade:nth-child(3) { transform: translate(-10px, -50%) rotate(180deg); }
+        .windmill-blade:nth-child(4) { transform: translate(-10px, -50%) rotate(270deg); }
+
+        /* Map Board */
+        .map-board-obj {
+            width: 240px;
+            height: 320px;
+            background: var(--cloud-white);
+            border: 8px solid var(--wood-dark);
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .map-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 120px;
+        }
+
+        .map-title {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--storm-purple);
+            color: white;
+            padding: 8px 20px;
+            font-size: 14px;
+            border-radius: 8px;
+        }
+
+        /* Object Labels */
+        .object-label {
+            margin-top: 16px;
+            background: var(--wood-light);
+            border: 4px solid var(--wood-dark);
+            padding: 8px 16px;
+            font-size: var(--font-size-sm);
+            color: var(--text-dark);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        /* Navigation */
+        .nav-bottom {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="screen-container observatory-screen">
+        <!-- Window Background -->
+        <div class="window-background">
+            <div class="window-sun"></div>
+        </div>
+
+        <!-- Floor -->
+        <div class="floor">
+            <div class="floor-plank" style="bottom: 400px;"></div>
+            <div class="floor-plank" style="bottom: 360px;"></div>
+            <div class="floor-plank" style="bottom: 320px;"></div>
+        </div>
+
+        <!-- Back Button -->
+        <button class="btn-pixel btn-wood btn-back" onclick="goBackToHub()">
+            ← EILANDEN
+        </button>
+
+        <!-- Location Title -->
+        <div class="location-title">
+            🔭 OBSERVATORIUM - Weer Meten
+        </div>
+
+        <!-- Interactive Objects -->
+        <div class="objects-container">
+            <!-- Thermometer -->
+            <div class="interactive-object" onclick="openThermometer()">
+                <div class="thermometer-obj">
+                    <div class="thermometer-tube">
+                        <div class="thermometer-mercury"></div>
+                    </div>
+                    <div class="thermometer-bulb"></div>
+                </div>
+                <div class="object-label">
+                    🌡️<br>THERMOMETER
+                </div>
+            </div>
+
+            <!-- Windmill -->
+            <div class="interactive-object" onclick="openWindmill()">
+                <div class="windmill-obj">
+                    <div class="windmill-blades">
+                        <div class="windmill-blade"></div>
+                        <div class="windmill-blade"></div>
+                        <div class="windmill-blade"></div>
+                        <div class="windmill-blade"></div>
+                    </div>
+                    <div class="windmill-tower"></div>
+                </div>
+                <div class="object-label">
+                    💨<br>WINDMOLEN
+                </div>
+            </div>
+
+            <!-- Map Board -->
+            <div class="interactive-object" onclick="openMap()">
+                <div class="map-board-obj">
+                    <div class="map-title">WEERKAART</div>
+                    <div class="map-icon">🗺️</div>
+                </div>
+                <div class="object-label">
+                    🌍<br>INTERACTIEVE KAART
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-bottom">
+            <button class="btn-pixel btn-wood" onclick="completeAndReturn()">
+                ✅ MISSIE VOLTOOID
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function openThermometer() {
+            window.location.href = '2.1-thermometer.html';
+        }
+
+        function openWindmill() {
+            window.location.href = '2.2-windmill.html';
+        }
+
+        function openMap() {
+            window.location.href = '2.3-interactive-map.html';
+        }
+
+        function completeAndReturn() {
+            // Mark as completed
+            sessionStorage.setItem('completed_observatory', 'true');
+            goBackToHub();
+        }
+
+        function goBackToHub() {
+            sessionStorage.setItem('destination', 'hub');
+            window.location.href = '1.5-loading.html';
+        }
+    </script>
+</body>
+</html>

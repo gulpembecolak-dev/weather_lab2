@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3.0 - Storm Lab | Weather Lab Kids</title>
+    <link rel="stylesheet" href="../design-system.css">
+    <script src="../js/dialogue.js"></script>
+    <script src="../js/analytics.js"></script>
+    <script>window.SCREEN_NAME = 'Storm Lab';</script>
+    <style>
+        .storm-screen {
+            width: var(--screen-width);
+            height: var(--screen-height);
+            background: linear-gradient(180deg, #4A235A 0%, #7D3C98 50%, #5B2C6F 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .storm-title {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(236, 240, 241, 0.95);
+            border: 6px solid var(--wood-dark);
+            padding: 16px 40px;
+            border-radius: 12px;
+            font-size: 24px;
+            color: #8E44AD;
+            z-index: 100;
+        }
+
+        .game-area {
+            position: absolute;
+            top: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 850px;
+            height: 500px;
+            background: linear-gradient(180deg, #2C3E50 0%, #34495E 100%);
+            border: 8px solid var(--wood-dark);
+            border-radius: 16px;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Grass/Ground in Game Area */
+        .game-ground {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 100px;
+            background: #27AE60;
+            border-top: 4px solid #1E8449;
+        }
+
+        .trees-container {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+        }
+
+        .tree-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transform-origin: bottom center;
+            transition: transform 0.2s ease-out;
+        }
+
+        .tree-emoji {
+            font-size: 100px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+        }
+
+        .cloud-storm {
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 120px;
+            transition: all 0.5s;
+            z-index: 10;
+        }
+
+        /* Wind Slider (Beaufort Scale) */
+        .slider-panel {
+            position: absolute;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 120px;
+            height: 420px;
+            background: rgba(236, 240, 241, 0.95);
+            border: 6px solid var(--wood-dark);
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        }
+
+        .beaufort-number {
+            font-size: 32px;
+            color: var(--storm-purple);
+            margin-bottom: 10px;
+        }
+
+        .slider-track {
+            flex: 1;
+            width: 20px;
+            background: #ddd;
+            border: 3px solid var(--wood-dark);
+            border-radius: 10px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .slider-handle {
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%, 50%);
+            width: 50px;
+            height: 50px;
+            background: var(--sun-yellow);
+            border: 4px solid var(--wood-dark);
+            border-radius: 8px;
+            box-shadow: 0 4px 0 var(--wood-dark);
+            bottom: 0;
+            cursor: pointer;
+        }
+
+        .beaufort-label {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 28px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            background: rgba(0,0,0,0.4);
+            padding: 10px 30px;
+            border-radius: 40px;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        /* Lightning Effect */
+        .lightning-flash {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        @keyframes flash {
+            0% { opacity: 0; }
+            10% { opacity: 0.8; }
+            20% { opacity: 0; }
+            30% { opacity: 0.5; }
+            40% { opacity: 0; }
+        }
+
+        /* Wind Lines */
+        .wind-line {
+            position: absolute;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+            animation: blow linear infinite;
+        }
+
+        @keyframes blow {
+            0% { transform: translateX(-100px); opacity: 0; }
+            50% { opacity: 0.5; }
+            100% { transform: translateX(900px); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="screen-container storm-screen">
+        <div class="lightning-flash" id="lightning"></div>
+
+        <!-- Back Button -->
+        <button class="btn-pixel btn-wood btn-back" onclick="goBackToHub()">
+            ← EILANDEN
+        </button>
+
+        <div class="storm-title">⚡ STORM LAB - Weer Maken</div>
+        
+        <div class="game-area" id="gameArea">
+            <div class="cloud-storm" id="stormCloud">☁️</div>
+            
+            <div class="trees-container" id="treesContainer">
+                <div class="tree-wrapper"><span class="tree-emoji">🌲</span></div>
+                <div class="tree-wrapper"><span class="tree-emoji">🌳</span></div>
+                <div class="tree-wrapper"><span class="tree-emoji">🌲</span></div>
+            </div>
+
+            <div class="game-ground"></div>
+            
+            <div class="slider-panel">
+                <div class="beaufort-number" id="windLevel">0</div>
+                <div class="slider-track" id="sliderTrack">
+                    <div class="slider-handle" id="sliderHandle"></div>
+                </div>
+                <div style="font-size: 10px; margin-top: 10px; color: #7F8C8D;">BEAUFORT</div>
+            </div>
+            
+            <div class="beaufort-label" id="beaufortLabel">WINDSTIL</div>
+        </div>
+        
+        <div style="position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);">
+            <button class="btn-pixel btn-glow" onclick="completeAndReturn()">
+                ✅ MISSIE VOLTOOID
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const handle = document.getElementById('sliderHandle');
+        const track = document.getElementById('sliderTrack');
+        const cloud = document.getElementById('stormCloud');
+        const treeWrappers = document.querySelectorAll('.tree-wrapper');
+        const windLevel = document.getElementById('windLevel');
+        const beaufortLabel = document.getElementById('beaufortLabel');
+        const lightning = document.getElementById('lightning');
+        const gameArea = document.getElementById('gameArea');
+        
+        const beaufortScale = [
+            'WINDSTIL', 'ZWAKKE WIND', 'MATIGE WIND', 'VRIJ KRACHTIG',
+            'KRACHTIG', 'HARDE WIND', 'STORM', 'ORKAAN 🌪️'
+        ];
+        
+        let isDragging = false;
+        let currentLevel = 0;
+        let windLines = [];
+
+        function updateWindLines(level) {
+            // Remove old lines
+            windLines.forEach(line => line.remove());
+            windLines = [];
+
+            if (level === 0) return;
+
+            // Create new lines based on wind level
+            const count = level * 5;
+            for (let i = 0; i < count; i++) {
+                const line = document.createElement('div');
+                line.className = 'wind-line';
+                line.style.width = (Math.random() * 50 + 20) + 'px';
+                line.style.top = Math.random() * 100 + '%';
+                line.style.left = '-100px';
+                line.style.animationDuration = (2 / level) + (Math.random() * 0.5) + 's';
+                line.style.animationDelay = Math.random() * 2 + 's';
+                gameArea.appendChild(line);
+                windLines.push(line);
+            }
+        }
+
+        function updateSlider(e) {
+            const rect = track.getBoundingClientRect();
+            let y = e.clientY - rect.top;
+            y = Math.max(0, Math.min(y, rect.height));
+            
+            const percentage = 100 - (y / rect.height) * 100;
+            handle.style.bottom = percentage + '%';
+            
+            const newLevel = Math.min(7, Math.floor(percentage / 12.5));
+            if (newLevel !== currentLevel) {
+                currentLevel = newLevel;
+                windLevel.textContent = currentLevel;
+                beaufortLabel.textContent = beaufortScale[currentLevel];
+                
+                // Update trees
+                treeWrappers.forEach((wrapper, i) => {
+                    const angle = currentLevel * 8;
+                    const scaleY = 1 - (currentLevel * 0.05);
+                    wrapper.style.transform = `rotate(${angle}deg) scaleY(${scaleY})`;
+                });
+                
+                // Update clouds
+                if (currentLevel >= 6) {
+                    cloud.textContent = '⛈️';
+                    cloud.style.filter = 'drop-shadow(0 0 20px yellow)';
+                    triggerLightning();
+                } else if (currentLevel >= 3) {
+                    cloud.textContent = '☁️';
+                    cloud.style.filter = 'none';
+                } else {
+                    cloud.textContent = '🌤️';
+                }
+
+                updateWindLines(currentLevel);
+
+                // Pam's dialogue for high wind
+                if (currentLevel === 7) {
+                    showDialogue("PAS OP! Windkracht 7 is een echte storm! Zie je hoe de bomen buigen?", "surprised");
+                }
+            }
+        }
+
+        function triggerLightning() {
+            if (currentLevel >= 6) {
+                lightning.style.animation = 'none';
+                void lightning.offsetWidth; // trigger reflow
+                lightning.style.animation = 'flash 0.5s';
+                
+                // Random next strike
+                setTimeout(triggerLightning, 3000 + Math.random() * 5000);
+            }
+        }
+
+        track.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            updateSlider(e);
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (isDragging) updateSlider(e);
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+
+        function completeAndReturn() {
+            sessionStorage.setItem('completed_storm', 'true');
+            goBackToHub();
+        }
+
+        function goBackToHub() {
+            sessionStorage.setItem('destination', 'hub');
+            window.location.href = '1.5-loading.html';
+        }
+
+        window.onload = function() {
+            setTimeout(() => {
+                showDialogue("Welkom in het Storm Lab! Sleep de schuifregelaar om de windkracht te veranderen.", "happy");
+            }, 500);
+        };
+    </script>
+</body>
+</html>

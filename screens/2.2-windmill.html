@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>2.2 - Windmolen | Weather Lab Kids</title>
+    <link rel="stylesheet" href="../design-system.css">
+    <style>
+        .wind-screen { width: var(--screen-width); height: var(--screen-height); background: linear-gradient(135deg, #3498DB 0%, #2980B9 100%); position: relative; overflow: hidden; }
+        .wind-panel { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(236, 240, 241, 0.98); border: 8px solid var(--wood-dark); padding: 40px; width: 700px; border-radius: 16px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5); text-align: center; }
+        .wind-title { font-size: 28px; color: #3498DB; margin-bottom: 24px; }
+        .wind-display { font-size: 64px; margin: 24px 0; }
+        .wind-info { font-size: 16px; color: var(--text-dark); line-height: 2; }
+    </style>
+</head>
+<body>
+    <div class="screen-container wind-screen">
+        <button class="btn-pixel btn-wood btn-back" onclick="history.back()">← TERUG</button>
+        <div class="wind-panel">
+            <div style="font-size: 100px; margin-bottom: 24px;">💨</div>
+            <div class="wind-title">VANDAAG: MATIGE WIND</div>
+            <div class="wind-display">
+                15 km/u<br>
+                <span style="font-size: 48px;">→ Noordwest</span>
+            </div>
+            <div class="wind-info">
+                De wind waait vandaag vanuit het noordwesten.<br>
+                Dat betekent dat koude lucht van de zee komt! 🌊<br><br>
+                Perfect weer om een vlieger op te laten! 🪁
+            </div>
+            <button class="btn-pixel btn-glow" style="margin-top: 32px; width: 100%;" onclick="history.back()">
+                BEGREPEN! →
+            </button>
+        </div>
+    </div>
+</body>
+</html>

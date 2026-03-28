@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1.0 - Hub Map | Weather Lab Kids</title>
+    <link rel="stylesheet" href="../design-system.css">
+    <script src="../js/dialogue.js"></script>
+    <style>
+        .hub-screen {
+            width: var(--screen-width);
+            height: var(--screen-height);
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 40%, #E8DAEF 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Particle Systems: Clouds and Fog */
+        .pixel-cloud {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 4px;
+            animation: float-cloud-slow linear infinite;
+            pointer-events: none;
+            z-index: 5;
+            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes float-cloud-slow {
+            0% { transform: translateX(-300px); }
+            100% { transform: translateX(1300px); }
+        }
+
+        .fog-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                rgba(255,255,255,0) 0%, 
+                rgba(255,255,255,0.05) 50%, 
+                rgba(255,255,255,0) 100%);
+            animation: move-fog 20s linear infinite;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        @keyframes move-fog {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Sky Stars */
+        .sky-star {
+            position: absolute;
+            color: white;
+            font-size: 16px;
+            animation: twinkle-star 2s ease-in-out infinite;
+        }
+
+        @keyframes twinkle-star {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+
+        /* Floating Islands Container */
+        .islands-container {
+            position: absolute;
+            top: 180px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 80px;
+        }
+
+        /* Island Card */
+        .island {
+            width: 260px;
+            cursor: pointer;
+            transition: all 0.4s;
+            position: relative;
+            animation: float-island 4s ease-in-out infinite;
+        }
+
+        .island:nth-child(1) { animation-delay: 0s; }
+        .island:nth-child(2) { animation-delay: 1.3s; }
+        .island:nth-child(3) { animation-delay: 2.6s; }
+
+        @keyframes float-island {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .island:hover {
+            transform: translateY(-30px) scale(1.08);
+        }
+
+        /* Island Visual */
+        .island-visual {
+            width: 260px;
+            height: 200px;
+            position: relative;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            overflow: hidden;
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.4),
+                inset 0 -20px 40px rgba(0, 0, 0, 0.2);
+            border: 6px solid var(--wood-dark);
+        }
+
+        /* Island Aura/Glow */
+        .island-aura {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            z-index: -1;
+            animation: pulse-aura 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse-aura {
+            0%, 100% { 
+                opacity: 0.6;
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 0.9;
+                transform: scale(1.05);
+            }
+        }
+
+        /* Observatory Island (Weather Station) */
+        .island-observatory .island-visual {
+            background: linear-gradient(180deg, #87CEEB 30%, #58D68D 70%, #27AE60 100%);
+        }
+
+        .island-observatory .island-aura {
+            background: radial-gradient(circle, rgba(247, 220, 111, 0.8), transparent);
+        }
+
+        .island-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 100px;
+            filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4));
+        }
+
+        /* Storm Lab Island */
+        .island-storm .island-visual {
+            background: linear-gradient(180deg, #4A235A 0%, #7D3C98 50%, #5B2C6F 100%);
+        }
+
+        .island-storm .island-aura {
+            background: radial-gradient(circle, rgba(142, 68, 173, 0.8), transparent);
+        }
+
+        .storm-cloud {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 80px;
+            animation: lightning-flash 3s ease-in-out infinite;
+        }
+
+        @keyframes lightning-flash {
+            0%, 90%, 100% { filter: brightness(1); }
+            93%, 97% { filter: brightness(2) drop-shadow(0 0 20px yellow); }
+        }
+
+        /* Discovery Lab Island */
+        .island-discovery .island-visual {
+            background: linear-gradient(180deg, #1ABC9C 0%, #16A085 50%, #138D75 100%);
+        }
+
+        .island-discovery .island-aura {
+            background: radial-gradient(circle, rgba(26, 188, 156, 0.8), transparent);
+        }
+
+        /* Island Name Plate */
+        .island-nameplate {
+            background: var(--wood-light);
+            border: 6px solid var(--wood-dark);
+            padding: 12px 20px;
+            margin-top: 16px;
+            text-align: center;
+            font-size: 18px;
+            color: var(--text-dark);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .island-nameplate::before {
+            content: '';
+            position: absolute;
+            top: -16px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-bottom: 16px solid var(--wood-dark);
+        }
+
+        .island-nameplate::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 13px solid var(--wood-light);
+        }
+
+        /* Progress Badge */
+        .progress-badge {
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            background: var(--sun-yellow);
+            border: 4px solid var(--wood-dark);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            z-index: 10;
+        }
+
+        .progress-badge.completed {
+            background: #2ECC71;
+            animation: badge-bounce 0.5s ease-in-out;
+        }
+
+        @keyframes badge-bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        /* Title Panel */
+        .title-panel {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(236, 240, 241, 0.95);
+            border: 6px solid var(--wood-dark);
+            padding: 20px 40px;
+            text-align: center;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+        }
+
+        .title-main {
+            font-size: 28px;
+            color: var(--storm-purple);
+            text-shadow: 2px 2px 0 rgba(255, 255, 255, 0.5);
+        }
+
+        .subtitle {
+            font-size: var(--font-size-sm);
+            color: var(--text-dark);
+            margin-top: 8px;
+        }
+
+        /* Player Info Bar */
+        .player-info-bar {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            background: rgba(44, 62, 80, 0.9);
+            border: 4px solid var(--wood-dark);
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .player-avatar-small {
+            font-size: 40px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+        }
+
+        .player-info-text {
+            color: var(--cloud-white);
+            font-size: var(--font-size-sm);
+            line-height: 1.6;
+        }
+
+        /* Progress Counter */
+        .progress-counter {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background: rgba(46, 204, 113, 0.95);
+            border: 4px solid #27AE60;
+            padding: 12px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            text-align: center;
+        }
+
+        .progress-text {
+            font-size: var(--font-size-xs);
+            color: white;
+            margin-bottom: 4px;
+        }
+
+        .progress-number {
+            font-size: 24px;
+            color: white;
+        }
+
+        /* Bottom Navigation */
+        .bottom-info {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: var(--font-size-sm);
+            color: var(--cloud-white);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            text-align: center;
+            background: rgba(44, 62, 80, 0.8);
+            padding: 12px 32px;
+            border: 3px solid var(--wood-dark);
+            border-radius: 8px;
+        }
+
+        /* Interactive Hints */
+        .hint-arrow {
+            position: absolute;
+            font-size: 40px;
+            animation: bounce-hint 1.5s ease-in-out infinite;
+        }
+
+        @keyframes bounce-hint {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="screen-container hub-screen">
+        <!-- Particle Systems: Clouds and Fog -->
+        <div class="fog-layer"></div>
+        <div class="pixel-cloud" style="width: 120px; height: 30px; top: 15%; left: -150px; animation-duration: 45s;"></div>
+        <div class="pixel-cloud" style="width: 100px; height: 25px; top: 40%; left: -120px; animation-duration: 60s; animation-delay: 5s;"></div>
+        <div class="pixel-cloud" style="width: 140px; height: 35px; top: 65%; left: -160px; animation-duration: 50s; animation-delay: 10s;"></div>
+
+        <!-- Sky Stars -->
+        <div class="sky-star" style="top: 15%; left: 10%;">⭐</div>
+        <div class="sky-star" style="top: 25%; left: 20%;">✨</div>
+        <div class="sky-star" style="top: 18%; left: 80%;">⭐</div>
+        <div class="sky-star" style="top: 30%; left: 90%;">✨</div>
+        <div class="sky-star" style="top: 20%; left: 50%;">⭐</div>
+
+        <!-- Back Button -->
+        <button class="btn-pixel btn-wood btn-back" onclick="window.location.href='0.3-character-selection.html'">
+            ← TERUG
+        </button>
+
+        <!-- Player Info Bar -->
+        <div class="player-info-bar">
+            <div class="player-avatar-small" id="playerAvatarSmall">👩‍🔬</div>
+            <div class="player-info-text">
+                <div id="playerNameSmall">KAPITEIN</div>
+                <div style="font-size: 8px; color: #BDC3C7;">Jonge Meteoroloog</div>
+            </div>
+        </div>
+
+        <!-- Progress Counter -->
+        <div class="progress-counter">
+            <div class="progress-text">MISSIES</div>
+            <div class="progress-number" id="progressDisplay">0/3</div>
+        </div>
+
+        <!-- Title Panel -->
+        <div class="title-panel">
+            <div class="title-main">🗺️ DE WEER EILANDEN 🗺️</div>
+            <div class="subtitle">Kies een eiland om te ontdekken</div>
+        </div>
+
+        <!-- Islands Container -->
+        <div class="islands-container">
+            <!-- Island 1: Observatory (WEER) -->
+            <div class="island island-observatory" onclick="goToIsland('observatory')">
+                <div class="progress-badge" id="badge-observatory">🔒</div>
+                <div class="island-aura"></div>
+                <div class="island-visual">
+                    <div class="island-icon">🔭</div>
+                </div>
+                <div class="island-nameplate">
+                    OBSERVATORIUM<br>
+                    <span style="font-size: 12px; color: #7F8C8D;">(Weer Meten)</span>
+                </div>
+            </div>
+
+            <!-- Island 2: Storm Lab -->
+            <div class="island island-storm" onclick="goToIsland('storm')">
+                <div class="progress-badge" id="badge-storm">🔒</div>
+                <div class="island-aura"></div>
+                <div class="island-visual">
+                    <div class="storm-cloud">⛈️</div>
+                </div>
+                <div class="island-nameplate">
+                    STORM LAB<br>
+                    <span style="font-size: 12px; color: #7F8C8D;">(Weer Maken)</span>
+                </div>
+            </div>
+
+            <!-- Island 3: Discovery Lab -->
+            <div class="island island-discovery" onclick="goToIsland('discovery')">
+                <div class="progress-badge" id="badge-discovery">🔒</div>
+                <div class="island-aura"></div>
+                <div class="island-visual">
+                    <div class="island-icon">🔬</div>
+                </div>
+                <div class="island-nameplate">
+                    DISCOVERY LAB<br>
+                    <span style="font-size: 12px; color: #7F8C8D;">(Weer Leren)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Info -->
+        <div class="bottom-info">
+            👆 Tik op een eiland om je missie te beginnen
+        </div>
+    </div>
+
+    <script>
+        // Character emoji mapping
+        const characterEmojis = {
+            'pam': '👩‍🔬',
+            'lily': '👧',
+            'eric': '👦'
+        };
+
+        // Load player data
+        window.onload = function() {
+            const playerName = sessionStorage.getItem('playerName') || 'KAPITEIN';
+            const selectedCharacter = sessionStorage.getItem('selectedCharacter') || 'pam';
+            
+            document.getElementById('playerNameSmall').textContent = playerName.toUpperCase();
+            document.getElementById('playerAvatarSmall').textContent = characterEmojis[selectedCharacter];
+
+            // Load progress
+            updateProgress();
+
+            // Show welcome dialogue
+            setTimeout(() => {
+                const playerName = sessionStorage.getItem('playerName') || 'Kapitein';
+                showDialogue(`Hoi ${playerName}! Welkom op de Weer Eilanden. Waar gaan we vandaag naartoe?`, 'happy');
+            }, 1000);
+        };
+
+        function updateProgress() {
+            const completed = {
+                observatory: sessionStorage.getItem('completed_observatory') === 'true',
+                storm: sessionStorage.getItem('completed_storm') === 'true',
+                discovery: sessionStorage.getItem('completed_discovery') === 'true'
+            };
+
+            let completedCount = 0;
+
+            // Update badges
+            if (completed.observatory) {
+                document.getElementById('badge-observatory').textContent = '✅';
+                document.getElementById('badge-observatory').classList.add('completed');
+                completedCount++;
+            }
+            if (completed.storm) {
+                document.getElementById('badge-storm').textContent = '✅';
+                document.getElementById('badge-storm').classList.add('completed');
+                completedCount++;
+            }
+            if (completed.discovery) {
+                document.getElementById('badge-discovery').textContent = '✅';
+                document.getElementById('badge-discovery').classList.add('completed');
+                completedCount++;
+            }
+
+            document.getElementById('progressDisplay').textContent = `${completedCount}/3`;
+
+            // Check if all completed
+            if (completedCount === 3) {
+                // Check if final test is offered
+                const finalTestOffered = sessionStorage.getItem('final_test_offered');
+                if (!finalTestOffered) {
+                    setTimeout(() => {
+                        if (confirm('Gefeliciteerd! Je hebt alle eilanden verkend! Ben je klaar voor de FINALE TEST?')) {
+                            sessionStorage.setItem('final_test_offered', 'true');
+                            window.location.href = '5.0-final-warning.html';
+                        }
+                    }, 500);
+                }
+            }
+        }
+
+        function goToIsland(island) {
+            // Show loading screen
+            sessionStorage.setItem('destination', island);
+            window.location.href = '1.5-loading.html';
+        }
+    </script>
+</body>
+</html>

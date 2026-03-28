@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>4.0 - Discovery Lab | Weather Lab Kids</title>
+    <link rel="stylesheet" href="../design-system.css">
+    <style>
+        .discovery-screen { width: var(--screen-width); height: var(--screen-height); background: linear-gradient(180deg, #1ABC9C 0%, #16A085 50%, #138D75 100%); position: relative; overflow: hidden; }
+        .lab-title { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(236, 240, 241, 0.95); border: 6px solid var(--wood-dark); padding: 16px 40px; border-radius: 12px; font-size: 24px; color: #16A085; z-index: 100; }
+        .bubbles-container { position: absolute; top: 150px; left: 50%; transform: translateX(-50%); width: 900px; height: 450px; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 40px; }
+        .question-bubble { width: 180px; height: 180px; background: rgba(255, 255, 255, 0.95); border: 6px solid var(--wood-dark); border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); animation: float-bubble 3s ease-in-out infinite; }
+        .question-bubble:hover { transform: scale(1.15); }
+        .question-bubble:nth-child(1) { animation-delay: 0s; }
+        .question-bubble:nth-child(2) { animation-delay: 0.5s; }
+        .question-bubble:nth-child(3) { animation-delay: 1s; }
+        .question-bubble:nth-child(4) { animation-delay: 1.5s; }
+        .question-bubble:nth-child(5) { animation-delay: 2s; }
+        @keyframes float-bubble {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        .bubble-icon { font-size: 64px; margin-bottom: 8px; }
+        .bubble-text { font-size: 14px; color: var(--text-dark); text-align: center; line-height: 1.4; padding: 0 12px; }
+    </style>
+</head>
+<body>
+    <div class="screen-container discovery-screen">
+        <button class="btn-pixel btn-wood btn-back" onclick="goBackToHub()">← EILANDEN</button>
+        <div class="lab-title">🔬 DISCOVERY LAB - Weer Leren</div>
+        
+        <div class="bubbles-container">
+            <div class="question-bubble" onclick="showAnswer(1)">
+                <div class="bubble-icon">☁️</div>
+                <div class="bubble-text">Hoe ontstaan<br>wolken?</div>
+            </div>
+            
+            <div class="question-bubble" onclick="showAnswer(2)">
+                <div class="bubble-icon">💨</div>
+                <div class="bubble-text">Waarom<br>waait het?</div>
+            </div>
+            
+            <div class="question-bubble" onclick="showAnswer(3)">
+                <div class="bubble-icon">🌧️</div>
+                <div class="bubble-text">Hoe ontstaat<br>regen?</div>
+            </div>
+            
+            <div class="question-bubble" onclick="showAnswer(4)">
+                <div class="bubble-icon">⚡</div>
+                <div class="bubble-text">Wat is<br>onweer?</div>
+            </div>
+            
+            <div class="question-bubble" onclick="window.location.href='4.2-phygital.html'">
+                <div class="bubble-icon">🏠</div>
+                <div class="bubble-text">Maak je eigen<br>windmeter!</div>
+            </div>
+        </div>
+        
+        <div style="position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%);">
+            <button class="btn-pixel btn-glow" onclick="completeAndReturn()">
+                ✅ MISSIE VOLTOOID
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const answers = {
+            1: "☁️ WOLKEN ONTSTAAN ZO:\n\nWarm water verdampt en stijgt omhoog.\nHoog in de lucht wordt het koud.\nDe waterdamp verandert in druppeltjes.\n\nDit noemen we een WOLK!\n\nTip: Blaas op een koude dag uit je mond.\nJe ziet een mini-wolkje! 💨",
+            2: "💨 WIND WERKT ZO:\n\nDe zon verwarmt de aarde.\nWarme lucht stijgt op.\nKoude lucht komt ervoor terug.\n\nDit noemen we WIND!\n\nOnthoud: Wind waait altijd van HOGE naar LAGE druk! ➡️",
+            3: "🌧️ REGEN ONTSTAAT ZO:\n\nDruppeltjes in de wolk worden groter.\nZe worden te zwaar om te zweven.\nDan vallen ze naar beneden.\n\nDat noemen we REGEN!\n\n1 regenwolk kan 500.000 liter water bevatten! 💧",
+            4: "⚡ ONWEER IS ZO:\n\nIn een onweerswolk botsen ijskristallen.\nDit maakt elektriciteit (zoals een batterij!).\nDe elektriciteit ontlaadt: BLIKSEM! ⚡\n\nDe lucht wordt heel heet en klapt uit elkaar.\nDat hoor je als DONDER! 💥\n\nLicht gaat sneller dan geluid!"
+        };
+        
+        function showAnswer(num) {
+            alert(answers[num]);
+        }
+        
+        function completeAndReturn() {
+            sessionStorage.setItem('completed_discovery', 'true');
+            goBackToHub();
+        }
+        
+        function goBackToHub() {
+            sessionStorage.setItem('destination', 'hub');
+            window.location.href = '1.5-loading.html';
+        }
+    </script>
+</body>
+</html>

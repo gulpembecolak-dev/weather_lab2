@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>5.0 - Final Test | Weather Lab Kids</title>
+    <link rel="stylesheet" href="../design-system.css">
+    <style>
+        .warning-screen { width: var(--screen-width); height: var(--screen-height); background: linear-gradient(135deg, #F39C12 0%, #E67E22 100%); position: relative; overflow: hidden; }
+        .warning-panel { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(236, 240, 241, 0.98); border: 8px solid var(--wood-dark); padding: 40px; width: 700px; border-radius: 16px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5); text-align: center; }
+        .warning-icon { font-size: 120px; margin-bottom: 24px; animation: pulse-warning 1.5s ease-in-out infinite; }
+        @keyframes pulse-warning {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        .warning-title { font-size: 28px; color: #E67E22; margin-bottom: 24px; }
+        .warning-text { font-size: 16px; color: var(--text-dark); line-height: 2; margin-bottom: 32px; }
+        .button-group { display: flex; gap: 20px; justify-content: center; }
+    </style>
+</head>
+<body>
+    <div class="screen-container warning-screen">
+        <div class="warning-panel">
+            <div class="warning-icon">🏆</div>
+            <div class="warning-title">FINALE TEST!</div>
+            <div class="warning-text">
+                Je hebt alle 3 de eilanden verkend! 🎉<br><br>
+                Ben je klaar om je kennis te testen?<br><br>
+                <strong>10 vragen</strong> over alles wat je hebt geleerd!<br><br>
+                <span style="color: #E67E22;">⚠️ Je kunt de test maar 1x doen!</span>
+            </div>
+            <div class="button-group">
+                <button class="btn-pixel btn-wood" style="padding: 20px 40px; font-size: 18px;" onclick="goBack()">
+                    ← NOG EVEN OEFENEN
+                </button>
+                <button class="btn-pixel btn-glow" style="padding: 20px 40px; font-size: 18px;" onclick="startTest()">
+                    IK BEN ER KLAAR VOOR! →
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            sessionStorage.setItem('destination', 'hub');
+            window.location.href = '1.5-loading.html';
+        }
+        
+        function startTest() {
+            window.location.href = '5.1-quiz.html';
+        }
+    </script>
+</body>
+</html>
