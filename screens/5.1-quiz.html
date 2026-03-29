@@ -2,227 +2,55 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>5.1 - Quiz | Weather Lab Kids</title>
     <link rel="stylesheet" href="../design-system.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
+        .quiz-screen { width:100%; height:100vh; height:100dvh; background:linear-gradient(135deg,#87CEEB 0%,#E0F7FA 100%); position:relative; overflow-x:hidden; overflow-y:auto; font-family:'Outfit',sans-serif; display:flex; align-items:center; justify-content:center; }
+        .soft-cloud { position:fixed; background:rgba(255,255,255,0.5); backdrop-filter:blur(8px); border-radius:100px; animation:float-cloud linear infinite; box-shadow:0 10px 30px rgba(0,0,0,0.05); pointer-events:none; }
+        .soft-cloud::before,.soft-cloud::after { content:''; position:absolute; background:inherit; border-radius:50%; }
+        .soft-cloud::before { width:50%; height:100%; top:-40%; left:15%; }
+        .soft-cloud::after { width:40%; height:80%; top:-20%; right:15%; }
+        .cloud-1{width:min(200px,25vw);height:min(60px,7.5vw);top:10%;animation-duration:45s;} .cloud-2{width:min(150px,20vw);height:min(45px,5.5vw);top:25%;animation-duration:60s;animation-delay:-10s;} .cloud-3{width:min(250px,30vw);height:min(75px,9vw);top:80%;animation-duration:50s;animation-delay:-25s;}
+        @keyframes float-cloud{0%{transform:translateX(-300px);}100%{transform:translateX(calc(100vw + 300px));}}
+        .quiz-panel { background:rgba(255,255,255,0.7); backdrop-filter:blur(20px); border:2px solid rgba(255,255,255,0.5); padding:clamp(25px,4vw,50px); width:min(900px,92vw); border-radius:clamp(20px,4vw,40px); box-shadow:0 40px 100px rgba(0,0,0,0.1); z-index:10; }
+        .progress-bar { height:12px; background:rgba(0,0,0,0.05); border-radius:10px; margin-bottom:clamp(15px,3vw,30px); overflow:hidden; box-shadow:inset 0 2px 4px rgba(0,0,0,0.05); }
+        .progress-fill { height:100%; background:#2ECC71; width:0%; transition:width 0.4s cubic-bezier(0.65,0,0.35,1); border-radius:10px; }
+        .question-counter { text-align:center; font-size:clamp(11px,1.5vw,14px); font-weight:700; color:#7F8C8D; margin-bottom:clamp(10px,2vw,20px); text-transform:uppercase; letter-spacing:2px; }
+        .question-text { font-size:clamp(20px,4vw,32px); font-weight:900; color:#2C3E50; text-align:center; margin-bottom:clamp(20px,3vw,40px); line-height:1.3; }
+        .answers-grid { display:grid; grid-template-columns:1fr 1fr; gap:clamp(12px,2vw,25px); }
+        .answer-btn { padding:clamp(15px,2.5vw,30px); font-family:'Outfit',sans-serif; font-size:clamp(14px,2vw,20px); font-weight:700; text-align:center; line-height:1.4; background:white; color:#2C3E50; border:2px solid rgba(0,0,0,0.05); border-radius:clamp(16px,2.5vw,24px); cursor:pointer; transition:all 0.3s cubic-bezier(0.175,0.885,0.32,1.275); box-shadow:0 10px 20px rgba(0,0,0,0.02); display:flex; align-items:center; justify-content:center; }
+        .answer-btn:hover { transform:scale(1.03) translateY(-5px); background:#FFD966; border-color:#FFD966; box-shadow:0 15px 30px rgba(255,217,102,0.3); }
+        .answer-btn:active { transform:scale(0.98); }
 
-        .quiz-screen {
-            width: var(--screen-width);
-            height: var(--screen-height);
-            background: linear-gradient(135deg, #87CEEB 0%, #E0F7FA 100%);
-            position: relative;
-            overflow: hidden;
-            font-family: 'Outfit', sans-serif;
-        }
-
-        /* Modern Quiz Panel - Glassmorphism */
-        .quiz-panel {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            padding: 50px;
-            width: 900px;
-            border-radius: 40px;
-            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.1);
-            z-index: 10;
-        }
-
-        /* Modern Progress Bar */
-        .progress-bar {
-            height: 12px;
-            background: rgba(0, 0, 0, 0.05);
-            border-radius: 10px;
-            margin-bottom: 30px;
-            overflow: hidden;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: #2ECC71;
-            width: 0%;
-            transition: width 0.4s cubic-bezier(0.65, 0, 0.35, 1);
-            border-radius: 10px;
-        }
-
-        .question-counter {
-            text-align: center;
-            font-size: 14px;
-            font-weight: 700;
-            color: #7F8C8D;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .question-text {
-            font-size: 32px;
-            font-weight: 900;
-            color: #2C3E50;
-            text-align: center;
-            margin-bottom: 40px;
-            line-height: 1.3;
-        }
-
-        .answers-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-        }
-
-        /* Modern Answer Button */
-        .answer-btn {
-            padding: 30px;
-            font-family: 'Outfit', sans-serif;
-            font-size: 20px;
-            font-weight: 700;
-            text-align: center;
-            line-height: 1.4;
-            background: white;
-            color: #2C3E50;
-            border: 2px solid rgba(0,0,0,0.05);
-            border-radius: 24px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.02);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .answer-btn:hover {
-            transform: scale(1.03) translateY(-5px);
-            background: #FFD966;
-            border-color: #FFD966;
-            box-shadow: 0 15px 30px rgba(255, 217, 102, 0.3);
-        }
-
-        .answer-btn:active {
-            transform: scale(0.98);
-        }
-
-        /* Modern Soft Clouds */
-        .soft-cloud {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(8px);
-            border-radius: 100px;
-            animation: float-cloud linear infinite;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            pointer-events: none;
-        }
-
-        .soft-cloud::before, .soft-cloud::after {
-            content: '';
-            position: absolute;
-            background: inherit;
-            border-radius: 50%;
-        }
-
-        .soft-cloud::before { width: 50%; height: 100%; top: -40%; left: 15%; }
-        .soft-cloud::after { width: 40%; height: 80%; top: -20%; right: 15%; }
-
-        @keyframes float-cloud {
-            0% { transform: translateX(-300px); }
-            100% { transform: translateX(1300px); }
+        @media (max-width: 480px) {
+            .answers-grid { grid-template-columns:1fr; }
         }
     </style>
 </head>
 <body>
     <div class="screen-container quiz-screen">
-        <!-- Modern Clouds -->
-        <div class="soft-cloud" style="width: 200px; height: 60px; top: 10%; left: -200px; animation-duration: 45s;"></div>
-        <div class="soft-cloud" style="width: 150px; height: 45px; top: 25%; left: -150px; animation-duration: 60s; animation-delay: -10s;"></div>
-        <div class="soft-cloud" style="width: 250px; height: 75px; top: 80%; left: -300px; animation-duration: 50s; animation-delay: -25s;"></div>
-
+        <div class="soft-cloud cloud-1"></div><div class="soft-cloud cloud-2"></div><div class="soft-cloud cloud-3"></div>
         <div class="quiz-panel">
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
-            </div>
-            
+            <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
             <div class="question-counter" id="questionCounter">Vraag 1 / 10</div>
-            
-            <div class="question-text" id="questionText">
-                Wat is een wolk?
-            </div>
-            
+            <div class="question-text" id="questionText">Wat is een wolk?</div>
             <div class="answers-grid" id="answersGrid">
-                <button class="answer-btn" onclick="checkAnswer(0)">
-                    Verdampt water<br>hoog in de lucht
-                </button>
-                <button class="answer-btn" onclick="checkAnswer(1)">
-                    Rook van<br>fabrieken
-                </button>
-                <button class="answer-btn" onclick="checkAnswer(2)">
-                    Schuim van<br>de zee
-                </button>
-                <button class="answer-btn" onclick="checkAnswer(3)">
-                    Stof uit<br>de ruimte
-                </button>
+                <button class="answer-btn" onclick="checkAnswer(0)">Verdampt water<br>hoog in de lucht</button>
+                <button class="answer-btn" onclick="checkAnswer(1)">Rook van<br>fabrieken</button>
+                <button class="answer-btn" onclick="checkAnswer(2)">Schuim van<br>de zee</button>
+                <button class="answer-btn" onclick="checkAnswer(3)">Stof uit<br>de ruimte</button>
             </div>
         </div>
     </div>
-
     <script>
-        const questions = [
-            { q: "Wat is een wolk?", a: ["Verdampt water hoog in de lucht", "Rook van fabrieken", "Schuim van de zee", "Stof uit de ruimte"], correct: 0 },
-            { q: "Waarom waait het?", a: ["Omdat de maan trekt", "Verschil tussen warme en koude lucht", "Bomen maken wind", "De aarde draait"], correct: 1 },
-            { q: "Wat betekent 'H' op een weerkaart?", a: ["Heet weer", "Hoge druk (mooi weer)", "Hagel", "Harde wind"], correct: 1 },
-            { q: "Welke wolk brengt onweer?", a: ["Cirrus", "Stratus", "Cumulonimbus", "Altocumulus"], correct: 2 },
-            { q: "Wat gebeurt er bij lage druk?", a: ["Mooi weer", "Wind stopt", "Regen en wolken", "Het wordt warmer"], correct: 2 },
-            { q: "Hoe ontstaat bliksem?", a: ["De zon schijnt te fel", "Ijskristallen botsen in de wolk", "Wolken wrijven over elkaar", "Warme lucht ontploft"], correct: 1 },
-            { q: "Warme lucht...", a: ["Zakt naar beneden", "Stijgt omhoog", "Blijft op zijn plek", "Wordt kouder"], correct: 1 },
-            { q: "Wat meet een windmolen?", a: ["Temperatuur", "Regen", "Windsnelheid", "Luchtvochtigheid"], correct: 2 },
-            { q: "Wind waait van...", a: ["Laag naar hoog", "Hoog naar laag", "Noord naar zuid", "Oost naar west"], correct: 1 },
-            { q: "Wat is de Beaufort-schaal?", a: ["Regenmeter", "Windkracht-meter", "Temperatuurschaal", "Wolkensoorten"], correct: 1 }
-        ];
-        
-        let currentQuestion = 0;
-        let score = 0;
-        
-        function checkAnswer(selected) {
-            if (selected === questions[currentQuestion].correct) {
-                score++;
-            }
-            
-            currentQuestion++;
-            
-            if (currentQuestion < questions.length) {
-                loadQuestion();
-            } else {
-                finishQuiz();
-            }
-        }
-        
-        function loadQuestion() {
-            const q = questions[currentQuestion];
-            document.getElementById('questionCounter').textContent = `Vraag ${currentQuestion + 1} / 10`;
-            document.getElementById('questionText').textContent = q.q;
-            document.getElementById('progressFill').style.width = ((currentQuestion + 1) / 10 * 100) + '%';
-            
-            const grid = document.getElementById('answersGrid');
-            grid.innerHTML = '';
-            q.a.forEach((answer, i) => {
-                const btn = document.createElement('button');
-                btn.className = 'answer-btn';
-                btn.innerHTML = answer;
-                btn.onclick = () => checkAnswer(i);
-                grid.appendChild(btn);
-            });
-        }
-        
-        function finishQuiz() {
-            sessionStorage.setItem('quizScore', score);
-            window.location.href = '5.2-victory.html';
-        }
-
-        // Initialize first question
-        window.onload = loadQuestion;
+        const questions=[{q:"Wat is een wolk?",a:["Verdampt water hoog in de lucht","Rook van fabrieken","Schuim van de zee","Stof uit de ruimte"],correct:0},{q:"Waarom waait het?",a:["Omdat de maan trekt","Verschil tussen warme en koude lucht","Bomen maken wind","De aarde draait"],correct:1},{q:"Wat betekent 'H' op een weerkaart?",a:["Heet weer","Hoge druk (mooi weer)","Hagel","Harde wind"],correct:1},{q:"Welke wolk brengt onweer?",a:["Cirrus","Stratus","Cumulonimbus","Altocumulus"],correct:2},{q:"Wat gebeurt er bij lage druk?",a:["Mooi weer","Wind stopt","Regen en wolken","Het wordt warmer"],correct:2},{q:"Hoe ontstaat bliksem?",a:["De zon schijnt te fel","Ijskristallen botsen in de wolk","Wolken wrijven over elkaar","Warme lucht ontploft"],correct:1},{q:"Warme lucht...",a:["Zakt naar beneden","Stijgt omhoog","Blijft op zijn plek","Wordt kouder"],correct:1},{q:"Wat meet een windmolen?",a:["Temperatuur","Regen","Windsnelheid","Luchtvochtigheid"],correct:2},{q:"Wind waait van...",a:["Laag naar hoog","Hoog naar laag","Noord naar zuid","Oost naar west"],correct:1},{q:"Wat is de Beaufort-schaal?",a:["Regenmeter","Windkracht-meter","Temperatuurschaal","Wolkensoorten"],correct:1}];
+        let currentQuestion=0,score=0;
+        function checkAnswer(selected){if(selected===questions[currentQuestion].correct)score++;currentQuestion++;if(currentQuestion<questions.length)loadQuestion();else finishQuiz();}
+        function loadQuestion(){const q=questions[currentQuestion];document.getElementById('questionCounter').textContent=`Vraag ${currentQuestion+1} / 10`;document.getElementById('questionText').textContent=q.q;document.getElementById('progressFill').style.width=((currentQuestion+1)/10*100)+'%';const grid=document.getElementById('answersGrid');grid.innerHTML='';q.a.forEach((answer,i)=>{const btn=document.createElement('button');btn.className='answer-btn';btn.innerHTML=answer;btn.onclick=()=>checkAnswer(i);grid.appendChild(btn);});}
+        function finishQuiz(){sessionStorage.setItem('quizScore',score);window.location.href='5.2-victory.html';}
+        window.onload=loadQuestion;
     </script>
 </body>
 </html>

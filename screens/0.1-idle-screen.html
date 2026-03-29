@@ -2,32 +2,34 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>0.1 - Giriş Ekranı | Weather Lab Kids</title>
     <link rel="stylesheet" href="../design-system.css">
-    <script src="../js/analytics.js"></script>
-    <script src="../js/sound.js"></script>
-    <script src="../js/scaling.js"></script>
     <script>window.SCREEN_NAME = 'Idle Screen';</script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
 
         .idle-screen {
-            width: var(--screen-width);
-            height: var(--screen-height);
+            width: 100%;
+            height: 100vh;
+            height: 100dvh;
             background: linear-gradient(180deg, #87CEEB 0%, #E0F7FA 100%);
             position: relative;
             overflow: hidden;
             font-family: 'Outfit', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
         /* Sun Rays - Softer & Modern */
         .sun-rays {
             position: absolute;
-            top: -150px;
-            right: -150px;
-            width: 800px;
-            height: 800px;
+            top: -15%;
+            right: -15%;
+            width: min(800px, 80vw);
+            height: min(800px, 80vw);
             background: radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, transparent 70%);
             animation: rotate-rays 40s linear infinite;
             pointer-events: none;
@@ -61,25 +63,50 @@
 
         @keyframes float-cloud {
             0% { transform: translateX(-300px); }
-            100% { transform: translateX(1300px); }
+            100% { transform: translateX(calc(100vw + 300px)); }
+        }
+
+        /* Cloud responsive sizes */
+        .cloud-1 {
+            width: min(200px, 25vw);
+            height: min(60px, 7.5vw);
+            top: 15%;
+            left: -200px;
+            animation-duration: 40s;
+        }
+
+        .cloud-2 {
+            width: min(150px, 20vw);
+            height: min(45px, 5.5vw);
+            top: 30%;
+            left: -150px;
+            animation-duration: 55s;
+            animation-delay: -10s;
+        }
+
+        .cloud-3 {
+            width: min(250px, 30vw);
+            height: min(75px, 9vw);
+            top: 45%;
+            left: -300px;
+            animation-duration: 45s;
+            animation-delay: -25s;
         }
 
         /* Modern Title Panel - Glassmorphism */
         .title-container {
-            position: absolute;
-            top: 100px;
-            left: 50%;
-            transform: translateX(-50%);
+            position: relative;
             text-align: center;
             z-index: 50;
+            margin-top: -5vh;
         }
 
         .title-panel-modern {
             background: rgba(255, 255, 255, 0.25);
             backdrop-filter: blur(15px);
             border: 2px solid rgba(255, 255, 255, 0.4);
-            padding: 40px 100px;
-            border-radius: 40px;
+            padding: clamp(20px, 4vh, 40px) clamp(40px, 10vw, 100px);
+            border-radius: clamp(20px, 4vw, 40px);
             box-shadow: 
                 0 30px 60px rgba(0,0,0,0.1),
                 inset 0 0 0 1px rgba(255,255,255,0.2);
@@ -92,20 +119,20 @@
         }
 
         .title-main {
-            font-size: 64px;
+            font-size: clamp(32px, 8vw, 64px);
             font-weight: 900;
             color: #2C3E50;
-            margin-bottom: 15px;
+            margin-bottom: clamp(8px, 1.5vh, 15px);
             letter-spacing: -1px;
             text-transform: uppercase;
             line-height: 0.9;
         }
 
         .title-sub {
-            font-size: 20px;
+            font-size: clamp(12px, 2.5vw, 20px);
             color: #34495E;
             font-weight: 400;
-            letter-spacing: 4px;
+            letter-spacing: clamp(1px, 0.5vw, 4px);
             text-transform: uppercase;
             opacity: 0.8;
         }
@@ -116,7 +143,7 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 320px;
+            height: clamp(150px, 35vh, 320px);
             z-index: 10;
         }
 
@@ -128,35 +155,35 @@
         }
 
         .hill-1 {
-            width: 1200px; height: 300px;
+            width: max(100%, 1200px);
+            height: clamp(150px, 30vh, 300px);
             background: linear-gradient(180deg, #58D68D 0%, #2ECC71 100%);
-            left: -200px;
+            left: -20%;
             z-index: 1;
             opacity: 0.8;
         }
 
         .hill-2 {
-            width: 1400px; height: 350px;
+            width: max(100%, 1400px);
+            height: clamp(170px, 35vh, 350px);
             background: linear-gradient(180deg, #48C9B0 0%, #1ABC9C 100%);
-            right: -300px;
+            right: -30%;
             z-index: 2;
         }
 
         /* Modern CTA Button */
         .start-button-modern {
-            position: absolute;
-            bottom: 220px;
-            left: 50%;
-            transform: translateX(-50%);
+            position: relative;
             z-index: 150;
+            margin-top: clamp(20px, 5vh, 60px);
         }
 
         .btn-start-final {
-            min-width: 400px;
+            min-width: min(400px, 80vw);
             font-family: 'Outfit', sans-serif;
-            font-size: 24px;
+            font-size: clamp(16px, 3vw, 24px);
             font-weight: 700;
-            padding: 30px 60px;
+            padding: clamp(16px, 3vh, 30px) clamp(30px, 6vw, 60px);
             background: #FFD966;
             color: #2C3E50;
             border: none;
@@ -167,7 +194,7 @@
                 0 5px 15px rgba(0,0,0,0.1);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: clamp(1px, 0.3vw, 2px);
         }
 
         .btn-start-final:hover {
@@ -185,16 +212,17 @@
         /* Subtle Instruction Hint */
         .instruction-hint {
             position: absolute;
-            bottom: 60px;
+            bottom: clamp(20px, 5vh, 60px);
             left: 50%;
             transform: translateX(-50%);
             z-index: 200;
             color: #2C3E50;
-            font-size: 14px;
+            font-size: clamp(11px, 1.8vw, 14px);
             font-weight: 400;
             letter-spacing: 1px;
             opacity: 0.6;
             animation: pulse-text 2s infinite;
+            white-space: nowrap;
         }
 
         @keyframes pulse-text {
@@ -205,27 +233,155 @@
         /* Modern Foreground Decor */
         .modern-flower {
             position: absolute;
-            bottom: 40px;
+            bottom: clamp(20px, 5vh, 40px);
             z-index: 100;
-            font-size: 40px;
+            font-size: clamp(24px, 5vw, 40px);
             animation: sway 4s ease-in-out infinite;
             filter: drop-shadow(0 10px 10px rgba(0,0,0,0.1));
         }
 
+        .flower-1 { left: 10%; }
+        .flower-2 { left: 18%; animation-delay: -1s; font-size: clamp(18px, 3.5vw, 30px); }
+        .flower-3 { right: 15%; animation-delay: -2s; }
+        .flower-4 { right: 22%; animation-delay: -3s; font-size: clamp(20px, 4.5vw, 35px); }
+
         @keyframes sway {
             0%, 100% { transform: translateY(0) rotate(-5deg); }
             50% { transform: translateY(-5px) rotate(5deg); }
+        }
+
+        /* ============= RESPONSIVE ADJUSTMENTS ============= */
+
+        /* Tablet Portrait */
+        @media (max-width: 768px) {
+            .title-container {
+                margin-top: -8vh;
+            }
+
+            .start-button-modern {
+                margin-top: clamp(15px, 4vh, 40px);
+            }
+
+            .instruction-hint {
+                bottom: clamp(15px, 3vh, 30px);
+                font-size: clamp(10px, 2vw, 13px);
+            }
+        }
+
+        /* Mobile */
+        @media (max-width: 480px) {
+            .title-panel-modern {
+                padding: clamp(15px, 4vw, 25px) clamp(25px, 8vw, 50px);
+                border-radius: 20px;
+                border-width: 1.5px;
+            }
+
+            .title-main {
+                font-size: clamp(28px, 10vw, 48px);
+            }
+
+            .start-button-modern {
+                margin-top: clamp(15px, 3vh, 30px);
+            }
+
+            .btn-start-final {
+                min-width: min(300px, 85vw);
+                border-radius: 30px;
+            }
+
+            .modern-flower {
+                font-size: clamp(18px, 5vw, 30px);
+            }
+
+            .flower-2, .flower-4 {
+                display: none;
+            }
+
+            .sun-rays {
+                top: -20%;
+                right: -30%;
+                width: 70vw;
+                height: 70vw;
+            }
+        }
+
+        /* Very small screens */
+        @media (max-width: 360px) {
+            .title-main {
+                font-size: 28px;
+            }
+
+            .title-sub {
+                font-size: 11px;
+                letter-spacing: 1px;
+            }
+
+            .btn-start-final {
+                font-size: 14px;
+                padding: 14px 25px;
+            }
+        }
+
+        /* Landscape mobile */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .title-container {
+                margin-top: -2vh;
+            }
+
+            .title-panel-modern {
+                padding: 10px 40px;
+            }
+
+            .title-main {
+                font-size: clamp(20px, 5vh, 36px);
+                margin-bottom: 5px;
+            }
+
+            .title-sub {
+                font-size: clamp(10px, 2vh, 14px);
+            }
+
+            .start-button-modern {
+                margin-top: 10px;
+            }
+
+            .btn-start-final {
+                padding: 10px 30px;
+                font-size: clamp(12px, 3vh, 18px);
+            }
+
+            .ground-layered {
+                height: 30vh;
+            }
+
+            .instruction-hint {
+                bottom: 10px;
+                font-size: 10px;
+            }
+
+            .modern-flower {
+                bottom: 10px;
+                font-size: 20px;
+            }
+        }
+
+        /* Large desktop */
+        @media (min-width: 1400px) {
+            .idle-screen {
+                max-width: 1400px;
+                margin: 0 auto;
+            }
         }
     </style>
 </head>
 <body>
     <div class="screen-container idle-screen">
         <div class="sun-rays"></div>
-        
+
         <!-- Modern Clouds -->
-        <div class="soft-cloud" style="width: 200px; height: 60px; top: 15%; left: -200px; animation-duration: 40s;"></div>
-        <div class="soft-cloud" style="width: 150px; height: 45px; top: 30%; left: -150px; animation-duration: 55s; animation-delay: -10s;"></div>
-        <div class="soft-cloud" style="width: 250px; height: 75px; top: 45%; left: -300px; animation-duration: 45s; animation-delay: -25s;"></div>
+        <div class="soft-cloud cloud-1"></div>
+        <div class="soft-cloud cloud-2"></div>
+        <div class="soft-cloud cloud-3"></div>
 
         <!-- Modern Title Section -->
         <div class="title-container">
@@ -235,6 +391,13 @@
             </div>
         </div>
 
+        <!-- CTA Button -->
+        <div class="start-button-modern">
+            <button class="btn-start-final" onclick="nextScreen()">
+                Start het Avontuur
+            </button>
+        </div>
+
         <!-- Ground & Environment -->
         <div class="ground-layered">
             <div class="hill hill-1"></div>
@@ -242,17 +405,10 @@
         </div>
 
         <!-- Modern Decor -->
-        <div class="modern-flower" style="left: 10%;">🌿</div>
-        <div class="modern-flower" style="left: 18%; animation-delay: -1s; font-size: 30px;">🌼</div>
-        <div class="modern-flower" style="right: 15%; animation-delay: -2s;">🌿</div>
-        <div class="modern-flower" style="right: 22%; animation-delay: -3s; font-size: 35px;">🌸</div>
-
-        <!-- CTA Button -->
-        <div class="start-button-modern">
-            <button class="btn-start-final" onclick="nextScreen()">
-                Start het Avontuur
-            </button>
-        </div>
+        <div class="modern-flower flower-1">🌿</div>
+        <div class="modern-flower flower-2">🌼</div>
+        <div class="modern-flower flower-3">🌿</div>
+        <div class="modern-flower flower-4">🌸</div>
 
         <!-- Subtle Instructions -->
         <div class="instruction-hint">

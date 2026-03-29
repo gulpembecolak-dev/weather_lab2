@@ -2,321 +2,62 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>2.3 - Interactieve Weerkaart | Weather Lab Kids</title>
     <link rel="stylesheet" href="../design-system.css">
-    <script src="../js/dialogue.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
+        .map-screen { width:100%; height:100vh; height:100dvh; background:linear-gradient(180deg,#87CEEB 0%,#E0F7FA 100%); position:relative; overflow:hidden; font-family:'Outfit',sans-serif; display:flex; align-items:center; justify-content:center; padding:clamp(60px,8vh,80px) clamp(15px,3vw,30px) clamp(15px,3vw,30px); }
+        .map-container { width:min(900px,95vw); height:min(550px,75vh); background:rgba(255,255,255,0.4); backdrop-filter:blur(15px); border:2px solid rgba(255,255,255,0.5); border-radius:clamp(20px,4vw,40px); box-shadow:0 40px 100px rgba(0,0,0,0.05); position:relative; display:flex; justify-content:center; align-items:center; padding:clamp(15px,3vw,40px); }
+        .map-title { position:absolute; top:clamp(-25px,-3vw,-35px); left:50%; transform:translateX(-50%); background:#2C3E50; color:white; padding:clamp(8px,1.5vw,15px) clamp(20px,4vw,40px); border-radius:30px; font-size:clamp(14px,2.5vw,24px); font-weight:900; box-shadow:0 10px 20px rgba(0,0,0,0.1); white-space:nowrap; z-index:100; text-transform:uppercase; letter-spacing:1px; }
+        .belgium-map { width:min(550px,60vw); height:min(450px,55vh); background:white; border-radius:30px; position:relative; overflow:hidden; box-shadow:0 20px 40px rgba(0,0,0,0.05); border:4px solid white; }
+        .swirl-container { position:absolute; width:clamp(100px,15vw,180px); height:clamp(100px,15vw,180px); pointer-events:none; display:flex; justify-content:center; align-items:center; }
+        .swirl-arrow { position:absolute; font-size:clamp(20px,3vw,36px); color:rgba(255,255,255,0.6); filter:drop-shadow(0 5px 10px rgba(0,0,0,0.1)); }
+        .swirl-h .swirl-arrow { animation:swirl-clockwise 4s linear infinite; }
+        @keyframes swirl-clockwise { 0%{transform:rotate(0deg) translateX(50px) rotate(0deg);opacity:0;} 50%{opacity:1;} 100%{transform:rotate(360deg) translateX(70px) rotate(-360deg);opacity:0;} }
+        .swirl-l .swirl-arrow { animation:swirl-counter-clockwise 4s linear infinite; }
+        @keyframes swirl-counter-clockwise { 0%{transform:rotate(360deg) translateX(80px) rotate(-360deg);opacity:0;} 50%{opacity:1;} 100%{transform:rotate(0deg) translateX(40px) rotate(0deg);opacity:0;} }
+        .pressure-marker { position:absolute; cursor:pointer; width:clamp(50px,8vw,90px); height:clamp(50px,8vw,90px); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:clamp(28px,5vw,54px); font-weight:900; border:clamp(3px,0.5vw,6px) solid white; box-shadow:0 10px 25px rgba(0,0,0,0.1); transition:all 0.4s cubic-bezier(0.175,0.885,0.32,1.275); z-index:10; }
+        .pressure-marker:hover { transform:scale(1.15) translateY(-5px); }
+        .marker-h { background:#E74C3C; top:25%; left:20%; color:white; }
+        .marker-l { background:#3498DB; bottom:25%; right:20%; color:white; }
+        .legend { position:absolute; bottom:clamp(10px,2vw,40px); left:clamp(10px,2vw,40px); background:white; padding:clamp(12px,2vw,25px); border-radius:24px; box-shadow:0 15px 30px rgba(0,0,0,0.05); z-index:20; width:min(280px,35vw); }
+        .legend-item { color:#2C3E50; font-size:clamp(10px,1.3vw,14px); margin:clamp(6px,1vw,12px) 0; display:flex; align-items:center; gap:clamp(8px,1.5vw,15px); font-weight:700; }
+        .legend-icon { width:clamp(25px,4vw,40px); height:clamp(25px,4vw,40px); border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; color:white; font-size:clamp(12px,2vw,20px); flex-shrink:0; }
+        .btn-extreme { background:#A569BD; color:white; padding:clamp(8px,1.2vw,15px) clamp(15px,2.5vw,30px); border-radius:30px; font-family:'Outfit',sans-serif; font-weight:900; font-size:clamp(10px,1.3vw,14px); border:none; cursor:pointer; box-shadow:0 10px 20px rgba(165,105,189,0.3); transition:all 0.3s; text-transform:uppercase; letter-spacing:1px; }
+        .btn-extreme:hover { transform:scale(1.05); background:#9B59B6; }
+        .btn-back { position:fixed; top:clamp(15px,3vw,40px); left:clamp(15px,3vw,40px); background:rgba(255,255,255,0.4); backdrop-filter:blur(10px); border:2px solid rgba(255,255,255,0.5); color:#2C3E50; padding:clamp(10px,1.5vw,15px) clamp(15px,2.5vw,30px); border-radius:30px; font-weight:700; z-index:100; cursor:pointer; transition:all 0.3s; font-size:clamp(12px,1.5vw,16px); }
+        .btn-back:hover { background:white; transform:translateX(-5px); }
+        .btn-home { position:fixed; top:clamp(15px,3vw,40px); right:clamp(15px,3vw,40px); background:rgba(255,255,255,0.4); backdrop-filter:blur(10px); border:2px solid rgba(255,255,255,0.5); padding:clamp(10px,1.5vw,15px); border-radius:50%; cursor:pointer; z-index:100; transition:all 0.3s; font-size:clamp(18px,2.5vw,24px); }
+        .btn-home:hover { background:white; transform:scale(1.1); }
 
-        .map-screen {
-            width: var(--screen-width);
-            height: var(--screen-height);
-            background: linear-gradient(180deg, #87CEEB 0%, #E0F7FA 100%);
-            position: relative;
-            overflow: hidden;
-            font-family: 'Outfit', sans-serif;
-        }
-
-        /* Modern Map Container - Glassmorphism */
-        .map-container {
-            position: absolute;
-            top: 120px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 900px;
-            height: 550px;
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(15px);
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            border-radius: 40px;
-            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.05);
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 40px;
-        }
-
-        .map-title {
-            position: absolute;
-            top: -35px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #2C3E50;
-            color: white;
-            padding: 15px 40px;
-            border-radius: 30px;
-            font-size: 24px;
-            font-weight: 900;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            white-space: nowrap;
-            z-index: 100;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .belgium-map {
-            width: 550px;
-            height: 450px;
-            background: white;
-            border-radius: 30px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
-            border: 4px solid white;
-        }
-
-        /* Swirling Arrows Animation - Modernized */
-        .swirl-container {
-            position: absolute;
-            width: 180px;
-            height: 180px;
-            pointer-events: none;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .swirl-arrow {
-            position: absolute;
-            font-size: 36px;
-            color: rgba(255, 255, 255, 0.6);
-            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1));
-        }
-
-        .swirl-h .swirl-arrow {
-            animation: swirl-clockwise 4s linear infinite;
-        }
-
-        @keyframes swirl-clockwise {
-            0% { transform: rotate(0deg) translateX(50px) rotate(0deg); opacity: 0; }
-            50% { opacity: 1; }
-            100% { transform: rotate(360deg) translateX(70px) rotate(-360deg); opacity: 0; }
-        }
-
-        .swirl-l .swirl-arrow {
-            animation: swirl-counter-clockwise 4s linear infinite;
-        }
-
-        @keyframes swirl-counter-clockwise {
-            0% { transform: rotate(360deg) translateX(80px) rotate(-360deg); opacity: 0; }
-            50% { opacity: 1; }
-            100% { transform: rotate(0deg) translateX(40px) rotate(0deg); opacity: 0; }
-        }
-
-        /* Pressure Markers - Modern & Friendly */
-        .pressure-marker {
-            position: absolute;
-            cursor: pointer;
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 54px;
-            font-weight: 900;
-            border: 6px solid white;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 10;
-        }
-
-        .pressure-marker:hover {
-            transform: scale(1.15) translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-        }
-
-        .marker-h { background: #E74C3C; top: 25%; left: 20%; color: white; }
-        .marker-l { background: #3498DB; bottom: 25%; right: 20%; color: white; }
-
-        /* Legend - Modern Style */
-        .legend {
-            position: absolute;
-            bottom: 40px;
-            left: 40px;
-            background: white;
-            padding: 25px;
-            border-radius: 24px;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05);
-            z-index: 20;
-            width: 280px;
-        }
-
-        .legend-item {
-            color: #2C3E50;
-            font-size: 14px;
-            margin: 12px 0;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            font-weight: 700;
-        }
-
-        .legend-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 900;
-            color: white;
-            font-size: 20px;
-            flex-shrink: 0;
-        }
-
-        /* Toggle Button - Modern Style */
-        .btn-extreme {
-            background: #A569BD;
-            color: white;
-            padding: 15px 30px;
-            border-radius: 30px;
-            font-family: 'Outfit', sans-serif;
-            font-weight: 900;
-            font-size: 14px;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 10px 20px rgba(165, 105, 189, 0.3);
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .btn-extreme:hover {
-            transform: scale(1.05);
-            background: #9B59B6;
-            box-shadow: 0 15px 30px rgba(165, 105, 189, 0.4);
-        }
-
-        /* Navigation Buttons */
-        .btn-back {
-            position: absolute;
-            top: 40px;
-            left: 40px;
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            color: #2C3E50;
-            padding: 15px 30px;
-            border-radius: 30px;
-            font-weight: 700;
-            z-index: 100;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-back:hover {
-            background: white;
-            transform: translateX(-5px);
-        }
-
-        .btn-home {
-            position: absolute;
-            top: 40px;
-            right: 40px;
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            padding: 15px;
-            border-radius: 50%;
-            cursor: pointer;
-            z-index: 100;
-            transition: all 0.3s;
-            font-size: 24px;
-        }
-
-        .btn-home:hover {
-            background: white;
-            transform: scale(1.1);
+        @media (max-width: 600px) {
+            .legend { display:none; }
         }
     </style>
 </head>
 <body>
     <div class="screen-container map-screen">
-        <!-- Back Button -->
-        <button class="btn-back" onclick="window.location.href='2.0-observatory-main.html'">
-            ← TERUG
-        </button>
-        
-        <!-- Home Button -->
-        <button class="btn-home" onclick="window.location.href='1.0-hub-map.html'">
-            🏠
-        </button>
-        
+        <button class="btn-back" onclick="window.location.href='2.0-observatory-main.html'">← TERUG</button>
+        <button class="btn-home" onclick="window.location.href='1.0-hub-map.html'">🏠</button>
         <div class="map-container">
             <div class="map-title">🗺️ INTERACTIEVE WEERKAART</div>
-            
             <div class="belgium-map" id="belgiumMap">
-                <!-- Swirl High -->
-                <div class="swirl-container swirl-h" style="top: 25%; left: 20%; transform: translate(-50%, -50%);">
-                    <span class="swirl-arrow" style="animation-delay: 0s">➔</span>
-                    <span class="swirl-arrow" style="animation-delay: 1s">➔</span>
-                    <span class="swirl-arrow" style="animation-delay: 2s">➔</span>
-                    <span class="swirl-arrow" style="animation-delay: 3s">➔</span>
-                </div>
-
-                <!-- Swirl Low -->
-                <div class="swirl-container swirl-l" style="bottom: 25%; right: 20%; transform: translate(50%, 50%);">
-                    <span class="swirl-arrow" style="animation-delay: 0s">➔</span>
-                    <span class="swirl-arrow" style="animation-delay: 1s">➔</span>
-                    <span class="swirl-arrow" style="animation-delay: 2s">➔</span>
-                    <span class="swirl-arrow" style="animation-delay: 3s">➔</span>
-                </div>
-                
-                <!-- Pressure Markers -->
+                <div class="swirl-container swirl-h" style="top:25%;left:20%;transform:translate(-50%,-50%);"><span class="swirl-arrow" style="animation-delay:0s">➔</span><span class="swirl-arrow" style="animation-delay:1s">➔</span><span class="swirl-arrow" style="animation-delay:2s">➔</span><span class="swirl-arrow" style="animation-delay:3s">➔</span></div>
+                <div class="swirl-container swirl-l" style="bottom:25%;right:20%;transform:translate(50%,50%);"><span class="swirl-arrow" style="animation-delay:0s">➔</span><span class="swirl-arrow" style="animation-delay:1s">➔</span><span class="swirl-arrow" style="animation-delay:2s">➔</span><span class="swirl-arrow" style="animation-delay:3s">➔</span></div>
                 <div class="pressure-marker marker-h" onclick="showPressureInfo('high')">H</div>
                 <div class="pressure-marker marker-l" onclick="showPressureInfo('low')">L</div>
             </div>
-            
-            <!-- Legend -->
             <div class="legend">
-                <div class="legend-item">
-                    <div class="legend-icon" style="background: #E74C3C;">H</div>
-                    <span><strong>HOGE DRUK</strong><br><span style="font-weight: 400; opacity: 0.7;">Mooi weer ☀️</span></span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-icon" style="background: #3498DB;">L</div>
-                    <span><strong>LAGE DRUK</strong><br><span style="font-weight: 400; opacity: 0.7;">Regen 🌧️</span></span>
-                </div>
+                <div class="legend-item"><div class="legend-icon" style="background:#E74C3C;">H</div><span><strong>HOGE DRUK</strong><br><span style="font-weight:400;opacity:0.7;">Mooi weer ☀️</span></span></div>
+                <div class="legend-item"><div class="legend-icon" style="background:#3498DB;">L</div><span><strong>LAGE DRUK</strong><br><span style="font-weight:400;opacity:0.7;">Regen 🌧️</span></span></div>
             </div>
-            
-            <!-- Extreme Weather Toggle -->
-            <div style="position: absolute; bottom: 40px; right: 40px;">
-                <button class="btn-extreme" onclick="toggleExtreme()">
-                    ⚡ EXTREME WEER
-                </button>
-            </div>
+            <div style="position:absolute;bottom:clamp(10px,2vw,40px);right:clamp(10px,2vw,40px);"><button class="btn-extreme" onclick="toggleExtreme()">⚡ EXTREME WEER</button></div>
         </div>
     </div>
-
     <script>
-        function showPressureInfo(type) {
-            if (type === 'high') {
-                showDialogue("Bij HOGE DRUK wordt de lucht naar beneden gedrukt. Dat houdt de wolken weg. Daarom is het dan vaak zonnig en droog!", "happy");
-            } else {
-                showDialogue("Bij LAGE DRUK stijgt de lucht op. De lucht koelt af en vormt wolken. Daarom regent het vaak als de druk laag is!", "surprised");
-            }
-        }
-
-        function toggleExtreme() {
-            const map = document.getElementById('belgiumMap');
-            map.style.transition = 'background 0.5s';
-            map.style.background = '#4A235A';
-            
-            showDialogue("OEI! Extreme lage druk zorgt voor een zware storm! Zie je de bliksem?", "surprised");
-            
-            setTimeout(() => {
-                map.style.background = '#E8F8F5';
-            }, 3000);
-        }
-
-        window.onload = function() {
-            setTimeout(() => {
-                showDialogue("Klik op de H of de L om te leren wat ze betekenen voor het weer in België!", "happy");
-            }, 500);
-        };
+        function showPressureInfo(type){if(type==='high'){alert("Bij HOGE DRUK wordt de lucht naar beneden gedrukt. Dat houdt de wolken weg. Daarom is het dan vaak zonnig en droog!");}else{alert("Bij LAGE DRUK stijgt de lucht op. De lucht koelt af en vormt wolken. Daarom regent het vaak als de druk laag is!");}}
+        function toggleExtreme(){const map=document.getElementById('belgiumMap');map.style.transition='background 0.5s';map.style.background='#4A235A';alert("OEI! Extreme lage druk zorgt voor een zware storm!");setTimeout(()=>{map.style.background='#E8F8F5';},3000);}
     </script>
 </body>
 </html>

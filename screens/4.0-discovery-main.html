@@ -2,301 +2,43 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>4.0 - Discovery Lab | Weather Lab Kids</title>
     <link rel="stylesheet" href="../design-system.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
-
-        .discovery-screen {
-            width: var(--screen-width);
-            height: var(--screen-height);
-            background: linear-gradient(135deg, var(--sky-blue) 0%, var(--sky-light) 100%);
-            position: relative;
-            overflow: hidden;
-            font-family: var(--font-modern);
-        }
-
-        /* Modern Title Panel - Glassmorphism */
-        .lab-title {
-            position: absolute;
-            top: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(15px);
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            padding: 20px 60px;
-            border-radius: 30px;
-            box-shadow: 0 20px 40px var(--shadow-soft);
-            text-align: center;
-            font-size: 28px;
-            font-weight: 900;
-            color: var(--text-dark);
-            z-index: 100;
-        }
-
-        .bubbles-container {
-            position: absolute;
-            top: 180px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 1000px;
-            height: 450px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            gap: 40px;
-            z-index: 20;
-        }
-
-        /* Modern Question Bubble */
-        .question-bubble {
-            width: 220px;
-            height: 220px;
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(10px);
-            border: 4px solid white;
-            border-radius: 50%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 15px 30px var(--shadow-soft);
-            animation: float-bubble 4s ease-in-out infinite;
-        }
-
-        .question-bubble:hover {
-            transform: scale(1.1) translateY(-10px);
-            background: white;
-            box-shadow: 0 20px 40px var(--shadow-heavy);
-        }
-
-        .question-bubble:nth-child(1) { animation-delay: 0s; }
-        .question-bubble:nth-child(2) { animation-delay: 0.8s; }
-        .question-bubble:nth-child(3) { animation-delay: 1.6s; }
-        .question-bubble:nth-child(4) { animation-delay: 2.4s; }
-        .question-bubble:nth-child(5) { animation-delay: 3.2s; }
-
-        @keyframes float-bubble {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-
-        .bubble-icon {
-            font-size: 70px;
-            margin-bottom: 10px;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1));
-        }
-
-        .bubble-text {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--text-dark);
-            text-align: center;
-            line-height: 1.3;
-            padding: 0 20px;
-        }
-
-        /* Navigation Buttons */
-        .btn-back {
-            position: absolute;
-            top: 40px;
-            left: 40px;
-            z-index: 100;
-        }
-
-        .btn-complete {
-            min-width: 500px;
-            padding: 30px 60px;
-            font-size: 26px;
-        }
-
-        /* Modern Info Popup - Glassmorphism */
-        .info-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.15);
-            backdrop-filter: blur(8px);
-            z-index: 2000;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .info-overlay.visible {
-            display: flex;
-            opacity: 1;
-        }
-
-        .info-popup {
-            width: 800px;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            border: 2px solid rgba(255, 255, 255, 0.6);
-            border-radius: 40px;
-            padding: 60px;
-            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.1);
-            transform: scale(0.95);
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            text-align: center;
-            position: relative;
-        }
-
-        .info-overlay.visible .info-popup {
-            transform: scale(1);
-        }
-
-        .info-icon {
-            font-size: 100px;
-            margin-bottom: 30px;
-            filter: drop-shadow(0 15px 30px rgba(0,0,0,0.1));
-        }
-
-        .info-title {
-            font-size: 32px;
-            font-weight: 900;
-            color: var(--text-dark);
-            margin-bottom: 25px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .info-content {
-            font-size: 20px;
-            color: var(--text-dark);
-            line-height: 1.8;
-            font-weight: 500;
-            margin-bottom: 45px;
-            padding: 0 20px;
-        }
-
-        .info-content strong {
-            color: #E67E22;
-            font-weight: 900;
-        }
-
-        .btn-close-popup {
-            min-width: 400px;
-            padding: 25px 50px;
-            font-size: 22px;
-        }
+        .discovery-screen { width:100%; min-height:100vh; min-height:100dvh; background:linear-gradient(135deg,var(--sky-blue) 0%,var(--sky-light) 100%); position:relative; overflow-x:hidden; overflow-y:auto; font-family:var(--font-modern); padding-bottom:clamp(80px,12vh,120px); }
+        .lab-title { background:rgba(255,255,255,0.4); backdrop-filter:blur(15px); border:2px solid rgba(255,255,255,0.5); padding:clamp(12px,2vw,20px) clamp(25px,5vw,60px); border-radius:30px; box-shadow:0 20px 40px var(--shadow-soft); text-align:center; font-size:clamp(18px,3.5vw,28px); font-weight:900; color:var(--text-dark); z-index:100; margin:clamp(60px,8vh,80px) auto clamp(15px,3vh,30px); width:fit-content; }
+        .bubbles-container { width:min(1000px,95vw); margin:0 auto; display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:clamp(15px,3vw,40px); z-index:20; padding:0 clamp(10px,2vw,20px); }
+        .question-bubble { width:clamp(140px,20vw,220px); height:clamp(140px,20vw,220px); background:rgba(255,255,255,0.6); backdrop-filter:blur(10px); border:4px solid white; border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; transition:all 0.4s cubic-bezier(0.175,0.885,0.32,1.275); box-shadow:0 15px 30px var(--shadow-soft); animation:float-bubble 4s ease-in-out infinite; }
+        .question-bubble:hover { transform:scale(1.1) translateY(-10px); background:white; box-shadow:0 20px 40px var(--shadow-heavy); }
+        .question-bubble:nth-child(1){animation-delay:0s;} .question-bubble:nth-child(2){animation-delay:0.8s;} .question-bubble:nth-child(3){animation-delay:1.6s;} .question-bubble:nth-child(4){animation-delay:2.4s;} .question-bubble:nth-child(5){animation-delay:3.2s;}
+        @keyframes float-bubble { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-20px);} }
+        .bubble-icon { font-size:clamp(36px,7vw,70px); margin-bottom:10px; filter:drop-shadow(0 10px 20px rgba(0,0,0,0.1)); }
+        .bubble-text { font-size:clamp(11px,1.5vw,16px); font-weight:700; color:var(--text-dark); text-align:center; line-height:1.3; padding:0 clamp(10px,1.5vw,20px); }
+        .btn-back { position:fixed; top:clamp(15px,3vw,40px); left:clamp(15px,3vw,40px); z-index:100; }
+        .btn-complete { min-width:min(500px,85vw); padding:clamp(18px,3vw,30px) clamp(30px,5vw,60px); font-size:clamp(18px,3vw,26px); }
+        .nav-bottom { position:fixed; bottom:clamp(15px,3vw,50px); left:50%; transform:translateX(-50%); z-index:100; }
     </style>
 </head>
 <body>
     <div class="screen-container discovery-screen">
         <button class="btn-modern btn-secondary btn-back" onclick="goBackToHub()">← TERUG</button>
         <div class="lab-title">DISCOVERY LAB</div>
-        
         <div class="bubbles-container">
-            <div class="question-bubble" onclick="showAnswer(1)">
-                <div class="bubble-icon">☁️</div>
-                <div class="bubble-text">Hoe ontstaan<br>wolken?</div>
-            </div>
-            
-            <div class="question-bubble" onclick="showAnswer(2)">
-                <div class="bubble-icon">💨</div>
-                <div class="bubble-text">Waarom<br>waait het?</div>
-            </div>
-            
-            <div class="question-bubble" onclick="showAnswer(3)">
-                <div class="bubble-icon">🌧️</div>
-                <div class="bubble-text">Hoe ontstaat<br>regen?</div>
-            </div>
-            
-            <div class="question-bubble" onclick="showAnswer(4)">
-                <div class="bubble-icon">⚡</div>
-                <div class="bubble-text">Wat is<br>onweer?</div>
-            </div>
-            
-            <div class="question-bubble" style="background: rgba(255, 217, 102, 0.4); border-color: var(--sun-yellow);" onclick="window.location.href='4.2-phygital.html'">
-                <div class="bubble-icon">🏠</div>
-                <div class="bubble-text">Maak je eigen<br>windmeter!</div>
-            </div>
+            <div class="question-bubble" onclick="showAnswer(1)"><div class="bubble-icon">☁️</div><div class="bubble-text">Hoe ontstaan<br>wolken?</div></div>
+            <div class="question-bubble" onclick="showAnswer(2)"><div class="bubble-icon">💨</div><div class="bubble-text">Waarom<br>waait het?</div></div>
+            <div class="question-bubble" onclick="showAnswer(3)"><div class="bubble-icon">🌧️</div><div class="bubble-text">Hoe ontstaat<br>regen?</div></div>
+            <div class="question-bubble" onclick="showAnswer(4)"><div class="bubble-icon">⚡</div><div class="bubble-text">Wat is<br>onweer?</div></div>
+            <div class="question-bubble" style="background:rgba(255,217,102,0.4);border-color:var(--sun-yellow);" onclick="window.location.href='4.2-phygital.html'"><div class="bubble-icon">🏠</div><div class="bubble-text">Maak je eigen<br>windmeter!</div></div>
         </div>
-        
-        <div style="position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%); z-index: 100;">
-            <button class="btn-modern btn-success btn-complete" onclick="completeAndReturn()">
-                MISSIE VOLTOOID
-            </button>
-        </div>
-
-        <!-- Custom In-Page Info Popup -->
-        <div class="info-overlay" id="infoOverlay" onclick="closeAnswer()">
-            <div class="info-popup" onclick="event.stopPropagation()">
-                <div class="info-icon" id="infoIcon">☁️</div>
-                <div class="info-title" id="infoTitle">TITEL</div>
-                <div class="info-content" id="infoContent">
-                    Inhoud komt hier...
-                </div>
-                <button class="btn-modern btn-primary btn-close-popup" onclick="closeAnswer()">
-                    GEWELDIG! →
-                </button>
-            </div>
-        </div>
+        <div class="nav-bottom"><button class="btn-modern btn-success btn-complete" onclick="completeAndReturn()">MISSIE VOLTOOID</button></div>
     </div>
-
     <script>
-        const answers = {
-            1: {
-                icon: "☁️",
-                title: "WOLKEN ONTSTAAN ZO:",
-                text: "Warm water verdampt en stijgt omhoog. Hoog in de lucht wordt het koud. De waterdamp verandert in kleine druppeltjes. Dit noemen we een <strong>WOLK</strong>!<br><br>Tip: Blaas op een koude dag uit je mond. Je ziet een mini-wolkje! 💨"
-            },
-            2: {
-                icon: "💨",
-                title: "WIND WERKT ZO:",
-                text: "De zon verwarmt de aarde. Warme lucht stijgt op en koude lucht komt ervoor in de plaats. Dit noemen we <strong>WIND</strong>!<br><br>Onthoud: Wind waait altijd van een plek met veel lucht naar een plek met minder lucht! ➡️"
-            },
-            3: {
-                icon: "🌧️",
-                title: "REGEN ONTSTAAT ZO:",
-                text: "Kleine druppeltjes in de wolk botsen tegen elkaar en worden groter. Ze worden te zwaar om te blijven zweven en vallen naar beneden. Dat noemen we <strong>REGEN</strong>!<br><br>Wist je dat 1 grote regenwolk wel 500.000 liter water kan bevatten? 💧"
-            },
-            4: {
-                icon: "⚡",
-                title: "WAT IS ONWEER?",
-                text: "In een onweerswolk botsen ijskristallen tegen elkaar. Dit maakt elektriciteit. De elektriciteit schiet door de lucht: <strong>BLIKSEM</strong>! ⚡<br><br>De lucht wordt superheet en klapt uit elkaar. Dat hoor je als <strong>DONDER</strong>! 💥"
-            }
-        };
-        
-        function showAnswer(num) {
-            const data = answers[num];
-            document.getElementById('infoIcon').textContent = data.icon;
-            document.getElementById('infoTitle').textContent = data.title;
-            document.getElementById('infoContent').innerHTML = data.text;
-            
-            const overlay = document.getElementById('infoOverlay');
-            overlay.style.display = 'flex';
-            // Trigger reflow for animation
-            overlay.offsetHeight;
-            overlay.classList.add('visible');
-        }
-
-        function closeAnswer() {
-            const overlay = document.getElementById('infoOverlay');
-            overlay.classList.remove('visible');
-            setTimeout(() => {
-                overlay.style.display = 'none';
-            }, 400);
-        }
-        
-        function completeAndReturn() {
-            sessionStorage.setItem('completed_discovery', 'true');
-            goBackToHub();
-        }
-        
-        function goBackToHub() {
-            sessionStorage.setItem('destination', 'hub');
-            window.location.href = '1.5-loading.html';
-        }
+        const answers={1:"☁️ WOLKEN ONTSTAAN ZO:\n\nWarm water verdampt en stijgt omhoog.\nHoog in de lucht wordt het koud.\nDe waterdamp verandert in druppeltjes.\n\nDit noemen we een WOLK!\n\nTip: Blaas op een koude dag uit je mond.\nJe ziet een mini-wolkje! 💨",2:"💨 WIND WERKT ZO:\n\nDe zon verwarmt de aarde.\nWarme lucht stijgt op.\nKoude lucht komt ervoor terug.\n\nDit noemen we WIND!\n\nOnthoud: Wind waait altijd van HOGE naar LAGE druk! ➡️",3:"🌧️ REGEN ONTSTAAT ZO:\n\nDruppeltjes in de wolk worden groter.\nZe worden te zwaar om te zweven.\nDan vallen ze naar beneden.\n\nDat noemen we REGEN!\n\n1 regenwolk kan 500.000 liter water bevatten! 💧",4:"⚡ ONWEER IS ZO:\n\nIn een onweerswolk botsen ijskristallen.\nDit maakt elektriciteit (zoals een batterij!).\nDe elektriciteit ontlaadt: BLIKSEM! ⚡\n\nDe lucht wordt heel heet en klapt uit elkaar.\nDat hoor je als DONDER! 💥\n\nLicht gaat sneller dan geluid!"};
+        function showAnswer(num){alert(answers[num]);}
+        function completeAndReturn(){sessionStorage.setItem('completed_discovery','true');goBackToHub();}
+        function goBackToHub(){sessionStorage.setItem('destination','hub');window.location.href='1.5-loading.html';}
     </script>
 </body>
 </html>

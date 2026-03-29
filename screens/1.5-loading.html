@@ -2,203 +2,61 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>1.5 - Loading | Weather Lab Kids</title>
     <link rel="stylesheet" href="../design-system.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
+        .loading-screen { width:100%; height:100vh; height:100dvh; background:linear-gradient(135deg,#87CEEB 0%,#E0F7FA 100%); position:relative; overflow:hidden; font-family:'Outfit',sans-serif; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+        .soft-cloud { position:absolute; background:rgba(255,255,255,0.5); backdrop-filter:blur(8px); border-radius:100px; animation:float-cloud linear infinite; box-shadow:0 10px 30px rgba(0,0,0,0.05); pointer-events:none; z-index:5; }
+        .soft-cloud::before,.soft-cloud::after { content:''; position:absolute; background:inherit; border-radius:50%; }
+        .soft-cloud::before { width:50%; height:100%; top:-40%; left:15%; }
+        .soft-cloud::after { width:40%; height:80%; top:-20%; right:15%; }
+        .cloud-1 { width:min(200px,25vw); height:min(60px,7.5vw); top:10%; animation-duration:45s; }
+        .cloud-2 { width:min(150px,20vw); height:min(45px,5.5vw); top:25%; animation-duration:60s; animation-delay:-10s; }
+        .cloud-3 { width:min(250px,30vw); height:min(75px,9vw); top:80%; animation-duration:50s; animation-delay:-25s; }
+        @keyframes float-cloud { 0%{transform:translateX(-300px);} 100%{transform:translateX(calc(100vw + 300px));} }
 
-        .loading-screen {
-            width: var(--screen-width);
-            height: var(--screen-height);
-            background: linear-gradient(135deg, #87CEEB 0%, #E0F7FA 100%);
-            position: relative;
-            overflow: hidden;
-            font-family: 'Outfit', sans-serif;
-        }
+        .flying-character { font-size:clamp(80px,20vw,140px); animation:fly-bounce 1.5s ease-in-out infinite; filter:drop-shadow(0 20px 40px rgba(0,0,0,0.15)); z-index:10; margin-bottom:clamp(20px,4vh,40px); }
+        @keyframes fly-bounce { 0%,100%{transform:translateY(0) rotate(-5deg);} 50%{transform:translateY(-40px) rotate(5deg);} }
 
-        /* Modern Soft Clouds */
-        .soft-cloud {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(8px);
-            border-radius: 100px;
-            animation: float-cloud linear infinite;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            pointer-events: none;
-            z-index: 5;
-        }
+        .loading-panel { background:rgba(255,255,255,0.4); backdrop-filter:blur(15px); border:2px solid rgba(255,255,255,0.5); padding:clamp(20px,3vw,30px) clamp(30px,8vw,80px); border-radius:clamp(20px,4vw,40px); box-shadow:0 20px 40px rgba(0,0,0,0.05); text-align:center; z-index:50; }
+        .loading-title { font-size:clamp(20px,4vw,28px); font-weight:900; color:#2C3E50; margin-bottom:10px; letter-spacing:1px; }
+        .loading-subtitle { font-size:clamp(12px,2vw,16px); color:#7F8C8D; font-weight:400; }
+        .loading-bar-container { width:min(450px,70vw); height:12px; background:rgba(255,255,255,0.5); margin:clamp(15px,2vh,25px) auto 0; position:relative; border-radius:10px; overflow:hidden; box-shadow:inset 0 2px 4px rgba(0,0,0,0.05); }
+        .loading-bar-fill { height:100%; background:#2ECC71; width:0%; animation:fill-bar 2.5s cubic-bezier(0.65,0,0.35,1) forwards; border-radius:10px; }
+        @keyframes fill-bar { 0%{width:0%;} 100%{width:100%;} }
 
-        .soft-cloud::before, .soft-cloud::after {
-            content: '';
-            position: absolute;
-            background: inherit;
-            border-radius: 50%;
-        }
-
-        .soft-cloud::before { width: 50%; height: 100%; top: -40%; left: 15%; }
-        .soft-cloud::after { width: 40%; height: 80%; top: -20%; right: 15%; }
-
-        @keyframes float-cloud {
-            0% { transform: translateX(-300px); }
-            100% { transform: translateX(1300px); }
-        }
-
-        /* Character Flying */
-        .flying-character {
-            position: absolute;
-            top: 45%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 140px;
-            animation: fly-bounce 1.5s ease-in-out infinite;
-            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.15));
-            z-index: 10;
-        }
-
-        @keyframes fly-bounce {
-            0%, 100% { transform: translate(-50%, -50%) translateY(0) rotate(-5deg); }
-            50% { transform: translate(-50%, -50%) translateY(-40px) rotate(5deg); }
-        }
-
-        /* Loading Text Panel - Modern Glassmorphism */
-        .loading-panel {
-            position: absolute;
-            bottom: 120px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(15px);
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            padding: 30px 80px;
-            border-radius: 40px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
-            text-align: center;
-            z-index: 50;
-        }
-
-        .loading-title {
-            font-size: 28px;
-            font-weight: 900;
-            color: #2C3E50;
-            margin-bottom: 10px;
-            letter-spacing: 1px;
-        }
-
-        .loading-subtitle {
-            font-size: 16px;
-            color: #7F8C8D;
-            font-weight: 400;
-        }
-
-        /* Loading Bar - Modern Rounded */
-        .loading-bar-container {
-            width: 450px;
-            height: 12px;
-            background: rgba(255, 255, 255, 0.5);
-            margin: 25px auto 0;
-            position: relative;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
-        }
-
-        .loading-bar-fill {
-            height: 100%;
-            background: #2ECC71;
-            width: 0%;
-            animation: fill-bar 2.5s cubic-bezier(0.65, 0, 0.35, 1) forwards;
-            border-radius: 10px;
-        }
-
-        @keyframes fill-bar {
-            0% { width: 0%; }
-            100% { width: 100%; }
-        }
-
-        /* Birds - Modern & Subtle */
-        .bird {
-            position: absolute;
-            font-size: 32px;
-            animation: fly-bird 10s linear infinite;
-            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.05));
-            opacity: 0.6;
-        }
-
-        .bird-1 { top: 15%; animation-duration: 12s; }
-        .bird-2 { top: 35%; animation-duration: 8s; animation-delay: -2s; }
-
-        @keyframes fly-bird {
-            0% { left: -100px; transform: scaleX(1); }
-            100% { left: 110%; transform: scaleX(1); }
-        }
+        .bird { position:absolute; font-size:clamp(20px,4vw,32px); animation:fly-bird 10s linear infinite; filter:drop-shadow(0 5px 10px rgba(0,0,0,0.05)); opacity:0.6; }
+        .bird-1 { top:15%; animation-duration:12s; }
+        .bird-2 { top:35%; animation-duration:8s; animation-delay:-2s; }
+        @keyframes fly-bird { 0%{left:-100px;transform:scaleX(1);} 100%{left:110%;transform:scaleX(1);} }
     </style>
 </head>
 <body>
     <div class="screen-container loading-screen">
-        <!-- Modern Clouds -->
-        <div class="soft-cloud" style="width: 200px; height: 60px; top: 10%; left: -200px; animation-duration: 45s;"></div>
-        <div class="soft-cloud" style="width: 150px; height: 45px; top: 25%; left: -150px; animation-duration: 60s; animation-delay: -10s;"></div>
-        <div class="soft-cloud" style="width: 250px; height: 75px; top: 80%; left: -300px; animation-duration: 50s; animation-delay: -25s;"></div>
-
-        <!-- Flying Birds -->
+        <div class="soft-cloud cloud-1"></div>
+        <div class="soft-cloud cloud-2"></div>
+        <div class="soft-cloud cloud-3"></div>
         <div class="bird bird-1">🐦</div>
         <div class="bird bird-2">🐦</div>
-
-        <!-- Flying Character -->
         <div class="flying-character" id="flyingCharacter">👩‍🔬</div>
-
-        <!-- Loading Panel -->
         <div class="loading-panel">
-            <div class="loading-title">
-                REIZEN...
-            </div>
-            <div class="loading-subtitle" id="destinationText">
-                Naar het Observatorium
-            </div>
-            <div class="loading-bar-container">
-                <div class="loading-bar-fill"></div>
-            </div>
+            <div class="loading-title">REIZEN...</div>
+            <div class="loading-subtitle" id="destinationText">Naar het Observatorium</div>
+            <div class="loading-bar-container"><div class="loading-bar-fill"></div></div>
         </div>
     </div>
-
     <script>
-        // Character emoji mapping
-        const characterEmojis = {
-            'pam': '👩‍🔬',
-            'lily': '👧',
-            'eric': '👦'
-        };
-
-        // Destination mapping
-        const destinationNames = {
-            'observatory': 'Naar het Observatorium',
-            'storm': 'Naar het Storm Lab',
-            'discovery': 'Naar het Discovery Lab',
-            'hub': 'Terug naar de Eilanden'
-        };
-
-        // Destination URLs
-        const destinationURLs = {
-            'observatory': '2.0-observatory-main.html',
-            'storm': '3.0-storm-main.html',
-            'discovery': '4.0-discovery-main.html',
-            'hub': '1.0-hub-map.html'
-        };
-
+        const characterEmojis = {'pam':'👩‍🔬','lily':'👧','eric':'👦'};
+        const destinationNames = {'observatory':'Naar het Observatorium','storm':'Naar het Storm Lab','discovery':'Naar het Discovery Lab','hub':'Terug naar de Eilanden'};
+        const destinationURLs = {'observatory':'2.0-observatory-main.html','storm':'3.0-storm-main.html','discovery':'4.0-discovery-main.html','hub':'1.0-hub-map.html'};
         window.onload = function() {
-            // Load character
             const selectedCharacter = sessionStorage.getItem('selectedCharacter') || 'pam';
             document.getElementById('flyingCharacter').textContent = characterEmojis[selectedCharacter];
-
-            // Load destination
             const destination = sessionStorage.getItem('destination') || 'observatory';
             document.getElementById('destinationText').textContent = destinationNames[destination];
-
-            // Redirect after loading (2 seconds to match animation)
-            setTimeout(() => {
-                window.location.href = destinationURLs[destination];
-            }, 2500);
+            setTimeout(() => { window.location.href = destinationURLs[destination]; }, 2500);
         };
     </script>
 </body>

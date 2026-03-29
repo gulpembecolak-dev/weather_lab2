@@ -2,24 +2,27 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>0.3 - Karakter Seçimi | Weather Lab Kids</title>
     <link rel="stylesheet" href="../design-system.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
 
         .character-screen {
-            width: var(--screen-width);
-            height: var(--screen-height);
+            width: 100%;
+            min-height: 100vh;
+            min-height: 100dvh;
             background: linear-gradient(135deg, #87CEEB 0%, #E0F7FA 100%);
             position: relative;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
             font-family: 'Outfit', sans-serif;
+            padding-bottom: clamp(80px, 12vh, 120px);
         }
 
         /* Modern Soft Clouds */
         .soft-cloud {
-            position: absolute;
+            position: fixed;
             background: rgba(255, 255, 255, 0.5);
             backdrop-filter: blur(8px);
             border-radius: 100px;
@@ -38,23 +41,25 @@
         .soft-cloud::before { width: 50%; height: 100%; top: -40%; left: 15%; }
         .soft-cloud::after { width: 40%; height: 80%; top: -20%; right: 15%; }
 
+        .cloud-1 { width: min(200px, 25vw); height: min(60px, 7.5vw); top: 10%; animation-duration: 45s; }
+        .cloud-2 { width: min(150px, 20vw); height: min(45px, 5.5vw); top: 30%; animation-duration: 60s; animation-delay: -10s; }
+        .cloud-3 { width: min(250px, 30vw); height: min(75px, 9vw); top: 80%; animation-duration: 50s; animation-delay: -25s; }
+
         @keyframes float-cloud {
             0% { transform: translateX(-300px); }
-            100% { transform: translateX(1300px); }
+            100% { transform: translateX(calc(100vw + 300px)); }
         }
 
         /* Title Section */
         .title-section {
-            position: absolute;
-            top: 60px;
-            left: 0;
-            right: 0;
             text-align: center;
             z-index: 10;
+            padding-top: clamp(70px, 10vh, 100px);
+            padding-bottom: clamp(15px, 3vh, 30px);
         }
 
         .welcome-text {
-            font-size: 20px;
+            font-size: clamp(14px, 2.5vw, 20px);
             color: #2C3E50;
             margin-bottom: 5px;
             letter-spacing: 2px;
@@ -62,18 +67,18 @@
         }
 
         .player-name {
-            font-size: 48px;
+            font-size: clamp(28px, 6vw, 48px);
             font-weight: 900;
             color: #2C3E50;
-            margin-bottom: 20px;
+            margin-bottom: clamp(10px, 2vh, 20px);
             text-transform: uppercase;
         }
 
         .instruction-text {
-            font-size: 16px;
+            font-size: clamp(11px, 1.8vw, 16px);
             color: white;
             background: #2C3E50;
-            padding: 10px 40px;
+            padding: clamp(8px, 1.2vw, 10px) clamp(20px, 4vw, 40px);
             border-radius: 40px;
             display: inline-block;
             font-weight: 700;
@@ -82,20 +87,19 @@
 
         /* Character Selection Grid */
         .character-grid {
-            position: absolute;
-            top: 240px;
-            left: 50%;
-            transform: translateX(-50%);
             display: flex;
-            gap: 40px;
+            gap: clamp(15px, 3vw, 40px);
             align-items: flex-start;
             justify-content: center;
-            width: 900px;
+            width: min(950px, 95vw);
+            margin: 0 auto;
+            padding: 0 clamp(10px, 2vw, 20px);
+            flex-wrap: wrap;
         }
 
         /* Character Card - Modern Museum Style */
         .character-card {
-            width: 270px;
+            width: clamp(160px, 25vw, 270px);
             cursor: pointer;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
@@ -109,12 +113,12 @@
         }
 
         .character-portrait-box {
-            width: 270px;
-            height: 320px;
+            width: 100%;
+            aspect-ratio: 270 / 320;
             background: rgba(255, 255, 255, 0.5);
             backdrop-filter: blur(15px);
             border: 2px solid rgba(255, 255, 255, 0.8);
-            border-radius: 40px;
+            border-radius: clamp(20px, 4vw, 40px);
             position: relative;
             overflow: hidden;
             display: flex;
@@ -134,7 +138,7 @@
         }
 
         .character-avatar {
-            font-size: 130px;
+            font-size: clamp(60px, 12vw, 130px);
             filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.1));
             transition: transform 0.5s ease;
         }
@@ -149,30 +153,30 @@
 
         /* Character Info */
         .character-info {
-            margin-top: 25px;
+            margin-top: clamp(12px, 2vw, 25px);
             text-align: center;
             width: 100%;
         }
 
         .character-name {
-            font-size: 24px;
+            font-size: clamp(16px, 2.5vw, 24px);
             font-weight: 900;
             color: #2C3E50;
-            margin-bottom: 10px;
+            margin-bottom: clamp(5px, 1vw, 10px);
             letter-spacing: 1px;
         }
 
         .character-role-badge {
             display: inline-block;
-            padding: 8px 16px;
+            padding: clamp(5px, 0.8vw, 8px) clamp(10px, 1.5vw, 16px);
             background: #FFD966;
             color: #2C3E50;
             border-radius: 12px;
-            font-size: 10px;
+            font-size: clamp(8px, 1.2vw, 10px);
             text-transform: uppercase;
             letter-spacing: 1px;
             font-weight: 900;
-            margin-bottom: 15px;
+            margin-bottom: clamp(8px, 1.5vw, 15px);
         }
 
         .character-card.selected .character-role-badge {
@@ -181,7 +185,7 @@
         }
 
         .character-description {
-            font-size: 13px;
+            font-size: clamp(11px, 1.4vw, 13px);
             color: #7F8C8D;
             line-height: 1.6;
             padding: 0 10px;
@@ -193,15 +197,15 @@
             position: absolute;
             top: -10px;
             right: -10px;
-            width: 50px;
-            height: 50px;
+            width: clamp(35px, 5vw, 50px);
+            height: clamp(35px, 5vw, 50px);
             background: #FFD966;
             border: 4px solid white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: clamp(16px, 2.5vw, 24px);
             opacity: 0;
             transform: scale(0);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -216,15 +220,15 @@
 
         /* Confirm Button - Modern & Premium */
         .confirm-button {
-            position: absolute;
-            bottom: 60px;
+            position: fixed;
+            bottom: clamp(15px, 3vh, 60px);
             left: 50%;
             transform: translateX(-50%) translateY(50px);
-            padding: 25px 80px;
+            padding: clamp(15px, 2.5vh, 25px) clamp(40px, 8vw, 80px);
             font-family: 'Outfit', sans-serif;
-            font-size: 28px;
+            font-size: clamp(18px, 3vw, 28px);
             font-weight: 900;
-            min-width: 450px;
+            min-width: min(450px, 85vw);
             opacity: 0;
             pointer-events: none;
             transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -238,6 +242,7 @@
                 0 5px 15px rgba(0,0,0,0.1);
             text-transform: uppercase;
             letter-spacing: 2px;
+            z-index: 200;
         }
 
         .confirm-button.visible {
@@ -256,33 +261,65 @@
 
         /* Back Button Override */
         .btn-back {
-            position: absolute;
-            top: 40px;
-            left: 40px;
+            position: fixed;
+            top: clamp(15px, 3vw, 40px);
+            left: clamp(15px, 3vw, 40px);
             background: rgba(255, 255, 255, 0.4);
             backdrop-filter: blur(10px);
             border: 2px solid rgba(255, 255, 255, 0.5);
             color: #2C3E50;
-            padding: 15px 30px;
+            padding: clamp(10px, 1.5vw, 15px) clamp(15px, 2.5vw, 30px);
             border-radius: 30px;
             font-weight: 700;
             z-index: 100;
             cursor: pointer;
             transition: all 0.3s;
+            font-size: clamp(12px, 1.5vw, 16px);
         }
 
         .btn-back:hover {
             background: white;
             transform: translateX(-5px);
         }
+
+        /* Mobile: stack vertically */
+        @media (max-width: 600px) {
+            .character-grid {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .character-card {
+                width: min(280px, 80vw);
+            }
+        }
+
+        @media (max-height: 500px) and (orientation: landscape) {
+            .character-screen {
+                padding-top: 10px;
+            }
+
+            .title-section {
+                padding-top: 50px;
+                padding-bottom: 10px;
+            }
+
+            .character-card {
+                width: clamp(140px, 20vw, 200px);
+            }
+
+            .character-avatar {
+                font-size: clamp(40px, 8vh, 80px);
+            }
+        }
     </style>
 </head>
 <body>
     <div class="screen-container character-screen">
         <!-- Modern Clouds -->
-        <div class="soft-cloud" style="width: 200px; height: 60px; top: 10%; left: -200px; animation-duration: 45s;"></div>
-        <div class="soft-cloud" style="width: 150px; height: 45px; top: 30%; left: -150px; animation-duration: 60s; animation-delay: -10s;"></div>
-        <div class="soft-cloud" style="width: 250px; height: 75px; top: 80%; left: -300px; animation-duration: 50s; animation-delay: -25s;"></div>
+        <div class="soft-cloud cloud-1"></div>
+        <div class="soft-cloud cloud-2"></div>
+        <div class="soft-cloud cloud-3"></div>
 
         <!-- Back Button -->
         <button class="btn-back" onclick="goBack()">
@@ -357,39 +394,27 @@
     <script>
         let selectedCharacter = null;
 
-        // Load player name from session
         window.onload = function() {
             const playerName = sessionStorage.getItem('playerName') || 'KAPITEIN';
             document.getElementById('playerNameDisplay').textContent = playerName.toUpperCase();
         };
 
         function selectCharacter(character) {
-            // Remove previous selection
             document.querySelectorAll('.character-card').forEach(card => {
                 card.classList.remove('selected');
             });
 
-            // Add selection to clicked card
             document.getElementById(`card-${character}`).classList.add('selected');
-            
             selectedCharacter = character;
-
-            // Show confirm button
             document.getElementById('confirmBtn').classList.add('visible');
 
-            // Play a small sound if possible
             if (typeof SoundSystem !== 'undefined') SoundSystem.playBlip(660, 0.1);
         }
 
         function proceedToMap() {
             if (selectedCharacter) {
-                // Store selected character in session
                 sessionStorage.setItem('selectedCharacter', selectedCharacter);
-                
-                // Play confirm sound
                 if (typeof SoundSystem !== 'undefined') SoundSystem.playBlip(880, 0.1);
-
-                // Proceed to hub map
                 window.location.href = '1.0-hub-map.html';
             }
         }

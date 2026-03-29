@@ -2,397 +2,68 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>2.1 - Interactieve Thermometer | Weather Lab Kids</title>
     <link rel="stylesheet" href="../design-system.css">
-    <script src="../js/dialogue.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
+        .thermometer-screen { width:100%; height:100vh; height:100dvh; background:linear-gradient(180deg,#87CEEB 0%,#E0F7FA 100%); position:relative; overflow:hidden; transition:background 0.5s; font-family:'Outfit',sans-serif; display:flex; align-items:center; justify-content:center; gap:clamp(15px,4vw,50px); padding:clamp(60px,8vh,80px) clamp(15px,3vw,30px) clamp(15px,3vw,30px); }
+        .thermometer-container { display:flex; flex-direction:column; align-items:center; gap:clamp(15px,2vw,30px); z-index:10; }
+        .thermometer-large { width:clamp(80px,12vw,140px); height:clamp(280px,45vh,480px); background:rgba(255,255,255,0.6); backdrop-filter:blur(10px); border:4px solid white; border-radius:70px 70px 40px 40px; position:relative; box-shadow:0 20px 40px rgba(0,0,0,0.05); }
+        .mercury-tube { position:absolute; bottom:clamp(50px,8vh,90px); left:50%; transform:translateX(-50%); width:clamp(16px,2.5vw,30px); height:clamp(180px,30vh,340px); background:rgba(0,0,0,0.05); border-radius:20px; overflow:hidden; }
+        .mercury-level { position:absolute; bottom:0; width:100%; height:50%; background:linear-gradient(180deg,#E74C3C,#C0392B); transition:height 0.3s ease-out; }
+        .mercury-bulb { position:absolute; bottom:15px; left:50%; transform:translateX(-50%); width:clamp(50px,8vw,90px); height:clamp(50px,8vw,90px); background:#E74C3C; border-radius:50%; border:6px solid white; box-shadow:0 10px 20px rgba(231,76,60,0.3); }
+        .temp-slider-container { width:min(350px,60vw); text-align:center; }
+        .temp-slider { -webkit-appearance:none; width:100%; height:12px; background:rgba(255,255,255,0.5); border-radius:10px; outline:none; cursor:pointer; }
+        .temp-slider::-webkit-slider-thumb { -webkit-appearance:none; width:44px; height:44px; background:white; border:4px solid #FFD966; border-radius:50%; cursor:pointer; box-shadow:0 10px 20px rgba(255,217,102,0.3); }
+        .temp-display { font-size:clamp(28px,5vw,48px); font-weight:900; color:#2C3E50; margin-top:clamp(10px,1.5vw,20px); background:white; padding:clamp(8px,1.5vw,15px) clamp(20px,4vw,40px); border-radius:30px; box-shadow:0 10px 20px rgba(0,0,0,0.05); display:inline-block; }
+        .simulation-container { width:min(400px,45vw); height:min(500px,70vh); background:rgba(255,255,255,0.4); backdrop-filter:blur(15px); border:2px solid rgba(255,255,255,0.5); border-radius:clamp(20px,4vw,40px); display:flex; flex-direction:column; align-items:center; padding:clamp(20px,3vw,40px); box-shadow:0 20px 40px rgba(0,0,0,0.05); z-index:10; }
+        .sim-title { font-size:clamp(14px,2vw,20px); font-weight:900; margin-bottom:clamp(15px,2vw,30px); color:#2C3E50; text-transform:uppercase; letter-spacing:1px; }
+        .water-beaker { width:clamp(140px,20vw,240px); height:clamp(160px,25vh,280px); border:6px solid rgba(255,255,255,0.8); border-top:none; position:relative; background:rgba(255,255,255,0.2); border-radius:0 0 40px 40px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.05); }
+        .water-level { position:absolute; bottom:0; width:100%; height:60%; background:rgba(52,152,219,0.6); transition:all 0.5s cubic-bezier(0.4,0,0.2,1); }
+        .ice-cubes { position:absolute; bottom:0; width:100%; height:0%; background:rgba(224,247,250,0.8); display:flex; flex-wrap:wrap; justify-content:center; align-items:flex-end; transition:all 0.5s; opacity:0; font-size:clamp(24px,4vw,40px); }
+        .steam-container { position:absolute; top:-60px; width:100%; display:flex; justify-content:center; opacity:0; transition:opacity 0.5s; }
+        .steam-particle { font-size:clamp(30px,5vw,50px); animation:rise 2s infinite; filter:blur(2px); }
+        @keyframes rise { 0%{transform:translateY(0) scale(1);opacity:0.6;} 100%{transform:translateY(-120px) scale(1.8);opacity:0;} }
+        .sim-desc { margin-top:clamp(15px,2vw,30px); text-align:center; font-size:clamp(12px,1.5vw,16px); color:#2C3E50; line-height:1.6; font-weight:700; }
+        .btn-back { position:fixed; top:clamp(15px,3vw,40px); left:clamp(15px,3vw,40px); background:rgba(255,255,255,0.4); backdrop-filter:blur(10px); border:2px solid rgba(255,255,255,0.5); color:#2C3E50; padding:clamp(10px,1.5vw,15px) clamp(15px,2.5vw,30px); border-radius:30px; font-weight:700; z-index:100; cursor:pointer; transition:all 0.3s; font-size:clamp(12px,1.5vw,16px); }
+        .btn-back:hover { background:white; transform:translateX(-5px); }
+        .btn-home { position:fixed; top:clamp(15px,3vw,40px); right:clamp(15px,3vw,40px); background:rgba(255,255,255,0.4); backdrop-filter:blur(10px); border:2px solid rgba(255,255,255,0.5); padding:clamp(10px,1.5vw,15px); border-radius:50%; cursor:pointer; z-index:100; transition:all 0.3s; font-size:clamp(18px,2.5vw,24px); }
+        .btn-home:hover { background:white; transform:scale(1.1); }
 
-        .thermometer-screen {
-            width: var(--screen-width);
-            height: var(--screen-height);
-            background: linear-gradient(180deg, #87CEEB 0%, #E0F7FA 100%);
-            position: relative;
-            overflow: hidden;
-            transition: background 0.5s;
-            font-family: 'Outfit', sans-serif;
-        }
-
-        .thermometer-container {
-            position: absolute;
-            top: 50%;
-            left: 30%;
-            transform: translate(-50%, -50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 30px;
-            z-index: 10;
-        }
-
-        /* Large Thermometer - Modern Style */
-        .thermometer-large {
-            width: 140px;
-            height: 480px;
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(10px);
-            border: 4px solid white;
-            border-radius: 70px 70px 40px 40px;
-            position: relative;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
-        }
-
-        .mercury-tube {
-            position: absolute;
-            bottom: 90px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 30px;
-            height: 340px;
-            background: rgba(0,0,0,0.05);
-            border-radius: 20px;
-            overflow: hidden;
-        }
-
-        .mercury-level {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 50%;
-            background: linear-gradient(180deg, #E74C3C, #C0392B);
-            transition: height 0.3s ease-out;
-        }
-
-        .mercury-bulb {
-            position: absolute;
-            bottom: 15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90px;
-            height: 90px;
-            background: #E74C3C;
-            border-radius: 50%;
-            border: 6px solid white;
-            box-shadow: 0 10px 20px rgba(231, 76, 60, 0.3);
-        }
-
-        /* Temperature Slider - Modern Style */
-        .temp-slider-container {
-            width: 350px;
-            text-align: center;
-        }
-
-        .temp-slider {
-            -webkit-appearance: none;
-            width: 100%;
-            height: 12px;
-            background: rgba(255, 255, 255, 0.5);
-            border-radius: 10px;
-            outline: none;
-            cursor: pointer;
-        }
-
-        .temp-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 44px;
-            height: 44px;
-            background: white;
-            border: 4px solid #FFD966;
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 10px 20px rgba(255, 217, 102, 0.3);
-            transition: transform 0.2s;
-        }
-
-        .temp-slider::-webkit-slider-thumb:hover {
-            transform: scale(1.1);
-        }
-
-        .temp-display {
-            font-size: 48px;
-            font-weight: 900;
-            color: #2C3E50;
-            margin-top: 20px;
-            background: white;
-            padding: 15px 40px;
-            border-radius: 30px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-            display: inline-block;
-        }
-
-        /* Simulation Window - Modern Glassmorphism */
-        .simulation-container {
-            position: absolute;
-            top: 50%;
-            right: 25%;
-            transform: translate(50%, -50%);
-            width: 400px;
-            height: 500px;
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(15px);
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            border-radius: 40px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 40px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
-            z-index: 10;
-        }
-
-        .sim-title {
-            font-size: 20px;
-            font-weight: 900;
-            margin-bottom: 30px;
-            color: #2C3E50;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .water-beaker {
-            width: 240px;
-            height: 280px;
-            border: 6px solid rgba(255, 255, 255, 0.8);
-            border-top: none;
-            position: relative;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 0 0 40px 40px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-        }
-
-        .water-level {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 60%;
-            background: rgba(52, 152, 219, 0.6);
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* Ice Effect */
-        .ice-cubes {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 0%;
-            background: rgba(224, 247, 250, 0.8);
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: flex-end;
-            transition: all 0.5s;
-            opacity: 0;
-            font-size: 40px;
-        }
-
-        /* Steam Effect */
-        .steam-container {
-            position: absolute;
-            top: -60px;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.5s;
-        }
-
-        .steam-particle {
-            font-size: 50px;
-            animation: rise 2s infinite;
-            filter: blur(2px);
-        }
-
-        @keyframes rise {
-            0% { transform: translateY(0) scale(1); opacity: 0.6; }
-            100% { transform: translateY(-120px) scale(1.8); opacity: 0; }
-        }
-
-        .sim-desc {
-            margin-top: 30px;
-            text-align: center;
-            font-size: 16px;
-            color: #2C3E50;
-            line-height: 1.6;
-            font-weight: 700;
-        }
-
-        /* Navigation Buttons */
-        .btn-back {
-            position: absolute;
-            top: 40px;
-            left: 40px;
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            color: #2C3E50;
-            padding: 15px 30px;
-            border-radius: 30px;
-            font-weight: 700;
-            z-index: 100;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-back:hover {
-            background: white;
-            transform: translateX(-5px);
-        }
-
-        .btn-home {
-            position: absolute;
-            top: 40px;
-            right: 40px;
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            padding: 15px;
-            border-radius: 50%;
-            cursor: pointer;
-            z-index: 100;
-            transition: all 0.3s;
-            font-size: 24px;
-        }
-
-        .btn-home:hover {
-            background: white;
-            transform: scale(1.1);
+        @media (max-width: 700px) {
+            .thermometer-screen { flex-direction:column; padding-top:70px; }
+            .simulation-container { width:min(350px,90vw); height:auto; min-height:200px; }
+            .thermometer-large { height:clamp(200px,30vh,300px); }
+            .mercury-tube { height:clamp(120px,20vh,200px); }
         }
     </style>
 </head>
 <body>
     <div class="screen-container thermometer-screen" id="mainScreen">
-        <!-- Back Button -->
-        <button class="btn-back" onclick="window.location.href='2.0-observatory-main.html'">
-            ← TERUG
-        </button>
-
-        <!-- Home Button -->
-        <button class="btn-home" onclick="window.location.href='1.0-hub-map.html'">
-            🏠
-        </button>
-
-        <!-- Thermometer Section -->
+        <button class="btn-back" onclick="window.location.href='2.0-observatory-main.html'">← TERUG</button>
+        <button class="btn-home" onclick="window.location.href='1.0-hub-map.html'">🏠</button>
         <div class="thermometer-container">
-            <div class="thermometer-large">
-                <div class="mercury-tube">
-                    <div class="mercury-level" id="mercuryLevel"></div>
-                </div>
-                <div class="mercury-bulb"></div>
-            </div>
-
+            <div class="thermometer-large"><div class="mercury-tube"><div class="mercury-level" id="mercuryLevel"></div></div><div class="mercury-bulb"></div></div>
             <div class="temp-slider-container">
                 <input type="range" min="-20" max="50" value="20" class="temp-slider" id="tempSlider">
                 <div class="temp-display" id="tempValue">20°C</div>
             </div>
         </div>
-
-        <!-- Simulation Section -->
         <div class="simulation-container">
             <div class="sim-title">WAT GEBEURT ER?</div>
             <div class="water-beaker">
-                <div class="steam-container" id="steam">
-                    <span class="steam-particle">☁️</span>
-                    <span class="steam-particle" style="animation-delay: 0.5s">☁️</span>
-                    <span class="steam-particle" style="animation-delay: 1s">☁️</span>
-                </div>
+                <div class="steam-container" id="steam"><span class="steam-particle">☁️</span><span class="steam-particle" style="animation-delay:0.5s">☁️</span><span class="steam-particle" style="animation-delay:1s">☁️</span></div>
                 <div class="water-level" id="water"></div>
-                <div class="ice-cubes" id="ice">
-                    🧊🧊🧊
-                </div>
+                <div class="ice-cubes" id="ice">🧊🧊🧊</div>
             </div>
-            <div class="sim-desc" id="simText">
-                Water is vloeibaar bij kamertemperatuur.
-            </div>
+            <div class="sim-desc" id="simText">Water is vloeibaar bij kamertemperatuur.</div>
         </div>
     </div>
-
     <script>
-        const slider = document.getElementById('tempSlider');
-        const tempValue = document.getElementById('tempValue');
-        const mercury = document.getElementById('mercuryLevel');
-        const mainScreen = document.getElementById('mainScreen');
-        const water = document.getElementById('water');
-        const ice = document.getElementById('ice');
-        const steam = document.getElementById('steam');
-        const simText = document.getElementById('simText');
-
-        let pamSpoken30 = false;
-        let pamSpoken0 = false;
-
-        slider.oninput = function() {
-            const val = parseInt(this.value);
-            tempValue.innerHTML = val + "°C";
-            
-            // Update Mercury level (min -20 = 0%, max 50 = 100%)
-            // Range is 70 degrees.
-            const percent = ((val + 20) / 70) * 100;
-            mercury.style.height = percent + "%";
-
-            // Update Sky Color (Tint)
-            // -20 is dark blue, 20 is sky blue, 50 is orange/red
-            let r, g, b;
-            if (val <= 20) {
-                // Interpolate between dark blue (-20) and sky blue (20)
-                const t = (val + 20) / 40;
-                r = Math.round(20 + (135 - 20) * t);
-                g = Math.round(50 + (206 - 50) * t);
-                b = Math.round(150 + (235 - 150) * t);
-            } else {
-                // Interpolate between sky blue (20) and orange (50)
-                const t = (val - 20) / 30;
-                r = Math.round(135 + (255 - 135) * t);
-                g = Math.round(206 + (165 - 206) * t);
-                b = Math.round(235 + (0 - 235) * t);
-            }
-            mainScreen.style.background = `rgb(${r}, ${g}, ${b})`;
-
-            // Update Simulation
-            if (val <= 0) {
-                // Freezing
-                ice.style.height = "100%";
-                ice.style.opacity = "1";
-                water.style.height = "0%";
-                steam.style.opacity = "0";
-                simText.innerHTML = "Het water is BEVROREN! Het is nu ijs. 🧊";
-                
-                if (!pamSpoken0) {
-                    showDialogue("Brrr, het vriest! Wist je dat water bij 0 graden in ijs verandert?", "surprised");
-                    pamSpoken0 = true;
-                }
-            } else if (val >= 40) {
-                // Evaporating
-                ice.style.opacity = "0";
-                ice.style.height = "0%";
-                water.style.height = "30%";
-                steam.style.opacity = "1";
-                simText.innerHTML = "Het water is aan het VERDAMPEN! Het wordt gas. ☁️";
-            } else {
-                // Liquid
-                ice.style.opacity = "0";
-                ice.style.height = "0%";
-                water.style.height = "60%";
-                steam.style.opacity = "0";
-                simText.innerHTML = "Water is vloeibaar. Perfect om te drinken! 💧";
-            }
-
-            // Pam's special dialogue for 30 degrees
-            if (val >= 30 && !pamSpoken30) {
-                showDialogue("Oei, het is warm! Wist je dat warme lucht opstijgt?", "surprised");
-                pamSpoken30 = true;
-            }
-        };
-
-        // Initial call to set state
+        const slider=document.getElementById('tempSlider'),tempValue=document.getElementById('tempValue'),mercury=document.getElementById('mercuryLevel'),mainScreen=document.getElementById('mainScreen'),water=document.getElementById('water'),ice=document.getElementById('ice'),steam=document.getElementById('steam'),simText=document.getElementById('simText');
+        slider.oninput=function(){const val=parseInt(this.value);tempValue.innerHTML=val+"°C";const percent=((val+20)/70)*100;mercury.style.height=percent+"%";let r,g,b;if(val<=20){const t=(val+20)/40;r=Math.round(20+(135-20)*t);g=Math.round(50+(206-50)*t);b=Math.round(150+(235-150)*t);}else{const t=(val-20)/30;r=Math.round(135+(255-135)*t);g=Math.round(206+(165-206)*t);b=Math.round(235+(0-235)*t);}mainScreen.style.background=`rgb(${r},${g},${b})`;if(val<=0){ice.style.height="100%";ice.style.opacity="1";water.style.height="0%";steam.style.opacity="0";simText.innerHTML="Het water is BEVROREN! Het is nu ijs. 🧊";}else if(val>=40){ice.style.opacity="0";ice.style.height="0%";water.style.height="30%";steam.style.opacity="1";simText.innerHTML="Het water is aan het VERDAMPEN! Het wordt gas. ☁️";}else{ice.style.opacity="0";ice.style.height="0%";water.style.height="60%";steam.style.opacity="0";simText.innerHTML="Water is vloeibaar. Perfect om te drinken! 💧";}};
         slider.oninput();
-
-        // Welcome dialogue
-        window.onload = function() {
-            setTimeout(() => {
-                showDialogue("Gebruik de schuifregelaar om de temperatuur te veranderen en kijk wat er gebeurt!", "happy");
-            }, 500);
-        };
     </script>
 </body>
 </html>

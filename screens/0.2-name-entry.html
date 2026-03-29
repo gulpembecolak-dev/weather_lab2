@@ -2,19 +2,24 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>0.2 - İsim Giriş | Weather Lab Kids</title>
     <link rel="stylesheet" href="../design-system.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
 
         .name-entry-screen {
-            width: var(--screen-width);
-            height: var(--screen-height);
+            width: 100%;
+            height: 100vh;
+            height: 100dvh;
             background: linear-gradient(135deg, #87CEEB 0%, #E0F7FA 100%);
             position: relative;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
             font-family: 'Outfit', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         /* Modern Soft Clouds */
@@ -38,36 +43,37 @@
         .soft-cloud::before { width: 50%; height: 100%; top: -40%; left: 15%; }
         .soft-cloud::after { width: 40%; height: 80%; top: -20%; right: 15%; }
 
+        .cloud-1 { width: min(200px, 25vw); height: min(60px, 7.5vw); top: 10%; animation-duration: 45s; }
+        .cloud-2 { width: min(150px, 20vw); height: min(45px, 5.5vw); top: 25%; animation-duration: 60s; animation-delay: -10s; }
+        .cloud-3 { width: min(250px, 30vw); height: min(75px, 9vw); top: 80%; animation-duration: 50s; animation-delay: -25s; }
+
         @keyframes float-cloud {
             0% { transform: translateX(-300px); }
-            100% { transform: translateX(1300px); }
+            100% { transform: translateX(calc(100vw + 300px)); }
         }
 
         /* Main Registration Panel - Modern Glassmorphism */
         .registration-panel {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            position: relative;
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(20px);
             border: 2px solid rgba(255, 255, 255, 0.5);
-            padding: 80px 60px 50px;
-            width: 800px;
+            padding: clamp(30px, 5vw, 80px) clamp(20px, 4vw, 60px) clamp(25px, 4vw, 50px);
+            width: min(800px, 92vw);
             box-shadow: 
                 0 40px 100px rgba(0, 0, 0, 0.1),
                 inset 0 0 0 1px rgba(255, 255, 255, 0.5);
-            border-radius: 40px;
+            border-radius: clamp(20px, 4vw, 40px);
             z-index: 10;
         }
 
         /* Title */
         .registration-title {
-            font-size: 36px;
+            font-size: clamp(20px, 4vw, 36px);
             font-weight: 900;
             color: #2C3E50;
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: clamp(20px, 3vw, 40px);
             line-height: 1.2;
             letter-spacing: -0.5px;
         }
@@ -76,24 +82,24 @@
         .reward-panel {
             background: rgba(255, 217, 102, 0.15);
             border: 2px solid rgba(255, 217, 102, 0.4);
-            padding: 30px;
-            margin-bottom: 40px;
-            border-radius: 24px;
+            padding: clamp(15px, 3vw, 30px);
+            margin-bottom: clamp(20px, 3vw, 40px);
+            border-radius: clamp(16px, 2.5vw, 24px);
             position: relative;
             display: flex;
             align-items: center;
-            gap: 30px;
+            gap: clamp(15px, 3vw, 30px);
         }
 
         .reward-icon-badge {
-            width: 100px;
-            height: 100px;
+            width: clamp(60px, 10vw, 100px);
+            height: clamp(60px, 10vw, 100px);
             background: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 60px;
+            font-size: clamp(32px, 6vw, 60px);
             flex-shrink: 0;
             box-shadow: 0 15px 30px rgba(255, 217, 102, 0.2);
             animation: pulse-badge 2s ease-in-out infinite;
@@ -104,16 +110,14 @@
             50% { transform: scale(1.05) rotate(5deg); }
         }
 
-        .reward-content {
-            flex: 1;
-        }
+        .reward-content { flex: 1; }
 
         .reward-title-small {
-            font-size: 14px;
+            font-size: clamp(10px, 1.5vw, 14px);
             color: #D35400;
             margin-bottom: 8px;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: clamp(1px, 0.3vw, 2px);
             font-weight: 900;
             display: flex;
             align-items: center;
@@ -121,7 +125,7 @@
         }
 
         .reward-desc {
-            font-size: 18px;
+            font-size: clamp(13px, 2vw, 18px);
             color: #2C3E50;
             line-height: 1.6;
         }
@@ -134,9 +138,9 @@
         /* Input Area */
         .input-group {
             background: white;
-            padding: 40px;
-            border-radius: 32px;
-            margin-bottom: 40px;
+            padding: clamp(20px, 4vw, 40px);
+            border-radius: clamp(20px, 3vw, 32px);
+            margin-bottom: clamp(20px, 3vw, 40px);
             box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             position: relative;
             transition: all 0.3s;
@@ -150,9 +154,9 @@
         }
 
         .input-label {
-            font-size: 14px;
+            font-size: clamp(11px, 1.5vw, 14px);
             color: #7F8C8D;
-            margin-bottom: 20px;
+            margin-bottom: clamp(10px, 2vw, 20px);
             display: block;
             text-align: center;
             text-transform: uppercase;
@@ -162,9 +166,9 @@
 
         .name-input {
             width: 100%;
-            padding: 25px;
+            padding: clamp(15px, 2.5vw, 25px);
             font-family: 'Outfit', sans-serif;
-            font-size: 40px;
+            font-size: clamp(24px, 5vw, 40px);
             font-weight: 900;
             text-align: center;
             border: none;
@@ -172,7 +176,7 @@
             color: #2C3E50;
             text-transform: uppercase;
             letter-spacing: 2px;
-            border-radius: 20px;
+            border-radius: clamp(12px, 2vw, 20px);
             transition: all 0.3s;
         }
 
@@ -193,7 +197,7 @@
             text-align: right;
             font-size: 12px;
             color: #95A5A6;
-            margin-top: 20px;
+            margin-top: clamp(10px, 1.5vw, 20px);
             font-weight: 700;
         }
 
@@ -204,11 +208,11 @@
         }
 
         .btn-start-adventure {
-            min-width: 500px;
+            min-width: min(500px, 100%);
             font-family: 'Outfit', sans-serif;
-            font-size: 26px;
+            font-size: clamp(18px, 3vw, 26px);
             font-weight: 900;
-            padding: 30px 60px;
+            padding: clamp(18px, 3vh, 30px) clamp(30px, 5vw, 60px);
             background: #FFD966;
             color: #2C3E50;
             border: none;
@@ -219,7 +223,7 @@
                 0 5px 15px rgba(0,0,0,0.1);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: clamp(1px, 0.3vw, 2px);
         }
 
         .btn-start-adventure:hover:not(:disabled) {
@@ -238,33 +242,87 @@
 
         /* Back Button Override */
         .btn-back {
-            position: absolute;
-            top: 40px;
-            left: 40px;
+            position: fixed;
+            top: clamp(15px, 3vw, 40px);
+            left: clamp(15px, 3vw, 40px);
             background: rgba(255, 255, 255, 0.4);
             backdrop-filter: blur(10px);
             border: 2px solid rgba(255, 255, 255, 0.5);
             color: #2C3E50;
-            padding: 15px 30px;
+            padding: clamp(10px, 1.5vw, 15px) clamp(15px, 2.5vw, 30px);
             border-radius: 30px;
             font-weight: 700;
             z-index: 100;
             cursor: pointer;
             transition: all 0.3s;
+            font-size: clamp(12px, 1.5vw, 16px);
         }
 
         .btn-back:hover {
             background: white;
             transform: translateX(-5px);
         }
+
+        /* Mobile adjustments */
+        @media (max-width: 480px) {
+            .reward-panel {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .reward-title-small {
+                justify-content: center;
+            }
+        }
+
+        @media (max-height: 500px) and (orientation: landscape) {
+            .name-entry-screen {
+                padding: 10px;
+            }
+
+            .registration-panel {
+                padding: 15px 20px;
+            }
+
+            .registration-title {
+                font-size: 18px;
+                margin-bottom: 10px;
+            }
+
+            .reward-panel {
+                padding: 10px;
+                margin-bottom: 10px;
+            }
+
+            .reward-icon-badge {
+                width: 50px;
+                height: 50px;
+                font-size: 28px;
+            }
+
+            .input-group {
+                padding: 10px 15px;
+                margin-bottom: 10px;
+            }
+
+            .name-input {
+                font-size: 20px;
+                padding: 10px;
+            }
+
+            .btn-start-adventure {
+                padding: 12px 25px;
+                font-size: 16px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="screen-container name-entry-screen">
         <!-- Modern Clouds -->
-        <div class="soft-cloud" style="width: 200px; height: 60px; top: 10%; left: -200px; animation-duration: 45s;"></div>
-        <div class="soft-cloud" style="width: 150px; height: 45px; top: 25%; left: -150px; animation-duration: 60s; animation-delay: -10s;"></div>
-        <div class="soft-cloud" style="width: 250px; height: 75px; top: 80%; left: -300px; animation-duration: 50s; animation-delay: -25s;"></div>
+        <div class="soft-cloud cloud-1"></div>
+        <div class="soft-cloud cloud-2"></div>
+        <div class="soft-cloud cloud-3"></div>
 
         <!-- Back Button -->
         <button class="btn-back" onclick="goBack()">
@@ -329,11 +387,10 @@
             const input = document.getElementById('userName');
             const count = document.getElementById('charCount');
             const continueBtn = document.getElementById('continueBtn');
-            
+
             playerName = input.value.trim();
             count.textContent = input.value.length;
-            
-            // Enable/disable continue button - minimum 2 characters
+
             if (playerName.length >= 2) {
                 continueBtn.disabled = false;
             } else {
@@ -343,10 +400,7 @@
 
         function proceedToCharacterSelection() {
             if (playerName.length >= 2) {
-                // Play confirm sound if possible
                 if (typeof SoundSystem !== 'undefined') SoundSystem.playBlip(880, 0.1);
-                
-                // Store name in session storage
                 sessionStorage.setItem('playerName', playerName);
                 window.location.href = '0.3-character-selection.html';
             }
@@ -356,14 +410,12 @@
             window.location.href = '../index.html';
         }
 
-        // Allow Enter key to proceed
         document.getElementById('userName').addEventListener('keypress', function(e) {
             if (e.key === 'Enter' && playerName.length >= 2) {
                 proceedToCharacterSelection();
             }
         });
 
-        // Focus input on load
         window.onload = function() {
             document.getElementById('userName').focus();
         };
