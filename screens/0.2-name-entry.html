@@ -6,285 +6,317 @@
     <title>0.2 - İsim Giriş | Weather Lab Kids</title>
     <link rel="stylesheet" href="../design-system.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
+
         .name-entry-screen {
             width: var(--screen-width);
             height: var(--screen-height);
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #87CEEB 0%, #E0F7FA 100%);
             position: relative;
             overflow: hidden;
+            font-family: 'Outfit', sans-serif;
         }
 
-        /* Animated Stars Background */
-        .star {
+        /* Modern Soft Clouds */
+        .soft-cloud {
             position: absolute;
-            background: white;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(8px);
+            border-radius: 100px;
+            animation: float-cloud linear infinite;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            pointer-events: none;
+        }
+
+        .soft-cloud::before, .soft-cloud::after {
+            content: '';
+            position: absolute;
+            background: inherit;
             border-radius: 50%;
-            animation: twinkle 3s ease-in-out infinite;
         }
 
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.2); }
+        .soft-cloud::before { width: 50%; height: 100%; top: -40%; left: 15%; }
+        .soft-cloud::after { width: 40%; height: 80%; top: -20%; right: 15%; }
+
+        @keyframes float-cloud {
+            0% { transform: translateX(-300px); }
+            100% { transform: translateX(1300px); }
         }
 
-        /* Generate random stars */
-        .star:nth-child(1) { width: 3px; height: 3px; top: 10%; left: 15%; animation-delay: 0s; }
-        .star:nth-child(2) { width: 2px; height: 2px; top: 20%; left: 25%; animation-delay: 0.5s; }
-        .star:nth-child(3) { width: 4px; height: 4px; top: 15%; left: 45%; animation-delay: 1s; }
-        .star:nth-child(4) { width: 3px; height: 3px; top: 25%; left: 65%; animation-delay: 1.5s; }
-        .star:nth-child(5) { width: 2px; height: 2px; top: 18%; left: 85%; animation-delay: 2s; }
-        .star:nth-child(6) { width: 3px; height: 3px; top: 35%; left: 12%; animation-delay: 0.3s; }
-        .star:nth-child(7) { width: 4px; height: 4px; top: 40%; left: 35%; animation-delay: 0.8s; }
-        .star:nth-child(8) { width: 2px; height: 2px; top: 45%; left: 55%; animation-delay: 1.3s; }
-        .star:nth-child(9) { width: 3px; height: 3px; top: 38%; left: 75%; animation-delay: 1.8s; }
-        .star:nth-child(10) { width: 4px; height: 4px; top: 42%; left: 90%; animation-delay: 2.3s; }
-
-        /* Main Panel */
+        /* Main Registration Panel - Modern Glassmorphism */
         .registration-panel {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(236, 240, 241, 0.98);
-            border: 8px solid var(--wood-dark);
-            padding: var(--spacing-lg);
-            width: 700px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            padding: 80px 60px 50px;
+            width: 800px;
             box-shadow: 
-                0 20px 60px rgba(0, 0, 0, 0.5),
-                inset 0 0 0 4px var(--wood-light);
-            border-radius: 16px;
-        }
-
-        /* Captain Icon */
-        .captain-icon {
-            text-align: center;
-            font-size: 120px;
-            margin-bottom: var(--spacing-md);
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
+                0 40px 100px rgba(0, 0, 0, 0.1),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+            border-radius: 40px;
+            z-index: 10;
         }
 
         /* Title */
         .registration-title {
-            font-size: 24px;
-            color: var(--storm-purple);
+            font-size: 36px;
+            font-weight: 900;
+            color: #2C3E50;
             text-align: center;
-            margin-bottom: var(--spacing-md);
-            line-height: 1.8;
-            text-shadow: 2px 2px 0 rgba(255, 255, 255, 0.5);
+            margin-bottom: 40px;
+            line-height: 1.2;
+            letter-spacing: -0.5px;
         }
 
-        /* Input Container */
-        .input-container {
-            margin-bottom: var(--spacing-lg);
+        /* Reward Panel - Modern Card */
+        .reward-panel {
+            background: rgba(255, 217, 102, 0.15);
+            border: 2px solid rgba(255, 217, 102, 0.4);
+            padding: 30px;
+            margin-bottom: 40px;
+            border-radius: 24px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .reward-icon-badge {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            flex-shrink: 0;
+            box-shadow: 0 15px 30px rgba(255, 217, 102, 0.2);
+            animation: pulse-badge 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-badge {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.05) rotate(5deg); }
+        }
+
+        .reward-content {
+            flex: 1;
+        }
+
+        .reward-title-small {
+            font-size: 14px;
+            color: #D35400;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .reward-desc {
+            font-size: 18px;
+            color: #2C3E50;
+            line-height: 1.6;
+        }
+
+        .reward-desc strong {
+            color: #E67E22;
+            font-weight: 900;
+        }
+
+        /* Input Area */
+        .input-group {
+            background: white;
+            padding: 40px;
+            border-radius: 32px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            position: relative;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .input-group:focus-within {
+            border-color: #FFD966;
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(255, 217, 102, 0.2);
         }
 
         .input-label {
-            font-size: var(--font-size-md);
-            color: var(--text-dark);
-            margin-bottom: var(--spacing-sm);
+            font-size: 14px;
+            color: #7F8C8D;
+            margin-bottom: 20px;
             display: block;
             text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
         }
 
         .name-input {
             width: 100%;
-            padding: var(--spacing-md);
-            font-family: var(--font-pixel);
-            font-size: 24px;
+            padding: 25px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 40px;
+            font-weight: 900;
             text-align: center;
-            border: 6px solid var(--wood-dark);
-            background: white;
-            color: var(--storm-purple);
+            border: none;
+            background: #F8F9F9;
+            color: #2C3E50;
             text-transform: uppercase;
-            letter-spacing: 3px;
-            box-shadow: 
-                inset 0 4px 8px rgba(0, 0, 0, 0.1),
-                0 4px 12px rgba(0, 0, 0, 0.2);
+            letter-spacing: 2px;
+            border-radius: 20px;
             transition: all 0.3s;
         }
 
         .name-input:focus {
             outline: none;
-            border-color: var(--sun-yellow);
-            box-shadow: 
-                inset 0 4px 8px rgba(0, 0, 0, 0.1),
-                0 0 0 4px rgba(247, 220, 111, 0.4),
-                0 4px 12px rgba(0, 0, 0, 0.2);
+            background: white;
         }
 
         .name-input::placeholder {
             color: #BDC3C7;
             text-transform: none;
+            font-weight: 400;
+            letter-spacing: 0;
         }
 
         /* Character Count */
         .char-count {
             text-align: right;
-            font-size: var(--font-size-xs);
-            color: #7F8C8D;
-            margin-top: var(--spacing-xs);
-        }
-
-        /* Info Box */
-        .info-box {
-            background: rgba(52, 152, 219, 0.1);
-            border: 4px solid #3498DB;
-            padding: var(--spacing-sm);
-            margin-bottom: var(--spacing-md);
-            border-radius: 8px;
-        }
-
-        .info-text {
-            font-size: var(--font-size-sm);
-            color: var(--text-dark);
-            line-height: 1.8;
-            text-align: center;
+            font-size: 12px;
+            color: #95A5A6;
+            margin-top: 20px;
+            font-weight: 700;
         }
 
         /* Button Group */
-        .button-group {
+        .button-area {
             display: flex;
-            gap: var(--spacing-md);
             justify-content: center;
         }
 
-        .btn-continue {
-            padding: 20px 60px;
-            font-size: 20px;
-            min-width: 200px;
-        }
-
-        .btn-continue:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            filter: grayscale(0.8);
-        }
-
-        /* Sample Names (Helper) */
-        .sample-names {
-            text-align: center;
-            margin-top: var(--spacing-sm);
-        }
-
-        .sample-name-btn {
-            background: #E8DAEF;
-            border: 3px solid #8E44AD;
-            padding: 8px 16px;
-            font-family: var(--font-pixel);
-            font-size: var(--font-size-xs);
-            color: var(--storm-purple);
+        .btn-start-adventure {
+            min-width: 500px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 26px;
+            font-weight: 900;
+            padding: 30px 60px;
+            background: #FFD966;
+            color: #2C3E50;
+            border: none;
+            border-radius: 50px;
             cursor: pointer;
-            margin: 0 4px;
-            transition: all 0.2s;
+            box-shadow: 
+                0 15px 35px rgba(255, 217, 102, 0.4),
+                0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
-        .sample-name-btn:hover {
-            background: #D7BDE2;
-            transform: scale(1.05);
+        .btn-start-adventure:hover:not(:disabled) {
+            transform: scale(1.05) translateY(-5px);
+            background: #FFE082;
+            box-shadow: 
+                0 25px 45px rgba(255, 217, 102, 0.5),
+                0 10px 20px rgba(0,0,0,0.1);
         }
 
-        /* Decorative Weather Icons */
-        .weather-icon {
+        .btn-start-adventure:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* Back Button Override */
+        .btn-back {
             position: absolute;
-            font-size: 64px;
-            animation: rotate-weather 10s linear infinite;
+            top: 40px;
+            left: 40px;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            color: #2C3E50;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-weight: 700;
+            z-index: 100;
+            cursor: pointer;
+            transition: all 0.3s;
         }
 
-        .icon-1 { top: 50px; left: 80px; }
-        .icon-2 { top: 80px; right: 80px; animation-delay: -5s; }
-        .icon-3 { bottom: 50px; left: 100px; animation-delay: -3s; }
-        .icon-4 { bottom: 80px; right: 100px; animation-delay: -7s; }
-
-        @keyframes rotate-weather {
-            0%, 100% { transform: rotate(-10deg); }
-            50% { transform: rotate(10deg); }
+        .btn-back:hover {
+            background: white;
+            transform: translateX(-5px);
         }
     </style>
 </head>
 <body>
     <div class="screen-container name-entry-screen">
-        <!-- Stars Background -->
-        <div class="star"></div>
-        <div class="star"></div>
-        <div class="star"></div>
-        <div class="star"></div>
-        <div class="star"></div>
-        <div class="star"></div>
-        <div class="star"></div>
-        <div class="star"></div>
-        <div class="star"></div>
-        <div class="star"></div>
-
-        <!-- Decorative Weather Icons -->
-        <div class="weather-icon icon-1">☀️</div>
-        <div class="weather-icon icon-2">⛈️</div>
-        <div class="weather-icon icon-3">🌈</div>
-        <div class="weather-icon icon-4">❄️</div>
+        <!-- Modern Clouds -->
+        <div class="soft-cloud" style="width: 200px; height: 60px; top: 10%; left: -200px; animation-duration: 45s;"></div>
+        <div class="soft-cloud" style="width: 150px; height: 45px; top: 25%; left: -150px; animation-duration: 60s; animation-delay: -10s;"></div>
+        <div class="soft-cloud" style="width: 250px; height: 75px; top: 80%; left: -300px; animation-duration: 50s; animation-delay: -25s;"></div>
 
         <!-- Back Button -->
-        <button class="btn-pixel btn-wood btn-back" onclick="goBack()">
+        <button class="btn-back" onclick="goBack()">
             ← TERUG
         </button>
 
         <!-- Main Registration Panel -->
         <div class="registration-panel">
-            <!-- Captain Icon -->
-            <div class="captain-icon">🧑‍✈️</div>
-
             <!-- Title -->
             <div class="registration-title">
-                WAT IS JE NAAM,<br>KAPITEIN?
+                WELKOM BIJ HET LAB!<br>
+                HOE MOETEN WE JE NOEMEN?
             </div>
 
-            <!-- Info Box -->
-            <div class="info-box">
-                <div class="info-text">
-                    🏆 Voltooi alle missies en ontvang je<br>
-                    <strong>JONGE METEOROLOOG</strong> badge aan de balie!
+            <!-- Reward Panel -->
+            <div class="reward-panel">
+                <div class="reward-icon-badge">🎖️</div>
+                <div class="reward-content">
+                    <div class="reward-title-small">✨ JOUW MISSIE BELONING ✨</div>
+                    <div class="reward-desc">
+                        Ontdek alle eilanden en verdien de officiële 
+                        <strong>JONGE METEOROLOOG</strong> badge!
+                    </div>
                 </div>
             </div>
 
-            <!-- Input Container -->
-            <div class="input-container">
-                <label class="input-label">Jouw Naam:</label>
+            <!-- Input Area -->
+            <div class="input-group">
+                <label class="input-label">Voer hier je naam in:</label>
                 <input 
                     type="text" 
                     class="name-input" 
                     id="userName" 
-                    placeholder="Typ je naam hier..."
-                    maxlength="20"
+                    placeholder="JOUW NAAM..."
+                    maxlength="15"
                     oninput="updateCharCount()"
+                    autocomplete="off"
                 >
                 <div class="char-count">
-                    <span id="charCount">0</span> / 20 karakters
+                    <span id="charCount">0</span> / 15 TEKENS
                 </div>
             </div>
 
-            <!-- Sample Names Helper (Optional) -->
-            <div class="sample-names">
-                <div style="font-size: 10px; color: #7F8C8D; margin-bottom: 8px;">
-                    💡 Voorbeelden:
-                </div>
-                <button class="sample-name-btn" onclick="fillName('EMMA')">Emma</button>
-                <button class="sample-name-btn" onclick="fillName('LUCAS')">Lucas</button>
-                <button class="sample-name-btn" onclick="fillName('SOPHIE')">Sophie</button>
-                <button class="sample-name-btn" onclick="fillName('NOAH')">Noah</button>
-            </div>
-
-            <!-- Button Group -->
-            <div class="button-group" style="margin-top: 32px;">
+            <!-- Button Area -->
+            <div class="button-area">
                 <button 
-                    class="btn-pixel btn-glow btn-continue" 
+                    class="btn-start-adventure" 
                     id="continueBtn"
                     onclick="proceedToCharacterSelection()"
                     disabled
                 >
-                    VERDER →
+                    START AVONTUUR →
                 </button>
             </div>
         </div>
@@ -301,7 +333,7 @@
             playerName = input.value.trim();
             count.textContent = input.value.length;
             
-            // Enable/disable continue button
+            // Enable/disable continue button - minimum 2 characters
             if (playerName.length >= 2) {
                 continueBtn.disabled = false;
             } else {
@@ -309,14 +341,11 @@
             }
         }
 
-        function fillName(name) {
-            const input = document.getElementById('userName');
-            input.value = name;
-            updateCharCount();
-        }
-
         function proceedToCharacterSelection() {
             if (playerName.length >= 2) {
+                // Play confirm sound if possible
+                if (typeof SoundSystem !== 'undefined') SoundSystem.playBlip(880, 0.1);
+                
                 // Store name in session storage
                 sessionStorage.setItem('playerName', playerName);
                 window.location.href = '0.3-character-selection.html';
@@ -324,7 +353,7 @@
         }
 
         function goBack() {
-            window.location.href = '0.1-idle-screen.html';
+            window.location.href = '../index.html';
         }
 
         // Allow Enter key to proceed
@@ -333,6 +362,11 @@
                 proceedToCharacterSelection();
             }
         });
+
+        // Focus input on load
+        window.onload = function() {
+            document.getElementById('userName').focus();
+        };
     </script>
 </body>
 </html>

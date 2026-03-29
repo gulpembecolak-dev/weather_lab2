@@ -6,164 +6,109 @@
     <title>1.5 - Loading | Weather Lab Kids</title>
     <link rel="stylesheet" href="../design-system.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
+
         .loading-screen {
             width: var(--screen-width);
             height: var(--screen-height);
-            background: linear-gradient(135deg, #5DADE2 0%, #3498DB 100%);
+            background: linear-gradient(135deg, #87CEEB 0%, #E0F7FA 100%);
             position: relative;
             overflow: hidden;
+            font-family: 'Outfit', sans-serif;
         }
 
-        /* Moving Clouds */
-        .cloud-layer {
+        /* Modern Soft Clouds */
+        .soft-cloud {
             position: absolute;
-            width: 200%;
-            height: 100%;
-            top: 0;
-            left: -100%;
-            animation: slide-clouds 4s linear infinite;
-        }
-
-        @keyframes slide-clouds {
-            0% { left: -100%; }
-            100% { left: 0; }
-        }
-
-        .loading-cloud {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(8px);
             border-radius: 100px;
+            animation: float-cloud linear infinite;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            pointer-events: none;
+            z-index: 5;
         }
 
-        .loading-cloud::before,
-        .loading-cloud::after {
+        .soft-cloud::before, .soft-cloud::after {
             content: '';
             position: absolute;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 100px;
+            background: inherit;
+            border-radius: 50%;
         }
 
-        /* Cloud 1 */
-        .cloud-big-1 {
-            width: 180px;
-            height: 60px;
-            top: 20%;
-            left: 10%;
-        }
-        .cloud-big-1::before {
-            width: 90px;
-            height: 90px;
-            top: -40px;
-            left: 30px;
-        }
-        .cloud-big-1::after {
-            width: 110px;
-            height: 70px;
-            top: -30px;
-            left: 70px;
-        }
+        .soft-cloud::before { width: 50%; height: 100%; top: -40%; left: 15%; }
+        .soft-cloud::after { width: 40%; height: 80%; top: -20%; right: 15%; }
 
-        /* Cloud 2 */
-        .cloud-big-2 {
-            width: 200px;
-            height: 70px;
-            top: 50%;
-            left: 40%;
-        }
-        .cloud-big-2::before {
-            width: 100px;
-            height: 100px;
-            top: -45px;
-            left: 40px;
-        }
-        .cloud-big-2::after {
-            width: 120px;
-            height: 80px;
-            top: -35px;
-            left: 85px;
-        }
-
-        /* Cloud 3 */
-        .cloud-big-3 {
-            width: 160px;
-            height: 55px;
-            top: 70%;
-            left: 70%;
-        }
-        .cloud-big-3::before {
-            width: 80px;
-            height: 80px;
-            top: -38px;
-            left: 25px;
-        }
-        .cloud-big-3::after {
-            width: 100px;
-            height: 65px;
-            top: -28px;
-            left: 60px;
+        @keyframes float-cloud {
+            0% { transform: translateX(-300px); }
+            100% { transform: translateX(1300px); }
         }
 
         /* Character Flying */
         .flying-character {
             position: absolute;
-            top: 50%;
+            top: 45%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 120px;
+            font-size: 140px;
             animation: fly-bounce 1.5s ease-in-out infinite;
-            filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.3));
+            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.15));
             z-index: 10;
         }
 
         @keyframes fly-bounce {
             0%, 100% { transform: translate(-50%, -50%) translateY(0) rotate(-5deg); }
-            50% { transform: translate(-50%, -50%) translateY(-30px) rotate(5deg); }
+            50% { transform: translate(-50%, -50%) translateY(-40px) rotate(5deg); }
         }
 
-        /* Loading Text Panel */
+        /* Loading Text Panel - Modern Glassmorphism */
         .loading-panel {
             position: absolute;
             bottom: 120px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(236, 240, 241, 0.95);
-            border: 6px solid var(--wood-dark);
-            padding: 24px 60px;
-            border-radius: 16px;
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            padding: 30px 80px;
+            border-radius: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
             text-align: center;
+            z-index: 50;
         }
 
         .loading-title {
-            font-size: 24px;
-            color: var(--storm-purple);
-            margin-bottom: 12px;
-            text-shadow: 2px 2px 0 rgba(255, 255, 255, 0.5);
+            font-size: 28px;
+            font-weight: 900;
+            color: #2C3E50;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
         }
 
         .loading-subtitle {
-            font-size: var(--font-size-md);
-            color: var(--text-dark);
+            font-size: 16px;
+            color: #7F8C8D;
+            font-weight: 400;
         }
 
-        /* Loading Bar */
+        /* Loading Bar - Modern Rounded */
         .loading-bar-container {
-            width: 400px;
-            height: 30px;
-            background: rgba(189, 195, 199, 0.5);
-            border: 4px solid var(--wood-dark);
-            margin: 16px auto 0;
+            width: 450px;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.5);
+            margin: 25px auto 0;
             position: relative;
-            border-radius: 15px;
+            border-radius: 10px;
             overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
         }
 
         .loading-bar-fill {
             height: 100%;
-            background: linear-gradient(90deg, #2ECC71, #27AE60);
+            background: #2ECC71;
             width: 0%;
-            animation: fill-bar 2s ease-out forwards;
-            box-shadow: 0 0 20px rgba(46, 204, 113, 0.6);
+            animation: fill-bar 2.5s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+            border-radius: 10px;
         }
 
         @keyframes fill-bar {
@@ -171,50 +116,30 @@
             100% { width: 100%; }
         }
 
-        /* Animated Dots */
-        .loading-dots {
-            display: inline-block;
-        }
-
-        .dot {
-            animation: blink 1.4s infinite;
-            opacity: 0;
-        }
-
-        .dot:nth-child(1) { animation-delay: 0s; }
-        .dot:nth-child(2) { animation-delay: 0.2s; }
-        .dot:nth-child(3) { animation-delay: 0.4s; }
-
-        @keyframes blink {
-            0%, 20% { opacity: 0; }
-            40% { opacity: 1; }
-            100% { opacity: 0; }
-        }
-
-        /* Birds */
+        /* Birds - Modern & Subtle */
         .bird {
             position: absolute;
-            font-size: 24px;
-            animation: fly-bird 8s linear infinite;
+            font-size: 32px;
+            animation: fly-bird 10s linear infinite;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.05));
+            opacity: 0.6;
         }
 
-        .bird-1 { top: 15%; animation-delay: 0s; }
-        .bird-2 { top: 35%; animation-delay: 2s; }
+        .bird-1 { top: 15%; animation-duration: 12s; }
+        .bird-2 { top: 35%; animation-duration: 8s; animation-delay: -2s; }
 
         @keyframes fly-bird {
-            0% { left: -50px; }
-            100% { left: 110%; }
+            0% { left: -100px; transform: scaleX(1); }
+            100% { left: 110%; transform: scaleX(1); }
         }
     </style>
 </head>
 <body>
     <div class="screen-container loading-screen">
-        <!-- Cloud Layers -->
-        <div class="cloud-layer">
-            <div class="loading-cloud cloud-big-1"></div>
-            <div class="loading-cloud cloud-big-2"></div>
-            <div class="loading-cloud cloud-big-3"></div>
-        </div>
+        <!-- Modern Clouds -->
+        <div class="soft-cloud" style="width: 200px; height: 60px; top: 10%; left: -200px; animation-duration: 45s;"></div>
+        <div class="soft-cloud" style="width: 150px; height: 45px; top: 25%; left: -150px; animation-duration: 60s; animation-delay: -10s;"></div>
+        <div class="soft-cloud" style="width: 250px; height: 75px; top: 80%; left: -300px; animation-duration: 50s; animation-delay: -25s;"></div>
 
         <!-- Flying Birds -->
         <div class="bird bird-1">🐦</div>
@@ -226,7 +151,7 @@
         <!-- Loading Panel -->
         <div class="loading-panel">
             <div class="loading-title">
-                REIZEN<span class="loading-dots"><span class="dot">.</span><span class="dot">.</span><span class="dot">.</span></span>
+                REIZEN...
             </div>
             <div class="loading-subtitle" id="destinationText">
                 Naar het Observatorium

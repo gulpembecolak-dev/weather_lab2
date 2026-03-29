@@ -5,28 +5,120 @@
     <title>4.0 - Discovery Lab | Weather Lab Kids</title>
     <link rel="stylesheet" href="../design-system.css">
     <style>
-        .discovery-screen { width: var(--screen-width); height: var(--screen-height); background: linear-gradient(180deg, #1ABC9C 0%, #16A085 50%, #138D75 100%); position: relative; overflow: hidden; }
-        .lab-title { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(236, 240, 241, 0.95); border: 6px solid var(--wood-dark); padding: 16px 40px; border-radius: 12px; font-size: 24px; color: #16A085; z-index: 100; }
-        .bubbles-container { position: absolute; top: 150px; left: 50%; transform: translateX(-50%); width: 900px; height: 450px; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 40px; }
-        .question-bubble { width: 180px; height: 180px; background: rgba(255, 255, 255, 0.95); border: 6px solid var(--wood-dark); border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); animation: float-bubble 3s ease-in-out infinite; }
-        .question-bubble:hover { transform: scale(1.15); }
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
+
+        .discovery-screen {
+            width: var(--screen-width);
+            height: var(--screen-height);
+            background: linear-gradient(135deg, var(--sky-blue) 0%, var(--sky-light) 100%);
+            position: relative;
+            overflow: hidden;
+            font-family: var(--font-modern);
+        }
+
+        /* Modern Title Panel - Glassmorphism */
+        .lab-title {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            padding: 20px 60px;
+            border-radius: 30px;
+            box-shadow: 0 20px 40px var(--shadow-soft);
+            text-align: center;
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--text-dark);
+            z-index: 100;
+        }
+
+        .bubbles-container {
+            position: absolute;
+            top: 180px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1000px;
+            height: 450px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            z-index: 20;
+        }
+
+        /* Modern Question Bubble */
+        .question-bubble {
+            width: 220px;
+            height: 220px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            border: 4px solid white;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 15px 30px var(--shadow-soft);
+            animation: float-bubble 4s ease-in-out infinite;
+        }
+
+        .question-bubble:hover {
+            transform: scale(1.1) translateY(-10px);
+            background: white;
+            box-shadow: 0 20px 40px var(--shadow-heavy);
+        }
+
         .question-bubble:nth-child(1) { animation-delay: 0s; }
-        .question-bubble:nth-child(2) { animation-delay: 0.5s; }
-        .question-bubble:nth-child(3) { animation-delay: 1s; }
-        .question-bubble:nth-child(4) { animation-delay: 1.5s; }
-        .question-bubble:nth-child(5) { animation-delay: 2s; }
+        .question-bubble:nth-child(2) { animation-delay: 0.8s; }
+        .question-bubble:nth-child(3) { animation-delay: 1.6s; }
+        .question-bubble:nth-child(4) { animation-delay: 2.4s; }
+        .question-bubble:nth-child(5) { animation-delay: 3.2s; }
+
         @keyframes float-bubble {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
+            50% { transform: translateY(-20px); }
         }
-        .bubble-icon { font-size: 64px; margin-bottom: 8px; }
-        .bubble-text { font-size: 14px; color: var(--text-dark); text-align: center; line-height: 1.4; padding: 0 12px; }
+
+        .bubble-icon {
+            font-size: 70px;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1));
+        }
+
+        .bubble-text {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-dark);
+            text-align: center;
+            line-height: 1.3;
+            padding: 0 20px;
+        }
+
+        /* Navigation Buttons */
+        .btn-back {
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            z-index: 100;
+        }
+
+        .btn-complete {
+            min-width: 500px;
+            padding: 30px 60px;
+            font-size: 26px;
+        }
     </style>
 </head>
 <body>
     <div class="screen-container discovery-screen">
-        <button class="btn-pixel btn-wood btn-back" onclick="goBackToHub()">← EILANDEN</button>
-        <div class="lab-title">🔬 DISCOVERY LAB - Weer Leren</div>
+        <button class="btn-modern btn-secondary btn-back" onclick="goBackToHub()">← TERUG</button>
+        <div class="lab-title">DISCOVERY LAB</div>
         
         <div class="bubbles-container">
             <div class="question-bubble" onclick="showAnswer(1)">
@@ -49,15 +141,15 @@
                 <div class="bubble-text">Wat is<br>onweer?</div>
             </div>
             
-            <div class="question-bubble" onclick="window.location.href='4.2-phygital.html'">
+            <div class="question-bubble" style="background: rgba(255, 217, 102, 0.4); border-color: var(--sun-yellow);" onclick="window.location.href='4.2-phygital.html'">
                 <div class="bubble-icon">🏠</div>
                 <div class="bubble-text">Maak je eigen<br>windmeter!</div>
             </div>
         </div>
         
-        <div style="position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%);">
-            <button class="btn-pixel btn-glow" onclick="completeAndReturn()">
-                ✅ MISSIE VOLTOOID
+        <div style="position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%); z-index: 100;">
+            <button class="btn-modern btn-success btn-complete" onclick="completeAndReturn()">
+                MISSIE VOLTOOID
             </button>
         </div>
     </div>

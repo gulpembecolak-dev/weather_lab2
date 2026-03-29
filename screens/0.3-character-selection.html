@@ -6,311 +6,351 @@
     <title>0.3 - Karakter Seçimi | Weather Lab Kids</title>
     <link rel="stylesheet" href="../design-system.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
+
         .character-screen {
             width: var(--screen-width);
             height: var(--screen-height);
-            background: linear-gradient(135deg, #FFA07A 0%, #FF6B6B 40%, #FF8E53 100%);
+            background: linear-gradient(135deg, #87CEEB 0%, #E0F7FA 100%);
             position: relative;
             overflow: hidden;
+            font-family: 'Outfit', sans-serif;
         }
 
-        /* Floating Particles */
-        .particle {
+        /* Modern Soft Clouds */
+        .soft-cloud {
             position: absolute;
-            font-size: 24px;
-            animation: float-particle 15s linear infinite;
-            opacity: 0.6;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(8px);
+            border-radius: 100px;
+            animation: float-cloud linear infinite;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            pointer-events: none;
         }
 
-        @keyframes float-particle {
-            0% { 
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 0;
-            }
-            10% { opacity: 0.6; }
-            90% { opacity: 0.6; }
-            100% { 
-                transform: translateY(-100px) rotate(360deg);
-                opacity: 0;
-            }
+        .soft-cloud::before, .soft-cloud::after {
+            content: '';
+            position: absolute;
+            background: inherit;
+            border-radius: 50%;
         }
 
-        .particle:nth-child(1) { left: 10%; animation-delay: 0s; }
-        .particle:nth-child(2) { left: 30%; animation-delay: 2s; }
-        .particle:nth-child(3) { left: 50%; animation-delay: 4s; }
-        .particle:nth-child(4) { left: 70%; animation-delay: 6s; }
-        .particle:nth-child(5) { left: 90%; animation-delay: 8s; }
+        .soft-cloud::before { width: 50%; height: 100%; top: -40%; left: 15%; }
+        .soft-cloud::after { width: 40%; height: 80%; top: -20%; right: 15%; }
+
+        @keyframes float-cloud {
+            0% { transform: translateX(-300px); }
+            100% { transform: translateX(1300px); }
+        }
 
         /* Title Section */
         .title-section {
             position: absolute;
-            top: 40px;
-            left: 50%;
-            transform: translateX(-50%);
+            top: 60px;
+            left: 0;
+            right: 0;
             text-align: center;
             z-index: 10;
         }
 
         .welcome-text {
-            font-size: var(--font-size-lg);
-            color: var(--cloud-white);
-            text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5);
-            margin-bottom: var(--spacing-sm);
+            font-size: 20px;
+            color: #2C3E50;
+            margin-bottom: 5px;
+            letter-spacing: 2px;
+            font-weight: 400;
         }
 
         .player-name {
-            font-size: 32px;
-            color: var(--sun-yellow);
-            text-shadow: 
-                3px 3px 0 rgba(0, 0, 0, 0.5),
-                0 0 20px rgba(247, 220, 111, 0.8);
-            margin-bottom: var(--spacing-md);
+            font-size: 48px;
+            font-weight: 900;
+            color: #2C3E50;
+            margin-bottom: 20px;
+            text-transform: uppercase;
         }
 
         .instruction-text {
-            font-size: var(--font-size-md);
-            color: var(--cloud-white);
-            text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
+            font-size: 16px;
+            color: white;
+            background: #2C3E50;
+            padding: 10px 40px;
+            border-radius: 40px;
+            display: inline-block;
+            font-weight: 700;
+            letter-spacing: 1px;
         }
 
-        /* Character Grid */
+        /* Character Selection Grid */
         .character-grid {
             position: absolute;
-            top: 200px;
+            top: 240px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 60px;
-            align-items: center;
+            gap: 40px;
+            align-items: flex-start;
             justify-content: center;
+            width: 900px;
         }
 
-        /* Character Card */
+        /* Character Card - Modern Museum Style */
         .character-card {
-            width: 280px;
+            width: 270px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
-        }
-
-        .character-card:hover {
-            transform: translateY(-20px) scale(1.08);
-        }
-
-        .character-card.selected {
-            transform: translateY(-20px) scale(1.12);
-        }
-
-        .character-portrait {
-            width: 280px;
-            height: 320px;
-            background: linear-gradient(135deg, #E8DAEF 0%, #D7BDE2 100%);
-            border: 8px solid var(--wood-dark);
-            border-radius: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .character-card:hover {
+            transform: translateY(-15px);
+        }
+
+        .character-portrait-box {
+            width: 270px;
+            height: 320px;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            border-radius: 40px;
             position: relative;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
         }
 
-        .character-card.selected .character-portrait {
-            border-color: var(--sun-yellow);
+        .character-card.selected .character-portrait-box {
+            background: white;
+            border-color: #FFD966;
             box-shadow: 
-                0 12px 32px rgba(0, 0, 0, 0.4),
-                0 0 0 6px var(--sun-yellow),
-                0 0 40px rgba(247, 220, 111, 0.8);
+                0 30px 60px rgba(255, 217, 102, 0.2),
+                0 0 0 4px #FFD966;
+            transform: scale(1.05);
         }
 
-        /* Character Avatar */
         .character-avatar {
-            font-size: 140px;
-            margin-bottom: var(--spacing-sm);
-            filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.3));
+            font-size: 130px;
+            filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.1));
+            transition: transform 0.5s ease;
         }
 
-        /* Character Role Badge */
-        .character-role {
-            background: rgba(255, 255, 255, 0.95);
-            border: 4px solid var(--storm-purple);
-            padding: 8px 16px;
-            font-size: var(--font-size-sm);
-            color: var(--storm-purple);
-            border-radius: 20px;
-            margin-top: var(--spacing-xs);
+        .character-card:hover .character-avatar {
+            transform: scale(1.1) rotate(5deg);
         }
 
-        /* Character Name */
+        .character-card.selected .character-avatar {
+            transform: scale(1.1);
+        }
+
+        /* Character Info */
+        .character-info {
+            margin-top: 25px;
+            text-align: center;
+            width: 100%;
+        }
+
         .character-name {
-            background: var(--wood-light);
-            border: 6px solid var(--wood-dark);
-            padding: var(--spacing-sm);
-            margin-top: var(--spacing-sm);
-            text-align: center;
             font-size: 24px;
-            color: var(--text-dark);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
-            border-radius: 12px;
+            font-weight: 900;
+            color: #2C3E50;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
         }
 
-        /* Character Description */
+        .character-role-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #FFD966;
+            color: #2C3E50;
+            border-radius: 12px;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 900;
+            margin-bottom: 15px;
+        }
+
+        .character-card.selected .character-role-badge {
+            background: #2C3E50;
+            color: white;
+        }
+
         .character-description {
-            margin-top: var(--spacing-xs);
-            text-align: center;
-            font-size: var(--font-size-xs);
-            color: var(--text-dark);
+            font-size: 13px;
+            color: #7F8C8D;
             line-height: 1.6;
-            background: rgba(236, 240, 241, 0.9);
-            padding: var(--spacing-xs);
-            border-radius: 8px;
+            padding: 0 10px;
+            font-weight: 400;
         }
 
         /* Selection Indicator */
         .selection-indicator {
             position: absolute;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 48px;
+            top: -10px;
+            right: -10px;
+            width: 50px;
+            height: 50px;
+            background: #FFD966;
+            border: 4px solid white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
             opacity: 0;
-            transition: all 0.3s;
-            animation: bounce-select 1s ease-in-out infinite;
+            transform: scale(0);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 30;
+            box-shadow: 0 10px 20px rgba(255, 217, 102, 0.3);
         }
 
         .character-card.selected .selection-indicator {
             opacity: 1;
+            transform: scale(1);
         }
 
-        @keyframes bounce-select {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(-10px); }
-        }
-
-        /* Confirm Button */
+        /* Confirm Button - Modern & Premium */
         .confirm-button {
             position: absolute;
-            bottom: 50px;
+            bottom: 60px;
             left: 50%;
-            transform: translateX(-50%);
-            padding: 24px 60px;
-            font-size: 24px;
-            min-width: 300px;
+            transform: translateX(-50%) translateY(50px);
+            padding: 25px 80px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 28px;
+            font-weight: 900;
+            min-width: 450px;
             opacity: 0;
             pointer-events: none;
-            transition: all 0.3s;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: #FFD966;
+            color: #2C3E50;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 
+                0 15px 35px rgba(255, 217, 102, 0.4),
+                0 5px 15px rgba(0,0,0,0.1);
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
         .confirm-button.visible {
             opacity: 1;
             pointer-events: all;
+            transform: translateX(-50%) translateY(0);
         }
 
-        /* Character Traits */
-        .trait-icons {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-            margin-top: var(--spacing-xs);
+        .confirm-button:hover {
+            transform: translateX(-50%) scale(1.05) translateY(-5px);
+            background: #FFE082;
+            box-shadow: 
+                0 25px 45px rgba(255, 217, 102, 0.5),
+                0 10px 20px rgba(0,0,0,0.1);
         }
 
-        .trait-icon {
-            font-size: 28px;
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        /* Back Button Override */
+        .btn-back {
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            color: #2C3E50;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-weight: 700;
+            z-index: 100;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-back:hover {
+            background: white;
+            transform: translateX(-5px);
         }
     </style>
 </head>
 <body>
     <div class="screen-container character-screen">
-        <!-- Floating Particles -->
-        <div class="particle">☁️</div>
-        <div class="particle">⭐</div>
-        <div class="particle">🌙</div>
-        <div class="particle">💨</div>
-        <div class="particle">⚡</div>
+        <!-- Modern Clouds -->
+        <div class="soft-cloud" style="width: 200px; height: 60px; top: 10%; left: -200px; animation-duration: 45s;"></div>
+        <div class="soft-cloud" style="width: 150px; height: 45px; top: 30%; left: -150px; animation-duration: 60s; animation-delay: -10s;"></div>
+        <div class="soft-cloud" style="width: 250px; height: 75px; top: 80%; left: -300px; animation-duration: 50s; animation-delay: -25s;"></div>
 
         <!-- Back Button -->
-        <button class="btn-pixel btn-wood btn-back" onclick="goBack()">
+        <button class="btn-back" onclick="goBack()">
             ← TERUG
         </button>
 
         <!-- Title Section -->
         <div class="title-section">
-            <div class="welcome-text">WELKOM,</div>
+            <div class="welcome-text">WELKOM BIJ HET LAB,</div>
             <div class="player-name" id="playerNameDisplay">KAPITEIN</div>
-            <div class="instruction-text">
-                KIES JOUW WEER GIDS
-            </div>
+            <div class="instruction-text">KIES JOUW WEERGIDS VOOR DEZE MISSIE</div>
         </div>
 
         <!-- Character Selection Grid -->
         <div class="character-grid">
             <!-- Character 1: PAM -->
             <div class="character-card" onclick="selectCharacter('pam')" id="card-pam">
-                <div class="selection-indicator">👇</div>
-                <div class="character-portrait">
+                <div class="selection-indicator">✔️</div>
+                <div class="character-portrait-box">
                     <div class="character-avatar">👩‍🔬</div>
-                    <div class="character-role">Wetenschapper</div>
-                    <div class="trait-icons">
-                        <span class="trait-icon">🔬</span>
-                        <span class="trait-icon">📊</span>
-                        <span class="trait-icon">🧪</span>
-                    </div>
                 </div>
-                <div class="character-name">PAM</div>
-                <div class="character-description">
-                    Slim & Nieuwsgierig<br>
-                    Expert in weerkunde
+                <div class="character-info">
+                    <div class="character-name">PAM</div>
+                    <div class="character-role-badge">HOOFD WETENSCHAPPER</div>
+                    <div class="character-description">
+                        Slim, nauwkeurig en weet<br>alles over meetinstrumenten.
+                    </div>
                 </div>
             </div>
 
             <!-- Character 2: LILY -->
             <div class="character-card" onclick="selectCharacter('lily')" id="card-lily">
-                <div class="selection-indicator">👇</div>
-                <div class="character-portrait" style="background: linear-gradient(135deg, #FFE5E5 0%, #FFD4D4 100%);">
+                <div class="selection-indicator">✔️</div>
+                <div class="character-portrait-box">
                     <div class="character-avatar">👧</div>
-                    <div class="character-role">Ontdekkingsreiziger</div>
-                    <div class="trait-icons">
-                        <span class="trait-icon">🗺️</span>
-                        <span class="trait-icon">🧭</span>
-                        <span class="trait-icon">🌍</span>
-                    </div>
                 </div>
-                <div class="character-name">LILY</div>
-                <div class="character-description">
-                    Avontuurlijk & Creatief<br>
-                    Ontdekt nieuwe dingen
+                <div class="character-info">
+                    <div class="character-name">LILY</div>
+                    <div class="character-role-badge">ONTDEKKINGSREIZIGER</div>
+                    <div class="character-description">
+                        Avontuurlijk, creatief en vindt<br>altijd de mooiste wolken.
+                    </div>
                 </div>
             </div>
 
             <!-- Character 3: ERIC -->
             <div class="character-card" onclick="selectCharacter('eric')" id="card-eric">
-                <div class="selection-indicator">👇</div>
-                <div class="character-portrait" style="background: linear-gradient(135deg, #D5E8F7 0%, #B8DAF0 100%);">
+                <div class="selection-indicator">✔️</div>
+                <div class="character-portrait-box">
                     <div class="character-avatar">👦</div>
-                    <div class="character-role">Storm Jager</div>
-                    <div class="trait-icons">
-                        <span class="trait-icon">⚡</span>
-                        <span class="trait-icon">🌪️</span>
-                        <span class="trait-icon">🎮</span>
-                    </div>
                 </div>
-                <div class="character-name">ERIC</div>
-                <div class="character-description">
-                    Moedig & Energiek<br>
-                    Houdt van actie
+                <div class="character-info">
+                    <div class="character-name">ERIC</div>
+                    <div class="character-role-badge">STORM JAGER</div>
+                    <div class="character-description">
+                        Moedig, energiek en niet<br>bang voor een beetje onweer.
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Confirm Button -->
         <button 
-            class="btn-pixel btn-glow confirm-button" 
+            class="confirm-button" 
             id="confirmBtn"
             onclick="proceedToMap()"
         >
-            START AVONTUUR →
+            START HET AVONTUUR →
         </button>
     </div>
 
@@ -336,6 +376,9 @@
 
             // Show confirm button
             document.getElementById('confirmBtn').classList.add('visible');
+
+            // Play a small sound if possible
+            if (typeof SoundSystem !== 'undefined') SoundSystem.playBlip(660, 0.1);
         }
 
         function proceedToMap() {
@@ -343,6 +386,9 @@
                 // Store selected character in session
                 sessionStorage.setItem('selectedCharacter', selectedCharacter);
                 
+                // Play confirm sound
+                if (typeof SoundSystem !== 'undefined') SoundSystem.playBlip(880, 0.1);
+
                 // Proceed to hub map
                 window.location.href = '1.0-hub-map.html';
             }
