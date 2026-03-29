@@ -13,7 +13,7 @@
 }
 
 :root {
-    /* 16-bit Color Palette */
+    /* 16-bit Color Palette - Enhanced for Depth */
     --sky-blue: #5DADE2;
     --cloud-white: #F8F9F9;
     --sun-yellow: #F7DC6F;
@@ -21,27 +21,30 @@
     --storm-dark: #4A235A;
     --grass-green: #58D68D;
     --earth-brown: #935116;
-    --wood-dark: #6E4C1E;
+    --wood-dark: #4A3215;
+    --wood-mid: #6E4C1E;
     --wood-light: #C68642;
-    --text-dark: #2C3E50;
+    --parchment: #F5E6BE;
+    --parchment-dark: #E6D2A0;
+    --text-dark: #2C1810;
     --text-light: #ECF0F1;
-    --shadow: rgba(0, 0, 0, 0.3);
+    --shadow: rgba(0, 0, 0, 0.4);
     --glow: rgba(247, 220, 111, 0.6);
     
     /* Typography */
     --font-pixel: 'Press Start 2P', cursive;
-    --font-size-xl: 28px;
-    --font-size-lg: 20px;
-    --font-size-md: 16px;
-    --font-size-sm: 12px;
-    --font-size-xs: 10px;
+    --font-size-xl: 32px;
+    --font-size-lg: 24px;
+    --font-size-md: 18px;
+    --font-size-sm: 14px;
+    --font-size-xs: 12px;
     
     /* Spacing */
-    --spacing-xs: 8px;
-    --spacing-sm: 16px;
-    --spacing-md: 24px;
-    --spacing-lg: 40px;
-    --spacing-xl: 64px;
+    --spacing-xs: 10px;
+    --spacing-sm: 20px;
+    --spacing-md: 30px;
+    --spacing-lg: 50px;
+    --spacing-xl: 80px;
     
     /* Tablet dimensions */
     --screen-width: 1024px;
@@ -64,11 +67,45 @@ body {
     margin: 0 auto;
     position: relative;
     overflow: hidden;
-    border: 4px solid var(--wood-dark);
-    box-shadow: 0 8px 32px var(--shadow);
-    transform-origin: top center;
+    border: 12px solid var(--wood-dark);
+    box-shadow: 
+        0 20px 60px rgba(0,0,0,0.6),
+        inset 0 0 0 4px var(--wood-light),
+        inset 0 0 40px rgba(0,0,0,0.4);
+    transform-origin: center center;
     image-rendering: pixelated;
     image-rendering: crisp-edges;
+    background-color: #000;
+}
+
+/* ============= RICH PANELS & FRAMES ============= */
+.panel-rich {
+    background: var(--parchment);
+    border: 8px solid var(--wood-dark);
+    box-shadow: 
+        inset 0 0 0 4px var(--wood-light),
+        inset 0 0 20px var(--parchment-dark),
+        0 8px 24px var(--shadow);
+    padding: var(--spacing-md);
+    position: relative;
+    border-radius: 4px;
+}
+
+.panel-rich::before {
+    content: '';
+    position: absolute;
+    top: -4px; left: -4px; right: -4px; bottom: -4px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    pointer-events: none;
+}
+
+.wood-frame {
+    border: 10px solid var(--wood-dark);
+    background: var(--wood-mid);
+    box-shadow: 
+        inset 0 0 0 4px var(--wood-light),
+        0 12px 32px var(--shadow);
+    position: relative;
 }
 
 /* Ensure pixel art look */
@@ -98,17 +135,21 @@ img, canvas {
 /* ============= PIXEL ART BUTTONS ============= */
 .btn-pixel {
     font-family: var(--font-pixel);
-    font-size: var(--font-size-md);
+    font-size: var(--font-size-sm);
     padding: var(--spacing-sm) var(--spacing-md);
-    min-width: 120px;
+    min-width: 160px;
     min-height: 80px;
     border: none;
     cursor: pointer;
     position: relative;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     transition: transform 0.1s, box-shadow 0.1s;
     image-rendering: pixelated;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 
 /* Wood Button (Primary) */
@@ -124,12 +165,12 @@ img, canvas {
 }
 
 .btn-wood:hover {
-    transform: translateY(4px);
+    transform: translateY(2px);
     box-shadow: 
         inset 4px 4px 0 rgba(255, 255, 255, 0.3),
         inset -4px -4px 0 rgba(0, 0, 0, 0.3),
-        0 4px 0 var(--wood-dark),
-        0 8px 12px var(--shadow);
+        0 6px 0 var(--wood-dark),
+        0 10px 14px var(--shadow);
 }
 
 .btn-wood:active {
@@ -145,7 +186,6 @@ img, canvas {
     color: var(--text-dark);
     box-shadow: 
         0 0 20px var(--glow),
-        0 0 40px var(--glow),
         0 8px 0 #D4A12A,
         0 12px 16px var(--shadow);
     border: 4px solid #F39C12;
@@ -154,18 +194,12 @@ img, canvas {
 
 @keyframes pulse {
     0%, 100% { 
-        box-shadow: 
-            0 0 20px var(--glow),
-            0 0 40px var(--glow),
-            0 8px 0 #D4A12A,
-            0 12px 16px var(--shadow);
+        box-shadow: 0 0 20px var(--glow), 0 8px 0 #D4A12A, 0 12px 16px var(--shadow);
+        transform: scale(1);
     }
     50% { 
-        box-shadow: 
-            0 0 30px var(--glow),
-            0 0 60px var(--glow),
-            0 8px 0 #D4A12A,
-            0 12px 16px var(--shadow);
+        box-shadow: 0 0 40px var(--glow), 0 8px 0 #D4A12A, 0 12px 16px var(--shadow);
+        transform: scale(1.02);
     }
 }
 
@@ -305,29 +339,13 @@ img, canvas {
     bottom: 0;
     left: 0;
     right: 0;
-    background: rgba(46, 64, 83, 0.95);
-    border-top: 4px solid var(--wood-dark);
+    background: var(--wood-dark);
+    border-top: 6px solid var(--wood-light);
     padding: var(--spacing-sm);
     display: flex;
     justify-content: space-between;
     align-items: center;
     z-index: 100;
-}
-
-.nav-btn {
-    background: var(--wood-light);
-    border: 3px solid var(--wood-dark);
-    padding: 12px 24px;
-    font-family: var(--font-pixel);
-    font-size: var(--font-size-sm);
-    color: var(--text-dark);
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.nav-btn:hover {
-    background: var(--sun-yellow);
-    transform: scale(1.05);
 }
 
 /* Back Button (Always Top-Left) */
@@ -336,8 +354,10 @@ img, canvas {
     top: var(--spacing-sm);
     left: var(--spacing-sm);
     z-index: 200;
-    padding: 16px 32px;
-    font-size: var(--font-size-md);
+    padding: 12px 24px;
+    font-size: var(--font-size-xs);
+    min-width: 100px;
+    min-height: 60px;
 }
 
 /* Home Button (Always Top-Right) */
@@ -346,10 +366,10 @@ img, canvas {
     top: var(--spacing-sm);
     right: var(--spacing-sm);
     z-index: 200;
-    padding: 16px;
+    padding: 12px;
     font-size: 32px;
-    min-width: 80px;
-    min-height: 80px;
+    min-width: 70px;
+    min-height: 70px;
 }
 
 /* ============= TEXT STYLES ============= */
@@ -423,8 +443,8 @@ img, canvas {
     bottom: 40px;
     left: 50%;
     transform: translateX(-50%);
-    width: 800px;
-    height: 180px;
+    width: 850px;
+    height: 200px;
     z-index: 500;
     display: flex;
     gap: 20px;
@@ -439,38 +459,34 @@ img, canvas {
 }
 
 .pam-portrait {
-    width: 150px;
-    height: 150px;
-    background: var(--wood-light);
-    border: 6px solid var(--wood-dark);
-    border-radius: 12px;
+    width: 180px;
+    height: 180px;
+    background: var(--parchment);
+    border: 8px solid var(--wood-dark);
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 80px;
-    box-shadow: 0 8px 16px var(--shadow);
+    font-size: 100px;
+    box-shadow: 
+        inset 0 0 0 4px var(--wood-light),
+        0 12px 24px var(--shadow);
     position: relative;
     overflow: hidden;
 }
 
-/* Expression classes (placeholder for sprite sheets) */
-.pam-portrait.happy::after { content: '😄'; position: absolute; }
-.pam-portrait.surprised::after { content: '😲'; position: absolute; }
-.pam-portrait.serious::after { content: '🧐'; position: absolute; }
-.pam-portrait.normal::after { content: '👩‍🔬'; position: absolute; }
-
 .dialogue-box {
     flex: 1;
-    background: rgba(44, 62, 80, 0.95);
-    border: 6px solid var(--wood-dark);
-    padding: 24px;
-    color: var(--cloud-white);
-    font-size: 14px;
+    background: var(--parchment);
+    border: 8px solid var(--wood-dark);
+    padding: 30px;
+    color: var(--text-dark);
+    font-size: var(--font-size-sm);
     line-height: 1.8;
     position: relative;
     box-shadow: 
         inset 0 0 0 4px var(--wood-light),
-        0 8px 24px var(--shadow);
+        0 12px 24px var(--shadow);
 }
 
 .dialogue-text {
@@ -480,15 +496,15 @@ img, canvas {
 
 .dialogue-next-hint {
     position: absolute;
-    bottom: 10px;
-    right: 15px;
-    font-size: 20px;
+    bottom: 15px;
+    right: 20px;
+    font-size: 24px;
     animation: bounce-next 1s infinite;
 }
 
 @keyframes bounce-next {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(5px); }
+    50% { transform: translateY(8px); }
 }
 
 /* ============= RESPONSIVE TABLET ADJUSTMENTS ============= */
