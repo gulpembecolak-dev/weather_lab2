@@ -12,185 +12,124 @@
         .storm-screen {
             width: var(--screen-width);
             height: var(--screen-height);
-            background: linear-gradient(180deg, #4A235A 0%, #7D3C98 50%, #5B2C6F 100%);
+            background: #2C1B3D; /* Dark purple */
             position: relative;
             overflow: hidden;
         }
 
-        .storm-title {
+        /* Room Construction */
+        .lab-floor {
             position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(236, 240, 241, 0.95);
-            border: 6px solid var(--wood-dark);
-            padding: 16px 40px;
-            border-radius: 12px;
-            font-size: 24px;
-            color: #8E44AD;
-            z-index: 100;
+            bottom: 0; left: 0; width: 100%; height: 200px;
+            background: #1A0F26;
+            border-top: 6px solid #4A235A;
+            z-index: 5;
         }
 
-        .game-area {
+        .lab-wall {
             position: absolute;
-            top: 120px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 850px;
-            height: 500px;
-            background: linear-gradient(180deg, #2C3E50 0%, #34495E 100%);
-            border: 8px solid var(--wood-dark);
-            border-radius: 16px;
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
-            position: relative;
-            overflow: hidden;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(180deg, #3D2352 0%, #1A0F26 100%);
+            box-shadow: inset 0 0 150px rgba(0,0,0,0.8);
         }
 
-        /* Grass/Ground in Game Area */
-        .game-ground {
+        /* High-Tech Props */
+        .tesla-coil {
             position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 100px;
-            background: #27AE60;
-            border-top: 4px solid #1E8449;
-        }
-
-        .trees-container {
-            position: absolute;
-            bottom: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 600px;
-            display: flex;
-            justify-content: space-around;
-            align-items: flex-end;
-        }
-
-        .tree-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transform-origin: bottom center;
-            transition: transform 0.2s ease-out;
-        }
-
-        .tree-emoji {
-            font-size: 100px;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
-        }
-
-        .cloud-storm {
-            position: absolute;
-            top: 50px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 120px;
-            transition: all 0.5s;
-            z-index: 10;
-        }
-
-        /* Wind Slider (Beaufort Scale) */
-        .slider-panel {
-            position: absolute;
-            right: 40px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 120px;
-            height: 420px;
-            background: rgba(236, 240, 241, 0.95);
-            border: 6px solid var(--wood-dark);
-            border-radius: 20px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-        }
-
-        .beaufort-number {
-            font-size: 32px;
-            color: var(--storm-purple);
-            margin-bottom: 10px;
-        }
-
-        .slider-track {
-            flex: 1;
-            width: 20px;
-            background: #ddd;
-            border: 3px solid var(--wood-dark);
-            border-radius: 10px;
-            position: relative;
-            cursor: pointer;
-        }
-
-        .slider-handle {
-            position: absolute;
-            left: 50%;
-            transform: translate(-50%, 50%);
-            width: 50px;
-            height: 50px;
-            background: var(--sun-yellow);
+            bottom: 180px;
+            width: 80px; height: 150px;
+            background: #5D6D7E;
             border: 4px solid var(--wood-dark);
-            border-radius: 8px;
-            box-shadow: 0 4px 0 var(--wood-dark);
-            bottom: 0;
-            cursor: pointer;
+            z-index: 6;
         }
 
-        .beaufort-label {
+        .tesla-coil::after {
+            content: '';
             position: absolute;
-            bottom: 30px;
-            left: 50%;
+            top: -20px; left: 50%; transform: translateX(-50%);
+            width: 60px; height: 60px;
+            background: #AED6F1;
+            border: 4px solid white;
+            border-radius: 50%;
+            box-shadow: 0 0 20px #5DADE2;
+        }
+
+        /* Control Panel */
+        .control-panel-rich {
+            position: absolute;
+            bottom: 40px; right: 50px;
+            width: 350px; height: 120px;
+            background: #34495E;
+            border: 6px solid var(--wood-dark);
+            box-shadow: 
+                inset 0 0 0 4px #5D6D7E,
+                0 10px 20px rgba(0,0,0,0.5);
+            z-index: 10;
+            display: flex; gap: 10px; padding: 15px;
+            align-items: center; justify-content: space-around;
+        }
+
+        .panel-btn {
+            width: 40px; height: 40px;
+            background: #E74C3C;
+            border: 3px solid #C0392B;
+            box-shadow: 0 4px 0 #922B21;
+            border-radius: 4px;
+        }
+
+        /* Main Game Area (Central Screen) */
+        .simulation-screen {
+            position: absolute;
+            top: 100px; left: 50%;
             transform: translateX(-50%);
-            font-size: 28px;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-            background: rgba(0,0,0,0.4);
-            padding: 10px 30px;
+            width: 750px; height: 420px;
+            background: #000;
+            border: 15px solid var(--wood-dark);
+            box-shadow: 
+                inset 0 0 0 4px var(--wood-light),
+                0 20px 50px rgba(0,0,0,0.6);
+            z-index: 15;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .sim-background {
+            width: 100%; height: 100%;
+            background: linear-gradient(180deg, #2C3E50 0%, #34495E 100%);
+            position: relative;
+        }
+
+        /* Beaufort Slider in Lab Style */
+        .lab-slider-container {
+            position: absolute;
+            left: 40px; top: 150px;
+            width: 120px; height: 400px;
+            background: var(--parchment);
+            border: 6px solid var(--wood-dark);
+            padding: 20px;
+            z-index: 20;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+        }
+
+        /* Mission UI */
+        .lab-mission-badge {
+            position: absolute;
+            top: 30px; left: 50%; transform: translateX(-50%);
+            background: #8E44AD;
+            border: 4px solid white;
+            padding: 10px 40px;
             border-radius: 40px;
-            border: 2px solid rgba(255,255,255,0.2);
-        }
-
-        /* Lightning Effect */
-        .lightning-flash {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: white;
-            opacity: 0;
-            pointer-events: none;
+            color: white;
             z-index: 100;
-        }
-
-        @keyframes flash {
-            0% { opacity: 0; }
-            10% { opacity: 0.8; }
-            20% { opacity: 0; }
-            30% { opacity: 0.5; }
-            40% { opacity: 0; }
-        }
-
-        /* Wind Lines */
-        .wind-line {
-            position: absolute;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 2px;
-            animation: blow linear infinite;
-        }
-
-        @keyframes blow {
-            0% { transform: translateX(-100px); opacity: 0; }
-            50% { opacity: 0.5; }
-            100% { transform: translateX(900px); opacity: 0; }
+            font-size: 14px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
         }
     </style>
 </head>
 <body>
     <div class="screen-container storm-screen">
+        <div class="lab-wall"></div>
+        <div class="lab-floor"></div>
         <div class="lightning-flash" id="lightning"></div>
 
         <!-- Back Button -->
@@ -198,31 +137,50 @@
             ← EILANDEN
         </button>
 
-        <div class="storm-title">⚡ STORM LAB - Weer Maken</div>
-        
-        <div class="game-area" id="gameArea">
-            <div class="cloud-storm" id="stormCloud">☁️</div>
-            
-            <div class="trees-container" id="treesContainer">
-                <div class="tree-wrapper"><span class="tree-emoji">🌲</span></div>
-                <div class="tree-wrapper"><span class="tree-emoji">🌳</span></div>
-                <div class="tree-wrapper"><span class="tree-emoji">🌲</span></div>
-            </div>
+        <div class="lab-mission-badge">
+            MISSIE: Maak een Storm
+        </div>
 
-            <div class="game-ground"></div>
-            
-            <div class="slider-panel">
-                <div class="beaufort-number" id="windLevel">0</div>
-                <div class="slider-track" id="sliderTrack">
-                    <div class="slider-handle" id="sliderHandle"></div>
-                </div>
-                <div style="font-size: 10px; margin-top: 10px; color: #7F8C8D;">BEAUFORT</div>
+        <!-- Lab Props -->
+        <div class="tesla-coil" style="left: 100px;"></div>
+        <div class="tesla-coil" style="right: 100px;"></div>
+
+        <!-- Control Panel -->
+        <div class="control-panel-rich">
+            <div class="panel-btn" style="background: #E74C3C;"></div>
+            <div class="panel-btn" style="background: #2ECC71;"></div>
+            <div class="panel-btn" style="background: #3498DB;"></div>
+            <div style="flex:1; background: #2C3E50; height: 60px; border: 3px solid #1A252F; color: #00FF00; font-size: 8px; padding: 5px; overflow: hidden;">
+                STATUS: READY<br>VOLTAGE: 100%<br>WIND: ACTIVE
             </div>
-            
-            <div class="beaufort-label" id="beaufortLabel">WINDSTIL</div>
+        </div>
+
+        <!-- Simulation Screen -->
+        <div class="simulation-screen">
+            <div class="sim-background" id="gameArea">
+                <div class="cloud-storm" id="stormCloud">☁️</div>
+                
+                <div class="trees-container" id="treesContainer">
+                    <div class="tree-wrapper"><span class="tree-emoji">🌲</span></div>
+                    <div class="tree-wrapper"><span class="tree-emoji">🌳</span></div>
+                    <div class="tree-wrapper"><span class="tree-emoji">🌲</span></div>
+                </div>
+
+                <div class="game-ground"></div>
+                <div class="beaufort-label" id="beaufortLabel">WINDSTIL</div>
+            </div>
+        </div>
+
+        <!-- Slider moved to a lab-style panel -->
+        <div class="lab-slider-container">
+            <div style="font-size: 10px; color: var(--text-dark); margin-bottom: 15px;">WIND KRACHT</div>
+            <div class="beaufort-number" id="windLevel" style="margin-bottom: 20px;">0</div>
+            <div class="slider-track" id="sliderTrack" style="height: 250px;">
+                <div class="slider-handle" id="sliderHandle"></div>
+            </div>
         </div>
         
-        <div style="position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);">
+        <div style="position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); z-index: 100;">
             <button class="btn-pixel btn-glow" onclick="completeAndReturn()">
                 ✅ MISSIE VOLTOOID
             </button>

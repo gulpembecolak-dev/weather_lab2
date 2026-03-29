@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5.0 - De Grote Weer Test | Weather Lab Kids</title>
+    <link rel="stylesheet" href="../design-system.css">
+    <script src="../js/dialogue.js"></script>
+    <script src="../js/analytics.js"></script>
+    <script>window.SCREEN_NAME = 'Final Test';</script>
+    <style>
+        .quiz-screen {
+            width: var(--screen-width);
+            height: var(--screen-height);
+            background: linear-gradient(135deg, #1A252F 0%, #2C3E50 100%);
+            position: relative;
+            overflow: hidden;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+
+        /* Question Frame */
+        .quiz-container {
+            width: 800px;
+            height: 500px;
+            background: var(--parchment);
+            border: 12px solid var(--wood-dark);
+            box-shadow: 
+                inset 0 0 0 4px var(--wood-light),
+                0 20px 60px rgba(0,0,0,0.6);
+            display: flex; flex-direction: column; padding: 50px;
+            position: relative;
+        }
+
+        .question-text {
+            font-size: 24px;
+            color: var(--text-dark);
+            margin-bottom: 50px;
+            line-height: 1.4;
+            text-align: center;
+        }
+
+        .answers-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .answer-btn {
+            background: var(--wood-light);
+            border: 6px solid var(--wood-dark);
+            padding: 20px;
+            color: var(--text-dark);
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: inset 0 0 0 2px rgba(255,255,255,0.3);
+            display: flex; align-items: center; justify-content: center;
+            text-align: center;
+        }
+
+        .answer-btn:hover {
+            background: var(--sun-yellow);
+            transform: scale(1.02);
+        }
+
+        /* Progress markers */
+        .quiz-progress {
+            position: absolute;
+            top: -40px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 15px;
+        }
+
+        .progress-dot {
+            width: 25px; height: 25px;
+            background: #BDC3C7;
+            border: 4px solid var(--wood-dark);
+            border-radius: 50%;
+        }
+
+        .progress-dot.active { background: var(--sun-yellow); }
+        .progress-dot.correct { background: #2ECC71; }
+
+        /* Reward Screen */
+        .reward-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+            color: white;
+            text-align: center;
+        }
+
+        .trophy { font-size: 200px; animation: pop 1s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        
+        @keyframes pop { 0% { transform: scale(0); } 100% { transform: scale(1); } }
+
+        /* Confetti simulation */
+        .confetti {
+            position: absolute;
+            width: 10px; height: 10px;
+            background: red;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(800px) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="screen-container quiz-screen">
+        <div class="quiz-progress" id="progressDots">
+            <div class="progress-dot active"></div>
+            <div class="progress-dot"></div>
+            <div class="progress-dot"></div>
+            <div class="progress-dot"></div>
+            <div class="progress-dot"></div>
+        </div>
+
+        <div class="quiz-container" id="quizBox">
+            <div class="question-text" id="question">Laden...</div>
+            <div class="answers-grid" id="answers">
+                <!-- Answers added by JS -->
+            </div>
+        </div>
+
+        <!-- Reward Screen -->
+        <div class="reward-overlay" id="reward">
+            <div class="trophy">🏆</div>
+            <h1 style="font-size: 40px; margin: 30px 0;">GEFELICITEERD!</h1>
+            <p style="font-size: 20px; margin-bottom: 50px;">Je bent nu een officiële Weer Expert!</p>
+            <button class="btn-pixel btn-glow" onclick="window.location.href='0.1-idle-screen.html'">
+                OPNIEUW SPELEN
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                q: "Wat gebeurt er met water bij 0 graden Celsius?",
+                a: ["Het verdampt", "Het wordt ijs 🧊", "Het wordt warmer", "Niets"],
+                correct: 1
+            },
+            {
+                q: "Welke kleur wolk bevat vaak de meeste regen?",
+                a: ["Helder wit", "Zacht roze", "Donkergrijs/Paars ⛈️", "Lichtblauw"],
+                correct: 2
+            },
+            {
+                q: "Bij welke luchtdruk is de kans op mooi weer het grootst?",
+                a: ["Lage druk (L)", "Hoge druk (H) ☀️", "Geen druk", "Zoute druk"],
+                correct: 1
+            },
+            {
+                q: "Waarom is de lucht blauw?",
+                a: ["Door de zee", "Door zonlicht en lucht 🌤️", "Door de wolken", "Het is geverfd"],
+                correct: 1
+            },
+            {
+                q: "Wat doet de wind bij Beaufort kracht 7?",
+                a: ["Het is windstil", "De bomen buigen hard 🌪️", "Een zacht briesje", "De zon schijnt"],
+                correct: 1
+            }
+        ];
+
+        let currentIdx = 0;
+        let score = 0;
+
+        function renderQuestion() {
+            const q = questions[currentIdx];
+            document.getElementById('question').textContent = q.q;
+            
+            const answersDiv = document.getElementById('answers');
+            answersDiv.innerHTML = '';
+            
+            q.a.forEach((text, i) => {
+                const btn = document.createElement('div');
+                btn.className = 'answer-btn';
+                btn.textContent = text;
+                btn.onclick = () => checkAnswer(i);
+                answersDiv.appendChild(btn);
+            });
+
+            // Update dots
+            const dots = document.querySelectorAll('.progress-dot');
+            dots.forEach((dot, i) => {
+                dot.className = 'progress-dot';
+                if (i === currentIdx) dot.classList.add('active');
+                if (i < currentIdx) dot.classList.add('correct');
+            });
+        }
+
+        function checkAnswer(i) {
+            if (i === questions[currentIdx].correct) {
+                score++;
+                showDialogue("Goed gedaan! Dat is het juiste antwoord.", "happy");
+            } else {
+                showDialogue("Oeps, dat was niet helemaal goed. Maar je leert bij!", "surprised");
+            }
+
+            setTimeout(() => {
+                currentIdx++;
+                if (currentIdx < questions.length) {
+                    renderQuestion();
+                } else {
+                    showReward();
+                }
+            }, 1500);
+        }
+
+        function showReward() {
+            document.getElementById('reward').style.display = 'flex';
+            spawnConfetti();
+        }
+
+        function spawnConfetti() {
+            for (let i = 0; i < 100; i++) {
+                const c = document.createElement('div');
+                c.className = 'confetti';
+                c.style.left = Math.random() * 100 + '%';
+                c.style.background = ['#F1C40F', '#E74C3C', '#3498DB', '#2ECC71', '#9B59B6'][Math.floor(Math.random()*5)];
+                c.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                c.style.animationDelay = (Math.random() * 5) + 's';
+                document.body.appendChild(c);
+            }
+        }
+
+        window.onload = function() {
+            renderQuestion();
+            setTimeout(() => {
+                showDialogue("Welkom bij de Grote Weer Test! Ben je er klaar voor?", "happy");
+            }, 500);
+        };
+    </script>
+</body>
+</html>
