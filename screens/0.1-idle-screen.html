@@ -13,44 +13,94 @@
         .idle-screen {
             width: var(--screen-width);
             height: var(--screen-height);
-            background: linear-gradient(180deg, #FFD966 0%, #87CEEB 40%, #5DADE2 100%);
+            background: linear-gradient(180deg, #87CEEB 0%, #5DADE2 40%, #3498DB 100%);
             position: relative;
             overflow: hidden;
         }
 
-        /* Sun Rays */
-        .sun-rays {
-            position: absolute;
-            top: -100px;
-            right: -100px;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 70%);
-            animation: rotate-rays 20s linear infinite;
-            pointer-events: none;
-        }
-
-        @keyframes rotate-rays {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        /* Animated Clouds - More Pixelated */
-        .pixel-cloud {
+        /* Animated Clouds */
+        .cloud {
             position: absolute;
             background: var(--cloud-white);
-            box-shadow: 
-                4px 4px 0 rgba(0,0,0,0.1),
-                inset -4px -4px 0 rgba(0,0,0,0.05);
+            border-radius: 100px;
+            opacity: 0.9;
             animation: float-cloud linear infinite;
         }
 
-        .pixel-cloud::after {
+        .cloud::before,
+        .cloud::after {
             content: '';
             position: absolute;
             background: var(--cloud-white);
-            width: 60%; height: 60%;
-            top: -30%; left: 20%;
+            border-radius: 100px;
+        }
+
+        .cloud-1 {
+            width: 120px;
+            height: 40px;
+            top: 15%;
+            left: -150px;
+            animation-duration: 45s;
+        }
+
+        .cloud-1::before {
+            width: 60px;
+            height: 60px;
+            top: -30px;
+            left: 20px;
+        }
+
+        .cloud-1::after {
+            width: 80px;
+            height: 50px;
+            top: -20px;
+            left: 50px;
+        }
+
+        .cloud-2 {
+            width: 100px;
+            height: 35px;
+            top: 35%;
+            left: -120px;
+            animation-duration: 60s;
+            animation-delay: 5s;
+        }
+
+        .cloud-2::before {
+            width: 50px;
+            height: 50px;
+            top: -25px;
+            left: 15px;
+        }
+
+        .cloud-2::after {
+            width: 70px;
+            height: 45px;
+            top: -18px;
+            left: 40px;
+        }
+
+        .cloud-3 {
+            width: 140px;
+            height: 45px;
+            top: 60%;
+            left: -160px;
+            animation-duration: 50s;
+            animation-delay: 10s;
+        }
+
+        .cloud-3::before {
+            width: 70px;
+            height: 70px;
+            top: -35px;
+            left: 25px;
+        }
+
+        .cloud-3::after {
+            width: 90px;
+            height: 55px;
+            top: -25px;
+            left: 60px;
         }
 
         @keyframes float-cloud {
@@ -58,159 +108,246 @@
             100% { transform: translateX(1200px); }
         }
 
-        /* Hanging Sign */
-        .sign-hanger {
+        /* Sun */
+        .sun {
             position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            z-index: 50;
-        }
-
-        .rope {
-            width: 6px;
-            height: 80px;
-            background: var(--wood-dark);
-            margin: 0 40px;
-            box-shadow: 2px 0 0 rgba(0,0,0,0.2);
-        }
-
-        .ropes-container {
-            display: flex;
-            justify-content: center;
-        }
-
-        .title-panel-rich {
-            background: var(--wood-mid);
-            border: 10px solid var(--wood-dark);
-            padding: 40px 60px;
-            text-align: center;
+            top: 80px;
+            right: 120px;
+            width: 120px;
+            height: 120px;
+            background: var(--sun-yellow);
+            border-radius: 50%;
             box-shadow: 
-                inset 0 0 0 4px var(--wood-light),
-                0 20px 40px rgba(0,0,0,0.4);
-            position: relative;
-            transform-origin: top center;
-            animation: swing 4s ease-in-out infinite;
+                0 0 40px rgba(247, 220, 111, 0.8),
+                0 0 80px rgba(247, 220, 111, 0.5),
+                inset 0 0 30px rgba(255, 255, 255, 0.5);
+            animation: sun-pulse 3s ease-in-out infinite;
         }
 
-        @keyframes swing {
-            0%, 100% { transform: rotate(-2deg); }
-            50% { transform: rotate(2deg); }
+        @keyframes sun-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
-        .title-main {
-            font-size: 40px;
-            color: var(--parchment);
-            text-shadow: 4px 4px 0 var(--wood-dark);
-            margin-bottom: 15px;
-            letter-spacing: 4px;
-        }
-
-        .title-sub {
-            font-size: 18px;
-            color: var(--sun-yellow);
-            text-shadow: 2px 2px 0 var(--wood-dark);
-        }
-
-        /* Ground & Environment */
-        .ground-layered {
+        /* Grass/Ground */
+        .ground {
             position: absolute;
             bottom: 0;
             left: 0;
-            width: 100%;
-            height: 250px;
-            z-index: 10;
+            right: 0;
+            height: 200px;
+            background: linear-gradient(180deg, #58D68D 0%, #27AE60 100%);
+            border-top: 6px solid #229954;
         }
 
-        .hill {
+        /* Grass Details (Pixel Style) */
+        .grass-detail {
+            position: absolute;
+            bottom: 200px;
+            width: 100%;
+            height: 40px;
+            background: 
+                repeating-linear-gradient(
+                    90deg,
+                    #58D68D 0px,
+                    #58D68D 3px,
+                    #52BE80 3px,
+                    #52BE80 6px,
+                    #58D68D 6px,
+                    #58D68D 9px,
+                    #45B566 9px,
+                    #45B566 12px
+                );
+        }
+
+        /* Weather Lab Building (Simplified) */
+        .building {
+            position: absolute;
+            bottom: 200px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 180px;
+        }
+
+        .building-body {
+            width: 180px;
+            height: 120px;
+            background: #E8DAEF;
+            border: 6px solid var(--wood-dark);
             position: absolute;
             bottom: 0;
-            border-radius: 50% 50% 0 0;
+            left: 10px;
         }
 
-        .hill-1 {
-            width: 800px; height: 200px;
-            background: #27AE60;
-            left: -100px;
-            z-index: 1;
-        }
-
-        .hill-2 {
-            width: 900px; height: 250px;
-            background: #2ECC71;
-            right: -150px;
-            z-index: 2;
-        }
-
-        /* Foreground Flowers */
-        .flower-cluster {
+        .building-roof {
+            width: 200px;
+            height: 0;
+            border-left: 100px solid transparent;
+            border-right: 100px solid transparent;
+            border-bottom: 70px solid #8E44AD;
             position: absolute;
-            bottom: 20px;
-            z-index: 100;
-            font-size: 40px;
-            animation: sway 3s ease-in-out infinite;
+            top: 0;
+            filter: drop-shadow(0 -4px 0 var(--wood-dark));
         }
 
-        @keyframes sway {
-            0%, 100% { transform: translateY(0) rotate(-5deg); }
-            50% { transform: translateY(-5px) rotate(5deg); }
+        .building-window {
+            width: 40px;
+            height: 40px;
+            background: #5DADE2;
+            border: 3px solid var(--wood-dark);
+            position: absolute;
+        }
+
+        .window-1 { top: 25px; left: 25px; }
+        .window-2 { top: 25px; right: 25px; }
+        .window-3 { top: 75px; left: 25px; }
+        .window-3::after {
+            content: '💨';
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            font-size: 24px;
+        }
+
+        /* Title Panel */
+        .title-panel {
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(236, 240, 241, 0.95);
+            border: 8px solid var(--wood-dark);
+            padding: var(--spacing-md);
+            text-align: center;
+            box-shadow: 
+                0 12px 32px var(--shadow),
+                inset 0 0 0 4px var(--wood-light);
+            min-width: 600px;
+        }
+
+        .title-main {
+            font-size: 32px;
+            color: var(--storm-purple);
+            text-shadow: 3px 3px 0 rgba(255, 255, 255, 0.8);
+            margin-bottom: var(--spacing-sm);
+            letter-spacing: 3px;
+        }
+
+        .title-sub {
+            font-size: var(--font-size-md);
+            color: var(--text-dark);
+            margin-top: var(--spacing-xs);
         }
 
         /* Start Button */
-        .start-button-rich {
+        .start-button {
             position: absolute;
-            bottom: 150px;
+            bottom: 280px;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 150;
+            padding: 24px 48px;
+            font-size: 24px;
+            min-width: 400px;
+            animation: pulse-glow 2s infinite;
+            transition: transform 0.1s;
+        }
+
+        .start-button:active {
+            transform: translateX(-50%) scale(0.9, 1.1); /* Squash and Stretch */
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { 
+                box-shadow: 
+                    0 0 30px var(--glow),
+                    0 0 60px var(--glow),
+                    0 8px 0 #D4A12A,
+                    0 12px 24px var(--shadow);
+            }
+            50% { 
+                box-shadow: 
+                    0 0 50px var(--glow),
+                    0 0 100px var(--glow),
+                    0 8px 0 #D4A12A,
+                    0 12px 24px var(--shadow);
+            }
+        }
+
+        /* Decorative Elements */
+        .flower {
+            position: absolute;
+            font-size: 32px;
+            animation: sway 3s ease-in-out infinite;
+        }
+
+        .flower-1 { bottom: 210px; left: 15%; animation-delay: 0s; }
+        .flower-2 { bottom: 210px; left: 25%; animation-delay: 0.5s; }
+        .flower-3 { bottom: 210px; right: 15%; animation-delay: 1s; }
+        .flower-4 { bottom: 210px; right: 25%; animation-delay: 1.5s; }
+
+        @keyframes sway {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        /* Instructions */
+        .instruction-text {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: var(--font-size-sm);
+            color: var(--text-light);
+            background: rgba(44, 62, 80, 0.8);
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: 3px solid var(--text-dark);
+            border-radius: 8px;
         }
     </style>
 </head>
 <body>
     <div class="screen-container idle-screen">
-        <div class="sun-rays"></div>
-        
-        <!-- Clouds -->
-        <div class="pixel-cloud" style="width: 150px; height: 40px; top: 15%; left: -100px; animation-duration: 40s;"></div>
-        <div class="pixel-cloud" style="width: 120px; height: 35px; top: 30%; left: -150px; animation-duration: 55s; animation-delay: 5s;"></div>
-        <div class="pixel-cloud" style="width: 180px; height: 45px; top: 55%; left: -200px; animation-duration: 45s; animation-delay: 10s;"></div>
+        <!-- Sky Elements -->
+        <div class="sun"></div>
+        <div class="cloud cloud-1"></div>
+        <div class="cloud cloud-2"></div>
+        <div class="cloud cloud-3"></div>
 
-        <!-- Hanging Title Sign -->
-        <div class="sign-hanger">
-            <div class="ropes-container">
-                <div class="rope"></div>
-                <div class="rope"></div>
-            </div>
-            <div class="title-panel-rich">
-                <div class="title-main">WEER<br>EILANDEN</div>
-                <div class="title-sub">Ontdek de Kracht van Natuur</div>
+        <!-- Title Panel -->
+        <div class="title-panel">
+            <div class="title-main">WEATHER LAB<br>KIDS</div>
+            <div class="title-sub">🌤️ De Weer Eilanden 🌤️</div>
+        </div>
+
+        <!-- Main Building -->
+        <div class="building">
+            <div class="building-roof"></div>
+            <div class="building-body">
+                <div class="building-window window-1"></div>
+                <div class="building-window window-2"></div>
+                <div class="building-window window-3"></div>
             </div>
         </div>
 
-        <!-- Environment -->
-        <div class="ground-layered">
-            <div class="hill hill-1"></div>
-            <div class="hill hill-2"></div>
-        </div>
+        <!-- Ground -->
+        <div class="grass-detail"></div>
+        <div class="ground"></div>
 
-        <!-- Foreground Flowers cluster -->
-        <div class="flower-cluster" style="left: 10%;">🌷🌼🌸</div>
-        <div class="flower-cluster" style="right: 15%; animation-delay: 1s;">🌻🌷🌼</div>
-        <div class="flower-cluster" style="left: 40%; animation-delay: 0.5s; font-size: 30px;">🌸🌼</div>
+        <!-- Decorative Flowers -->
+        <div class="flower flower-1">🌼</div>
+        <div class="flower flower-2">🌻</div>
+        <div class="flower flower-3">🌼</div>
+        <div class="flower flower-4">🌻</div>
 
         <!-- Start Button -->
-        <div class="start-button-rich">
-            <button class="btn-pixel btn-glow" style="min-width: 450px; font-size: 24px;" onclick="nextScreen()">
-                RAAK AAN OM<br>TE STARTEN
-            </button>
-        </div>
+        <button class="btn-pixel btn-glow start-button" onclick="nextScreen()">
+            RAAK AAN OM<br>TE STARTEN
+        </button>
 
         <!-- Instructions -->
-        <div class="instruction-text" style="z-index: 200; bottom: 40px;">
-            👆 Tik op het scherm om te beginnen
+        <div class="instruction-text">
+            👆 Tik op het gele scherm om je avontuur te beginnen
         </div>
     </div>
 
