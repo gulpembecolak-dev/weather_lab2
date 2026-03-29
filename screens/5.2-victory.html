@@ -2,206 +2,49 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>5.2 - Gefeliciteerd! | Weather Lab Kids</title>
     <link rel="stylesheet" href="../design-system.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
-
-        .victory-screen {
-            width: var(--screen-width);
-            height: var(--screen-height);
-            background: linear-gradient(135deg, #FF9966 0%, #FF5E62 100%);
-            position: relative;
-            overflow: hidden;
-            font-family: 'Outfit', sans-serif;
-            animation: rainbow-bg 8s ease-in-out infinite;
-        }
-
-        @keyframes rainbow-bg {
-            0%, 100% { filter: hue-rotate(0deg); }
-            50% { filter: hue-rotate(20deg); }
-        }
-
-        .confetti {
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            border-radius: 2px;
-            animation: fall 4s linear infinite;
-            z-index: 5;
-        }
-
-        @keyframes fall {
-            0% { top: -20px; transform: rotate(0deg) translateX(0); opacity: 1; }
-            100% { top: 100%; transform: rotate(720deg) translateX(100px); opacity: 0; }
-        }
-
-        /* Modern Victory Panel - Glassmorphism */
-        .victory-panel {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(20px);
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            padding: 50px;
-            width: 800px;
-            border-radius: 40px;
-            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            z-index: 10;
-        }
-
-        .trophy {
-            font-size: 140px;
-            margin-bottom: 20px;
-            animation: trophy-bounce 2s ease-in-out infinite;
-            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.1));
-        }
-
-        @keyframes trophy-bounce {
-            0%, 100% { transform: scale(1) rotate(-5deg); }
-            50% { transform: scale(1.1) rotate(5deg); }
-        }
-
-        .victory-title {
-            font-size: 42px;
-            font-weight: 900;
-            color: #2C3E50;
-            margin-bottom: 10px;
-            letter-spacing: -1px;
-        }
-
-        .score-display {
-            font-size: 32px;
-            font-weight: 700;
-            color: #2ECC71;
-            margin-bottom: 20px;
-        }
-
-        .victory-text {
-            font-size: 18px;
-            color: #2C3E50;
-            line-height: 1.6;
-            margin-bottom: 30px;
-        }
-
-        .badge-display {
-            font-size: 100px;
-            margin: 20px 0;
-            animation: badge-pulse 2s ease-in-out infinite;
-            filter: drop-shadow(0 15px 30px rgba(0,0,0,0.1));
-        }
-
-        @keyframes badge-pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.15); }
-        }
-
-        /* Modern Info Card */
-        .museum-info {
-            background: rgba(52, 152, 219, 0.1);
-            border: 2px solid rgba(52, 152, 219, 0.3);
-            padding: 25px;
-            border-radius: 24px;
-            margin-bottom: 30px;
-        }
-
-        .museum-info strong {
-            color: #2980B9;
-            font-weight: 900;
-        }
-
-        /* Modern Button */
-        .btn-restart {
-            width: 100%;
-            padding: 25px;
-            font-family: 'Outfit', sans-serif;
-            font-size: 22px;
-            font-weight: 900;
-            background: #FFD966;
-            color: #2C3E50;
-            border: none;
-            border-radius: 40px;
-            cursor: pointer;
-            box-shadow: 0 15px 30px rgba(255, 217, 102, 0.4);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .btn-restart:hover {
-            transform: scale(1.03) translateY(-5px);
-            background: #FFE082;
-            box-shadow: 0 20px 40px rgba(255, 217, 102, 0.5);
-        }
+        .victory-screen { width:100%; height:100vh; height:100dvh; background:linear-gradient(135deg,#FF9966 0%,#FF5E62 100%); position:relative; overflow-x:hidden; overflow-y:auto; font-family:'Outfit',sans-serif; animation:rainbow-bg 8s ease-in-out infinite; display:flex; align-items:center; justify-content:center; }
+        @keyframes rainbow-bg { 0%,100%{filter:hue-rotate(0deg);} 50%{filter:hue-rotate(20deg);} }
+        .confetti { position:fixed; width:12px; height:12px; border-radius:2px; animation:fall 4s linear infinite; z-index:5; }
+        @keyframes fall { 0%{top:-20px;transform:rotate(0deg) translateX(0);opacity:1;} 100%{top:100%;transform:rotate(720deg) translateX(100px);opacity:0;} }
+        .victory-panel { background:rgba(255,255,255,0.75); backdrop-filter:blur(20px); border:2px solid rgba(255,255,255,0.5); padding:clamp(25px,4vw,50px); width:min(800px,92vw); border-radius:clamp(20px,4vw,40px); box-shadow:0 40px 100px rgba(0,0,0,0.1); text-align:center; z-index:10; }
+        .trophy { font-size:clamp(70px,15vw,140px); margin-bottom:clamp(10px,2vw,20px); animation:trophy-bounce 2s ease-in-out infinite; filter:drop-shadow(0 20px 40px rgba(0,0,0,0.1)); }
+        @keyframes trophy-bounce { 0%,100%{transform:scale(1) rotate(-5deg);} 50%{transform:scale(1.1) rotate(5deg);} }
+        .victory-title { font-size:clamp(24px,5vw,42px); font-weight:900; color:#2C3E50; margin-bottom:10px; letter-spacing:-1px; }
+        .score-display { font-size:clamp(20px,4vw,32px); font-weight:700; color:#2ECC71; margin-bottom:clamp(10px,2vw,20px); }
+        .victory-text { font-size:clamp(14px,2vw,18px); color:#2C3E50; line-height:1.6; margin-bottom:clamp(15px,3vw,30px); }
+        .badge-display { font-size:clamp(50px,10vw,100px); margin:clamp(10px,2vw,20px) 0; animation:badge-pulse 2s ease-in-out infinite; filter:drop-shadow(0 15px 30px rgba(0,0,0,0.1)); }
+        @keyframes badge-pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.15);} }
+        .museum-info { background:rgba(52,152,219,0.1); border:2px solid rgba(52,152,219,0.3); padding:clamp(15px,2.5vw,25px); border-radius:24px; margin-bottom:clamp(15px,3vw,30px); }
+        .museum-info strong { color:#2980B9; font-weight:900; }
+        .btn-restart { width:100%; padding:clamp(15px,2.5vw,25px); font-family:'Outfit',sans-serif; font-size:clamp(16px,2.5vw,22px); font-weight:900; background:#FFD966; color:#2C3E50; border:none; border-radius:40px; cursor:pointer; box-shadow:0 15px 30px rgba(255,217,102,0.4); transition:all 0.3s cubic-bezier(0.175,0.885,0.32,1.275); text-transform:uppercase; letter-spacing:1px; }
+        .btn-restart:hover { transform:scale(1.03) translateY(-5px); background:#FFE082; }
     </style>
 </head>
 <body>
     <div class="screen-container victory-screen">
-        <!-- Confetti -->
         <script>
-            for (let i = 0; i < 60; i++) {
-                const confetti = document.createElement('div');
-                confetti.className = 'confetti';
-                confetti.style.left = Math.random() * 100 + '%';
-                confetti.style.animationDelay = Math.random() * 4 + 's';
-                confetti.style.background = ['#FFD966', '#FF5E62', '#2ECC71', '#3498DB', '#A569BD'][Math.floor(Math.random() * 5)];
-                confetti.style.width = (Math.random() * 10 + 5) + 'px';
-                confetti.style.height = confetti.style.width;
-                document.body.appendChild(confetti);
-            }
+            for(let i=0;i<60;i++){const c=document.createElement('div');c.className='confetti';c.style.left=Math.random()*100+'%';c.style.animationDelay=Math.random()*4+'s';c.style.background=['#FFD966','#FF5E62','#2ECC71','#3498DB','#A569BD'][Math.floor(Math.random()*5)];c.style.width=(Math.random()*10+5)+'px';c.style.height=c.style.width;document.body.appendChild(c);}
         </script>
-        
         <div class="victory-panel">
             <div class="trophy">🏆</div>
-            
-            <div class="victory-title">
-                GEFELICITEERD,<br>
-                <span id="playerNameVictory">KAPITEIN</span>!
-            </div>
-            
-            <div class="score-display">
-                <span id="scoreDisplay">10</span> / 10 correct!
-            </div>
-            
-            <div class="victory-text">
-                Je bent nu officieel een<br>
-                <strong style="color: #E67E22; font-size: 24px;">JONGE METEOROLOOG</strong>!
-            </div>
-            
+            <div class="victory-title">GEFELICITEERD,<br><span id="playerNameVictory">KAPITEIN</span>!</div>
+            <div class="score-display"><span id="scoreDisplay">10</span> / 10 correct!</div>
+            <div class="victory-text">Je bent nu officieel een<br><strong style="color:#E67E22;font-size:clamp(18px,3vw,24px);">JONGE METEOROLOOG</strong>!</div>
             <div class="badge-display">🎖️</div>
-            
             <div class="museum-info">
-                <div class="victory-text" style="margin-bottom: 0;">
-                    📍 Ga naar de <strong>museumbalie</strong><br>
-                    en ontvang je officiële badge!<br><br>
-                    🎁 Laat dit scherm zien aan de medewerker
-                </div>
+                <div class="victory-text" style="margin-bottom:0;">📍 Ga naar de <strong>museumbalie</strong><br>en ontvang je officiële badge!<br><br>🎁 Laat dit scherm zien aan de medewerker</div>
             </div>
-            
-            <button class="btn-restart" onclick="restart()">
-                🔄 OPNIEUW SPELEN
-            </button>
+            <button class="btn-restart" onclick="restart()">🔄 OPNIEUW SPELEN</button>
         </div>
     </div>
-
     <script>
-        window.onload = function() {
-            const playerName = sessionStorage.getItem('playerName') || 'KAPITEIN';
-            const score = sessionStorage.getItem('quizScore') || '10';
-            
-            document.getElementById('playerNameVictory').textContent = playerName.toUpperCase();
-            document.getElementById('scoreDisplay').textContent = score;
-        };
-        
-        function restart() {
-            if (confirm('Weet je zeker dat je opnieuw wilt beginnen? Al je voortgang gaat verloren.')) {
-                sessionStorage.clear();
-                window.location.href = '0.1-idle-screen.html';
-            }
-        }
+        window.onload=function(){const playerName=sessionStorage.getItem('playerName')||'KAPITEIN';const score=sessionStorage.getItem('quizScore')||'10';document.getElementById('playerNameVictory').textContent=playerName.toUpperCase();document.getElementById('scoreDisplay').textContent=score;};
+        function restart(){if(confirm('Weet je zeker dat je opnieuw wilt beginnen? Al je voortgang gaat verloren.')){sessionStorage.clear();window.location.href='0.1-idle-screen.html';}}
     </script>
 </body>
 </html>

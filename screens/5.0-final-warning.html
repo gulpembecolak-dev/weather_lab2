@@ -2,158 +2,36 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>5.0 - Final Test | Weather Lab Kids</title>
     <link rel="stylesheet" href="../design-system.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
-
-        .warning-screen {
-            width: var(--screen-width);
-            height: var(--screen-height);
-            background: linear-gradient(135deg, #FF9966 0%, #FF5E62 100%);
-            position: relative;
-            overflow: hidden;
-            font-family: 'Outfit', sans-serif;
-        }
-
-        /* Modern Warning Panel - Glassmorphism */
-        .warning-panel {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            padding: 60px;
-            width: 800px;
-            border-radius: 40px;
-            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            z-index: 10;
-        }
-
-        .warning-icon {
-            font-size: 140px;
-            margin-bottom: 30px;
-            animation: pulse-warning 2s ease-in-out infinite;
-            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.1));
-        }
-
-        @keyframes pulse-warning {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        .warning-title {
-            font-size: 48px;
-            font-weight: 900;
-            color: #2C3E50;
-            margin-bottom: 30px;
-            letter-spacing: -1px;
-        }
-
-        .warning-text {
-            font-size: 20px;
-            color: #2C3E50;
-            line-height: 1.8;
-            margin-bottom: 50px;
-            font-weight: 400;
-        }
-
-        .warning-text strong {
-            font-weight: 900;
-            color: #E67E22;
-        }
-
-        .warning-alert {
-            display: inline-block;
-            background: rgba(231, 76, 60, 0.1);
-            color: #E74C3C;
-            padding: 10px 30px;
-            border-radius: 20px;
-            font-weight: 700;
-            margin-top: 20px;
-            font-size: 16px;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 30px;
-            justify-content: center;
-        }
-
-        /* Modern Buttons */
-        .btn-modern {
-            font-family: 'Outfit', sans-serif;
-            font-size: 20px;
-            font-weight: 900;
-            padding: 25px 50px;
-            border-radius: 40px;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.5);
-            color: #2C3E50;
-            border: 2px solid rgba(0,0,0,0.05);
-        }
-
-        .btn-secondary:hover {
-            background: white;
-            transform: scale(1.05);
-        }
-
-        .btn-primary {
-            background: #FFD966;
-            color: #2C3E50;
-            box-shadow: 0 15px 30px rgba(255, 217, 102, 0.4);
-        }
-
-        .btn-primary:hover {
-            transform: scale(1.05) translateY(-5px);
-            background: #FFE082;
-            box-shadow: 0 20px 40px rgba(255, 217, 102, 0.5);
-        }
-
-        /* Modern Soft Clouds */
-        .soft-cloud {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(8px);
-            border-radius: 100px;
-            animation: float-cloud linear infinite;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            pointer-events: none;
-        }
-
-        .soft-cloud::before, .soft-cloud::after {
-            content: '';
-            position: absolute;
-            background: inherit;
-            border-radius: 50%;
-        }
-
-        .soft-cloud::before { width: 50%; height: 100%; top: -40%; left: 15%; }
-        .soft-cloud::after { width: 40%; height: 80%; top: -20%; right: 15%; }
-
-        @keyframes float-cloud {
-            0% { transform: translateX(-300px); }
-            100% { transform: translateX(1300px); }
-        }
+        .warning-screen { width:100%; height:100vh; height:100dvh; background:linear-gradient(135deg,#FF9966 0%,#FF5E62 100%); position:relative; overflow-x:hidden; overflow-y:auto; font-family:'Outfit',sans-serif; display:flex; align-items:center; justify-content:center; }
+        .soft-cloud { position:fixed; background:rgba(255,255,255,0.5); backdrop-filter:blur(8px); border-radius:100px; animation:float-cloud linear infinite; box-shadow:0 10px 30px rgba(0,0,0,0.05); pointer-events:none; }
+        .soft-cloud::before,.soft-cloud::after { content:''; position:absolute; background:inherit; border-radius:50%; }
+        .soft-cloud::before { width:50%; height:100%; top:-40%; left:15%; }
+        .soft-cloud::after { width:40%; height:80%; top:-20%; right:15%; }
+        .cloud-1{width:min(200px,25vw);height:min(60px,7.5vw);top:10%;animation-duration:45s;} .cloud-2{width:min(150px,20vw);height:min(45px,5.5vw);top:25%;animation-duration:60s;animation-delay:-10s;} .cloud-3{width:min(250px,30vw);height:min(75px,9vw);top:80%;animation-duration:50s;animation-delay:-25s;}
+        @keyframes float-cloud{0%{transform:translateX(-300px);}100%{transform:translateX(calc(100vw + 300px));}}
+        .warning-panel { background:rgba(255,255,255,0.7); backdrop-filter:blur(20px); border:2px solid rgba(255,255,255,0.5); padding:clamp(30px,5vw,60px); width:min(800px,92vw); border-radius:clamp(20px,4vw,40px); box-shadow:0 40px 100px rgba(0,0,0,0.1); text-align:center; z-index:10; }
+        .warning-icon { font-size:clamp(70px,15vw,140px); margin-bottom:clamp(15px,3vw,30px); animation:pulse-warning 2s ease-in-out infinite; filter:drop-shadow(0 20px 40px rgba(0,0,0,0.1)); }
+        @keyframes pulse-warning { 0%,100%{transform:scale(1);} 50%{transform:scale(1.1);} }
+        .warning-title { font-size:clamp(28px,6vw,48px); font-weight:900; color:#2C3E50; margin-bottom:clamp(15px,3vw,30px); letter-spacing:-1px; }
+        .warning-text { font-size:clamp(14px,2.5vw,20px); color:#2C3E50; line-height:1.8; margin-bottom:clamp(25px,4vw,50px); font-weight:400; }
+        .warning-text strong { font-weight:900; color:#E67E22; }
+        .warning-alert { display:inline-block; background:rgba(231,76,60,0.1); color:#E74C3C; padding:clamp(6px,1vw,10px) clamp(15px,3vw,30px); border-radius:20px; font-weight:700; margin-top:clamp(10px,2vw,20px); font-size:clamp(12px,1.8vw,16px); }
+        .button-group { display:flex; gap:clamp(10px,2vw,30px); justify-content:center; flex-wrap:wrap; }
+        .btn-modern { font-family:'Outfit',sans-serif; font-size:clamp(14px,2vw,20px); font-weight:900; padding:clamp(15px,2.5vw,25px) clamp(25px,4vw,50px); border-radius:40px; border:none; cursor:pointer; transition:all 0.3s cubic-bezier(0.175,0.885,0.32,1.275); text-transform:uppercase; letter-spacing:1px; }
+        .btn-secondary { background:rgba(255,255,255,0.5); color:#2C3E50; border:2px solid rgba(0,0,0,0.05); }
+        .btn-secondary:hover { background:white; transform:scale(1.05); }
+        .btn-primary { background:#FFD966; color:#2C3E50; box-shadow:0 15px 30px rgba(255,217,102,0.4); }
+        .btn-primary:hover { transform:scale(1.05) translateY(-5px); background:#FFE082; }
     </style>
 </head>
 <body>
     <div class="screen-container warning-screen">
-        <!-- Modern Clouds -->
-        <div class="soft-cloud" style="width: 200px; height: 60px; top: 10%; left: -200px; animation-duration: 45s;"></div>
-        <div class="soft-cloud" style="width: 150px; height: 45px; top: 25%; left: -150px; animation-duration: 60s; animation-delay: -10s;"></div>
-        <div class="soft-cloud" style="width: 250px; height: 75px; top: 80%; left: -300px; animation-duration: 50s; animation-delay: -25s;"></div>
-
+        <div class="soft-cloud cloud-1"></div><div class="soft-cloud cloud-2"></div><div class="soft-cloud cloud-3"></div>
         <div class="warning-panel">
             <div class="warning-icon">🏆</div>
             <div class="warning-title">FINALE TEST!</div>
@@ -164,25 +42,14 @@
                 <div class="warning-alert">⚠️ Je kunt de test maar 1x doen!</div>
             </div>
             <div class="button-group">
-                <button class="btn-modern btn-secondary" onclick="goBack()">
-                    ← NOG EVEN OEFENEN
-                </button>
-                <button class="btn-modern btn-primary" onclick="startTest()">
-                    IK BEN ER KLAAR VOOR! →
-                </button>
+                <button class="btn-modern btn-secondary" onclick="goBack()">← NOG EVEN OEFENEN</button>
+                <button class="btn-modern btn-primary" onclick="startTest()">IK BEN ER KLAAR VOOR! →</button>
             </div>
         </div>
     </div>
-
     <script>
-        function goBack() {
-            sessionStorage.setItem('destination', 'hub');
-            window.location.href = '1.5-loading.html';
-        }
-        
-        function startTest() {
-            window.location.href = '5.1-quiz.html';
-        }
+        function goBack(){sessionStorage.setItem('destination','hub');window.location.href='1.5-loading.html';}
+        function startTest(){window.location.href='5.1-quiz.html';}
     </script>
 </body>
 </html>
