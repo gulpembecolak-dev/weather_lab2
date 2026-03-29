@@ -10,344 +10,253 @@
     <script src="../js/scaling.js"></script>
     <script>window.SCREEN_NAME = 'Idle Screen';</script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
+
         .idle-screen {
             width: var(--screen-width);
             height: var(--screen-height);
-            background: linear-gradient(180deg, #87CEEB 0%, #5DADE2 40%, #3498DB 100%);
+            background: linear-gradient(180deg, #87CEEB 0%, #E0F7FA 100%);
             position: relative;
             overflow: hidden;
+            font-family: 'Outfit', sans-serif;
         }
 
-        /* Animated Clouds */
-        .cloud {
+        /* Sun Rays - Softer & Modern */
+        .sun-rays {
             position: absolute;
-            background: var(--cloud-white);
-            border-radius: 100px;
-            opacity: 0.9;
-            animation: float-cloud linear infinite;
+            top: -150px;
+            right: -150px;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, transparent 70%);
+            animation: rotate-rays 40s linear infinite;
+            pointer-events: none;
+            filter: blur(20px);
         }
 
-        .cloud::before,
-        .cloud::after {
+        @keyframes rotate-rays {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Modern Soft Clouds */
+        .soft-cloud {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 100px;
+            animation: float-cloud linear infinite;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .soft-cloud::before, .soft-cloud::after {
             content: '';
             position: absolute;
-            background: var(--cloud-white);
-            border-radius: 100px;
+            background: inherit;
+            border-radius: 50%;
         }
 
-        .cloud-1 {
-            width: 120px;
-            height: 40px;
-            top: 15%;
-            left: -150px;
-            animation-duration: 45s;
-        }
-
-        .cloud-1::before {
-            width: 60px;
-            height: 60px;
-            top: -30px;
-            left: 20px;
-        }
-
-        .cloud-1::after {
-            width: 80px;
-            height: 50px;
-            top: -20px;
-            left: 50px;
-        }
-
-        .cloud-2 {
-            width: 100px;
-            height: 35px;
-            top: 35%;
-            left: -120px;
-            animation-duration: 60s;
-            animation-delay: 5s;
-        }
-
-        .cloud-2::before {
-            width: 50px;
-            height: 50px;
-            top: -25px;
-            left: 15px;
-        }
-
-        .cloud-2::after {
-            width: 70px;
-            height: 45px;
-            top: -18px;
-            left: 40px;
-        }
-
-        .cloud-3 {
-            width: 140px;
-            height: 45px;
-            top: 60%;
-            left: -160px;
-            animation-duration: 50s;
-            animation-delay: 10s;
-        }
-
-        .cloud-3::before {
-            width: 70px;
-            height: 70px;
-            top: -35px;
-            left: 25px;
-        }
-
-        .cloud-3::after {
-            width: 90px;
-            height: 55px;
-            top: -25px;
-            left: 60px;
-        }
+        .soft-cloud::before { width: 50%; height: 100%; top: -40%; left: 15%; }
+        .soft-cloud::after { width: 40%; height: 80%; top: -20%; right: 15%; }
 
         @keyframes float-cloud {
-            0% { transform: translateX(-200px); }
-            100% { transform: translateX(1200px); }
+            0% { transform: translateX(-300px); }
+            100% { transform: translateX(1300px); }
         }
 
-        /* Sun */
-        .sun {
+        /* Modern Title Panel - Glassmorphism */
+        .title-container {
             position: absolute;
-            top: 80px;
-            right: 120px;
-            width: 120px;
-            height: 120px;
-            background: var(--sun-yellow);
-            border-radius: 50%;
-            box-shadow: 
-                0 0 40px rgba(247, 220, 111, 0.8),
-                0 0 80px rgba(247, 220, 111, 0.5),
-                inset 0 0 30px rgba(255, 255, 255, 0.5);
-            animation: sun-pulse 3s ease-in-out infinite;
-        }
-
-        @keyframes sun-pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        /* Grass/Ground */
-        .ground {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 200px;
-            background: linear-gradient(180deg, #58D68D 0%, #27AE60 100%);
-            border-top: 6px solid #229954;
-        }
-
-        /* Grass Details (Pixel Style) */
-        .grass-detail {
-            position: absolute;
-            bottom: 200px;
-            width: 100%;
-            height: 40px;
-            background: 
-                repeating-linear-gradient(
-                    90deg,
-                    #58D68D 0px,
-                    #58D68D 3px,
-                    #52BE80 3px,
-                    #52BE80 6px,
-                    #58D68D 6px,
-                    #58D68D 9px,
-                    #45B566 9px,
-                    #45B566 12px
-                );
-        }
-
-        /* Weather Lab Building (Simplified) */
-        .building {
-            position: absolute;
-            bottom: 200px;
+            top: 100px;
             left: 50%;
             transform: translateX(-50%);
-            width: 200px;
-            height: 180px;
-        }
-
-        .building-body {
-            width: 180px;
-            height: 120px;
-            background: #E8DAEF;
-            border: 6px solid var(--wood-dark);
-            position: absolute;
-            bottom: 0;
-            left: 10px;
-        }
-
-        .building-roof {
-            width: 200px;
-            height: 0;
-            border-left: 100px solid transparent;
-            border-right: 100px solid transparent;
-            border-bottom: 70px solid #8E44AD;
-            position: absolute;
-            top: 0;
-            filter: drop-shadow(0 -4px 0 var(--wood-dark));
-        }
-
-        .building-window {
-            width: 40px;
-            height: 40px;
-            background: #5DADE2;
-            border: 3px solid var(--wood-dark);
-            position: absolute;
-        }
-
-        .window-1 { top: 25px; left: 25px; }
-        .window-2 { top: 25px; right: 25px; }
-        .window-3 { top: 75px; left: 25px; }
-        .window-3::after {
-            content: '💨';
-            position: absolute;
-            top: 5px;
-            left: 5px;
-            font-size: 24px;
-        }
-
-        /* Title Panel */
-        .title-panel {
-            position: absolute;
-            top: 50px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(236, 240, 241, 0.95);
-            border: 8px solid var(--wood-dark);
-            padding: var(--spacing-md);
             text-align: center;
+            z-index: 50;
+        }
+
+        .title-panel-modern {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            padding: 40px 100px;
+            border-radius: 40px;
             box-shadow: 
-                0 12px 32px var(--shadow),
-                inset 0 0 0 4px var(--wood-light);
-            min-width: 600px;
+                0 30px 60px rgba(0,0,0,0.1),
+                inset 0 0 0 1px rgba(255,255,255,0.2);
+            animation: float-title 6s ease-in-out infinite;
+        }
+
+        @keyframes float-title {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
         }
 
         .title-main {
-            font-size: 32px;
-            color: var(--storm-purple);
-            text-shadow: 3px 3px 0 rgba(255, 255, 255, 0.8);
-            margin-bottom: var(--spacing-sm);
-            letter-spacing: 3px;
+            font-size: 64px;
+            font-weight: 900;
+            color: #2C3E50;
+            margin-bottom: 15px;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+            line-height: 0.9;
         }
 
         .title-sub {
-            font-size: var(--font-size-md);
-            color: var(--text-dark);
-            margin-top: var(--spacing-xs);
+            font-size: 20px;
+            color: #34495E;
+            font-weight: 400;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            opacity: 0.8;
         }
 
-        /* Start Button */
-        .start-button {
+        /* Ground & Environment - Softer Layers */
+        .ground-layered {
             position: absolute;
-            bottom: 280px;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 320px;
+            z-index: 10;
+        }
+
+        .hill {
+            position: absolute;
+            bottom: -50px;
+            border-radius: 50% 50% 0 0;
+            filter: blur(1px);
+        }
+
+        .hill-1 {
+            width: 1200px; height: 300px;
+            background: linear-gradient(180deg, #58D68D 0%, #2ECC71 100%);
+            left: -200px;
+            z-index: 1;
+            opacity: 0.8;
+        }
+
+        .hill-2 {
+            width: 1400px; height: 350px;
+            background: linear-gradient(180deg, #48C9B0 0%, #1ABC9C 100%);
+            right: -300px;
+            z-index: 2;
+        }
+
+        /* Modern CTA Button */
+        .start-button-modern {
+            position: absolute;
+            bottom: 220px;
             left: 50%;
             transform: translateX(-50%);
-            padding: 24px 48px;
-            font-size: 24px;
+            z-index: 150;
+        }
+
+        .btn-start-final {
             min-width: 400px;
-            animation: pulse-glow 2s infinite;
-            transition: transform 0.1s;
+            font-family: 'Outfit', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            padding: 30px 60px;
+            background: #FFD966;
+            color: #2C3E50;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 
+                0 15px 35px rgba(255, 217, 102, 0.4),
+                0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
-        .start-button:active {
-            transform: translateX(-50%) scale(0.9, 1.1); /* Squash and Stretch */
+        .btn-start-final:hover {
+            transform: scale(1.05) translateY(-5px);
+            background: #FFE082;
+            box-shadow: 
+                0 25px 45px rgba(255, 217, 102, 0.5),
+                0 10px 20px rgba(0,0,0,0.1);
         }
 
-        @keyframes pulse-glow {
-            0%, 100% { 
-                box-shadow: 
-                    0 0 30px var(--glow),
-                    0 0 60px var(--glow),
-                    0 8px 0 #D4A12A,
-                    0 12px 24px var(--shadow);
-            }
-            50% { 
-                box-shadow: 
-                    0 0 50px var(--glow),
-                    0 0 100px var(--glow),
-                    0 8px 0 #D4A12A,
-                    0 12px 24px var(--shadow);
-            }
+        .btn-start-final:active {
+            transform: scale(0.98);
         }
 
-        /* Decorative Elements */
-        .flower {
+        /* Subtle Instruction Hint */
+        .instruction-hint {
             position: absolute;
-            font-size: 32px;
-            animation: sway 3s ease-in-out infinite;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 200;
+            color: #2C3E50;
+            font-size: 14px;
+            font-weight: 400;
+            letter-spacing: 1px;
+            opacity: 0.6;
+            animation: pulse-text 2s infinite;
         }
 
-        .flower-1 { bottom: 210px; left: 15%; animation-delay: 0s; }
-        .flower-2 { bottom: 210px; left: 25%; animation-delay: 0.5s; }
-        .flower-3 { bottom: 210px; right: 15%; animation-delay: 1s; }
-        .flower-4 { bottom: 210px; right: 25%; animation-delay: 1.5s; }
+        @keyframes pulse-text {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+        }
+
+        /* Modern Foreground Decor */
+        .modern-flower {
+            position: absolute;
+            bottom: 40px;
+            z-index: 100;
+            font-size: 40px;
+            animation: sway 4s ease-in-out infinite;
+            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.1));
+        }
 
         @keyframes sway {
-            0%, 100% { transform: rotate(-5deg); }
-            50% { transform: rotate(5deg); }
-        }
-
-        /* Instructions */
-        .instruction-text {
-            position: absolute;
-            bottom: 50px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: var(--font-size-sm);
-            color: var(--text-light);
-            background: rgba(44, 62, 80, 0.8);
-            padding: var(--spacing-sm) var(--spacing-md);
-            border: 3px solid var(--text-dark);
-            border-radius: 8px;
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            50% { transform: translateY(-5px) rotate(5deg); }
         }
     </style>
 </head>
 <body>
     <div class="screen-container idle-screen">
-        <!-- Sky Elements -->
-        <div class="sun"></div>
-        <div class="cloud cloud-1"></div>
-        <div class="cloud cloud-2"></div>
-        <div class="cloud cloud-3"></div>
+        <div class="sun-rays"></div>
+        
+        <!-- Modern Clouds -->
+        <div class="soft-cloud" style="width: 200px; height: 60px; top: 15%; left: -200px; animation-duration: 40s;"></div>
+        <div class="soft-cloud" style="width: 150px; height: 45px; top: 30%; left: -150px; animation-duration: 55s; animation-delay: -10s;"></div>
+        <div class="soft-cloud" style="width: 250px; height: 75px; top: 45%; left: -300px; animation-duration: 45s; animation-delay: -25s;"></div>
 
-        <!-- Title Panel -->
-        <div class="title-panel">
-            <div class="title-main">WEATHER LAB<br>KIDS</div>
-            <div class="title-sub">🌤️ De Weer Eilanden 🌤️</div>
-        </div>
-
-        <!-- Main Building -->
-        <div class="building">
-            <div class="building-roof"></div>
-            <div class="building-body">
-                <div class="building-window window-1"></div>
-                <div class="building-window window-2"></div>
-                <div class="building-window window-3"></div>
+        <!-- Modern Title Section -->
+        <div class="title-container">
+            <div class="title-panel-modern">
+                <div class="title-main">WEER<br>EILANDEN</div>
+                <div class="title-sub">Ontdek de Kracht van Natuur</div>
             </div>
         </div>
 
-        <!-- Ground -->
-        <div class="grass-detail"></div>
-        <div class="ground"></div>
+        <!-- Ground & Environment -->
+        <div class="ground-layered">
+            <div class="hill hill-1"></div>
+            <div class="hill hill-2"></div>
+        </div>
 
-        <!-- Decorative Flowers -->
-        <div class="flower flower-1">🌼</div>
-        <div class="flower flower-2">🌻</div>
-        <div class="flower flower-3">🌼</div>
-        <div class="flower flower-4">🌻</div>
+        <!-- Modern Decor -->
+        <div class="modern-flower" style="left: 10%;">🌿</div>
+        <div class="modern-flower" style="left: 18%; animation-delay: -1s; font-size: 30px;">🌼</div>
+        <div class="modern-flower" style="right: 15%; animation-delay: -2s;">🌿</div>
+        <div class="modern-flower" style="right: 22%; animation-delay: -3s; font-size: 35px;">🌸</div>
 
-        <!-- Start Button -->
-        <button class="btn-pixel btn-glow start-button" onclick="nextScreen()">
-            RAAK AAN OM<br>TE STARTEN
-        </button>
+        <!-- CTA Button -->
+        <div class="start-button-modern">
+            <button class="btn-start-final" onclick="nextScreen()">
+                Start het Avontuur
+            </button>
+        </div>
 
-        <!-- Instructions -->
-        <div class="instruction-text">
-            👆 Tik op het gele scherm om je avontuur te beginnen
+        <!-- Subtle Instructions -->
+        <div class="instruction-hint">
+            Tik op het scherm om te beginnen
         </div>
     </div>
 

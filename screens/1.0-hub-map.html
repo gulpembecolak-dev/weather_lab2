@@ -7,48 +7,42 @@
     <link rel="stylesheet" href="../design-system.css">
     <script src="../js/dialogue.js"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
+
         .hub-screen {
             width: var(--screen-width);
             height: var(--screen-height);
-            background: linear-gradient(180deg, #667eea 0%, #764ba2 40%, #E8DAEF 100%);
+            background: linear-gradient(180deg, #87CEEB 0%, #E0F7FA 100%);
             position: relative;
             overflow: hidden;
+            font-family: 'Outfit', sans-serif;
         }
 
-        /* Particle Systems: Clouds and Fog */
-        .pixel-cloud {
+        /* Modern Soft Clouds */
+        .soft-cloud {
             position: absolute;
-            background: rgba(255, 255, 255, 0.4);
-            border-radius: 4px;
-            animation: float-cloud-slow linear infinite;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(8px);
+            border-radius: 100px;
+            animation: float-cloud linear infinite;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             pointer-events: none;
             z-index: 5;
-            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
         }
 
-        @keyframes float-cloud-slow {
+        .soft-cloud::before, .soft-cloud::after {
+            content: '';
+            position: absolute;
+            background: inherit;
+            border-radius: 50%;
+        }
+
+        .soft-cloud::before { width: 50%; height: 100%; top: -40%; left: 15%; }
+        .soft-cloud::after { width: 40%; height: 80%; top: -20%; right: 15%; }
+
+        @keyframes float-cloud {
             0% { transform: translateX(-300px); }
             100% { transform: translateX(1300px); }
-        }
-
-        .fog-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 200%;
-            height: 100%;
-            background: linear-gradient(90deg, 
-                rgba(255,255,255,0) 0%, 
-                rgba(255,255,255,0.05) 50%, 
-                rgba(255,255,255,0) 100%);
-            animation: move-fog 20s linear infinite;
-            pointer-events: none;
-            z-index: 2;
-        }
-
-        @keyframes move-fog {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
         }
 
         /* Sky Stars */
@@ -57,6 +51,8 @@
             color: white;
             font-size: 16px;
             animation: twinkle-star 2s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 2;
         }
 
         @keyframes twinkle-star {
@@ -67,22 +63,26 @@
         /* Floating Islands Container */
         .islands-container {
             position: absolute;
-            top: 180px;
+            top: 220px;
             left: 50%;
             transform: translateX(-50%);
             width: 100%;
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            gap: 80px;
+            gap: 60px;
+            z-index: 20;
         }
 
         /* Island Card */
         .island {
-            width: 260px;
+            width: 280px;
             cursor: pointer;
-            transition: all 0.4s;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             animation: float-island 4s ease-in-out infinite;
         }
 
@@ -96,155 +96,105 @@
         }
 
         .island:hover {
-            transform: translateY(-30px) scale(1.08);
+            transform: translateY(-30px) scale(1.05);
         }
 
         /* Island Visual */
         .island-visual {
-            width: 260px;
-            height: 200px;
+            width: 240px;
+            height: 180px;
             position: relative;
-            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            border-radius: 40px;
             overflow: hidden;
-            box-shadow: 
-                0 20px 40px rgba(0, 0, 0, 0.4),
-                inset 0 -20px 40px rgba(0, 0, 0, 0.2);
-            border: 6px solid var(--wood-dark);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border: 4px solid white;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .island-icon {
+            font-size: 100px;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1));
+            transition: transform 0.3s;
+        }
+
+        .island:hover .island-icon {
+            transform: scale(1.1) rotate(5deg);
         }
 
         /* Island Aura/Glow */
         .island-aura {
             position: absolute;
-            top: -10px;
-            left: -10px;
-            right: -10px;
-            bottom: -10px;
-            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            border-radius: 50%;
             z-index: -1;
-            animation: pulse-aura 3s ease-in-out infinite;
+            filter: blur(30px);
+            opacity: 0.4;
+            transition: opacity 0.3s;
         }
 
-        @keyframes pulse-aura {
-            0%, 100% { 
-                opacity: 0.6;
-                transform: scale(1);
-            }
-            50% { 
-                opacity: 0.9;
-                transform: scale(1.05);
-            }
+        .island:hover .island-aura {
+            opacity: 0.7;
         }
 
-        /* Observatory Island (Weather Station) */
-        .island-observatory .island-visual {
-            background: linear-gradient(180deg, #87CEEB 30%, #58D68D 70%, #27AE60 100%);
-        }
-
-        .island-observatory .island-aura {
-            background: radial-gradient(circle, rgba(247, 220, 111, 0.8), transparent);
-        }
-
-        .island-icon {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 100px;
-            filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4));
-        }
-
-        /* Storm Lab Island */
-        .island-storm .island-visual {
-            background: linear-gradient(180deg, #4A235A 0%, #7D3C98 50%, #5B2C6F 100%);
-        }
-
-        .island-storm .island-aura {
-            background: radial-gradient(circle, rgba(142, 68, 173, 0.8), transparent);
-        }
-
-        .storm-cloud {
-            position: absolute;
-            top: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 80px;
-            animation: lightning-flash 3s ease-in-out infinite;
-        }
-
-        @keyframes lightning-flash {
-            0%, 90%, 100% { filter: brightness(1); }
-            93%, 97% { filter: brightness(2) drop-shadow(0 0 20px yellow); }
-        }
-
-        /* Discovery Lab Island */
-        .island-discovery .island-visual {
-            background: linear-gradient(180deg, #1ABC9C 0%, #16A085 50%, #138D75 100%);
-        }
-
-        .island-discovery .island-aura {
-            background: radial-gradient(circle, rgba(26, 188, 156, 0.8), transparent);
-        }
+        /* Specific Island Styles */
+        .island-observatory .island-aura { background: #FFD966; }
+        .island-storm .island-aura { background: #A569BD; }
+        .island-discovery .island-aura { background: #48C9B0; }
 
         /* Island Name Plate */
         .island-nameplate {
-            background: var(--wood-light);
-            border: 6px solid var(--wood-dark);
-            padding: 12px 20px;
-            margin-top: 16px;
+            background: white;
+            padding: 15px 25px;
+            margin-top: 20px;
             text-align: center;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            border-radius: 20px;
+            border: 2px solid rgba(0,0,0,0.05);
+            width: 100%;
+        }
+
+        .island-title {
             font-size: 18px;
-            color: var(--text-dark);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-            border-radius: 8px;
-            position: relative;
+            font-weight: 900;
+            color: #2C3E50;
+            margin-bottom: 5px;
+            text-transform: uppercase;
         }
 
-        .island-nameplate::before {
-            content: '';
-            position: absolute;
-            top: -16px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 12px solid transparent;
-            border-right: 12px solid transparent;
-            border-bottom: 16px solid var(--wood-dark);
-        }
-
-        .island-nameplate::after {
-            content: '';
-            position: absolute;
-            top: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 10px solid transparent;
-            border-right: 10px solid transparent;
-            border-bottom: 13px solid var(--wood-light);
+        .island-subtitle {
+            font-size: 12px;
+            color: #7F8C8D;
+            font-weight: 400;
         }
 
         /* Progress Badge */
         .progress-badge {
             position: absolute;
-            top: -20px;
-            right: -20px;
-            background: var(--sun-yellow);
-            border: 4px solid var(--wood-dark);
+            top: -15px;
+            right: -15px;
+            background: white;
             border-radius: 50%;
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-            z-index: 10;
+            font-size: 24px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            z-index: 30;
+            border: 3px solid #F1C40F;
         }
 
         .progress-badge.completed {
             background: #2ECC71;
+            color: white;
+            border-color: white;
             animation: badge-bounce 0.5s ease-in-out;
         }
 
@@ -253,118 +203,142 @@
             50% { transform: scale(1.2); }
         }
 
-        /* Title Panel */
+        /* Title Panel - Modern Glassmorphism */
         .title-panel {
             position: absolute;
-            top: 30px;
+            top: 40px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(236, 240, 241, 0.95);
-            border: 6px solid var(--wood-dark);
-            padding: 20px 40px;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            padding: 20px 60px;
             text-align: center;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+            border-radius: 30px;
+            z-index: 50;
         }
 
         .title-main {
             font-size: 28px;
-            color: var(--storm-purple);
-            text-shadow: 2px 2px 0 rgba(255, 255, 255, 0.5);
+            font-weight: 900;
+            color: #2C3E50;
+            letter-spacing: 1px;
         }
 
         .subtitle {
-            font-size: var(--font-size-sm);
-            color: var(--text-dark);
-            margin-top: 8px;
+            font-size: 14px;
+            color: #34495E;
+            margin-top: 5px;
+            font-weight: 400;
         }
 
         /* Player Info Bar */
         .player-info-bar {
             position: absolute;
-            top: 30px;
-            left: 30px;
-            background: rgba(44, 62, 80, 0.9);
-            border: 4px solid var(--wood-dark);
-            padding: 12px 24px;
+            top: 40px;
+            left: 40px;
+            background: white;
+            padding: 10px 25px;
             display: flex;
             align-items: center;
-            gap: 16px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            gap: 15px;
+            border-radius: 25px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            z-index: 50;
         }
 
         .player-avatar-small {
-            font-size: 40px;
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+            font-size: 32px;
+            filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.1));
         }
 
         .player-info-text {
-            color: var(--cloud-white);
-            font-size: var(--font-size-sm);
-            line-height: 1.6;
+            color: #2C3E50;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        #playerNameSmall {
+            font-weight: 900;
+            text-transform: uppercase;
         }
 
         /* Progress Counter */
         .progress-counter {
             position: absolute;
-            top: 30px;
-            right: 30px;
-            background: rgba(46, 204, 113, 0.95);
-            border: 4px solid #27AE60;
-            padding: 12px 24px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            top: 40px;
+            right: 40px;
+            background: #2ECC71;
+            padding: 10px 30px;
+            border-radius: 25px;
+            box-shadow: 0 10px 20px rgba(46, 204, 113, 0.2);
             text-align: center;
+            color: white;
+            z-index: 50;
         }
 
         .progress-text {
-            font-size: var(--font-size-xs);
-            color: white;
-            margin-bottom: 4px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 2px;
         }
 
         .progress-number {
-            font-size: 24px;
-            color: white;
+            font-size: 20px;
+            font-weight: 900;
         }
 
-        /* Bottom Navigation */
+        /* Bottom Info */
         .bottom-info {
             position: absolute;
-            bottom: 30px;
+            bottom: 40px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: var(--font-size-sm);
-            color: var(--cloud-white);
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            font-size: 14px;
+            color: #2C3E50;
             text-align: center;
-            background: rgba(44, 62, 80, 0.8);
-            padding: 12px 32px;
-            border: 3px solid var(--wood-dark);
-            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 15px 40px;
+            border-radius: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            z-index: 50;
+            font-weight: 700;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
         }
 
-        /* Interactive Hints */
-        .hint-arrow {
+        /* Back Button Override */
+        .btn-back {
             position: absolute;
-            font-size: 40px;
-            animation: bounce-hint 1.5s ease-in-out infinite;
+            bottom: 40px;
+            left: 40px;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            color: #2C3E50;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-weight: 700;
+            z-index: 100;
+            cursor: pointer;
+            transition: all 0.3s;
         }
 
-        @keyframes bounce-hint {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
+        .btn-back:hover {
+            background: white;
+            transform: translateX(-5px);
         }
     </style>
 </head>
 <body>
     <div class="screen-container hub-screen">
-        <!-- Particle Systems: Clouds and Fog -->
-        <div class="fog-layer"></div>
-        <div class="pixel-cloud" style="width: 120px; height: 30px; top: 15%; left: -150px; animation-duration: 45s;"></div>
-        <div class="pixel-cloud" style="width: 100px; height: 25px; top: 40%; left: -120px; animation-duration: 60s; animation-delay: 5s;"></div>
-        <div class="pixel-cloud" style="width: 140px; height: 35px; top: 65%; left: -160px; animation-duration: 50s; animation-delay: 10s;"></div>
+        <!-- Modern Clouds -->
+        <div class="soft-cloud" style="width: 200px; height: 60px; top: 10%; left: -200px; animation-duration: 45s;"></div>
+        <div class="soft-cloud" style="width: 150px; height: 45px; top: 25%; left: -150px; animation-duration: 60s; animation-delay: -10s;"></div>
+        <div class="soft-cloud" style="width: 250px; height: 75px; top: 80%; left: -300px; animation-duration: 50s; animation-delay: -25s;"></div>
 
         <!-- Sky Stars -->
         <div class="sky-star" style="top: 15%; left: 10%;">⭐</div>
@@ -374,7 +348,7 @@
         <div class="sky-star" style="top: 20%; left: 50%;">⭐</div>
 
         <!-- Back Button -->
-        <button class="btn-pixel btn-wood btn-back" onclick="window.location.href='0.3-character-selection.html'">
+        <button class="btn-back" onclick="window.location.href='0.3-character-selection.html'">
             ← TERUG
         </button>
 
@@ -383,7 +357,7 @@
             <div class="player-avatar-small" id="playerAvatarSmall">👩‍🔬</div>
             <div class="player-info-text">
                 <div id="playerNameSmall">KAPITEIN</div>
-                <div style="font-size: 8px; color: #BDC3C7;">Jonge Meteoroloog</div>
+                <div style="font-size: 9px; opacity: 0.6;">Jonge Meteoroloog</div>
             </div>
         </div>
 
@@ -395,7 +369,7 @@
 
         <!-- Title Panel -->
         <div class="title-panel">
-            <div class="title-main">🗺️ DE WEER EILANDEN 🗺️</div>
+            <div class="title-main">DE WEER EILANDEN</div>
             <div class="subtitle">Kies een eiland om te ontdekken</div>
         </div>
 
@@ -409,8 +383,8 @@
                     <div class="island-icon">🔭</div>
                 </div>
                 <div class="island-nameplate">
-                    OBSERVATORIUM<br>
-                    <span style="font-size: 12px; color: #7F8C8D;">(Weer Meten)</span>
+                    <div class="island-title">OBSERVATORIUM</div>
+                    <div class="island-subtitle">Weer Meten</div>
                 </div>
             </div>
 
@@ -419,11 +393,11 @@
                 <div class="progress-badge" id="badge-storm">🔒</div>
                 <div class="island-aura"></div>
                 <div class="island-visual">
-                    <div class="storm-cloud">⛈️</div>
+                    <div class="island-icon">⛈️</div>
                 </div>
                 <div class="island-nameplate">
-                    STORM LAB<br>
-                    <span style="font-size: 12px; color: #7F8C8D;">(Weer Maken)</span>
+                    <div class="island-title">STORM LAB</div>
+                    <div class="island-subtitle">Weer Maken</div>
                 </div>
             </div>
 
@@ -435,15 +409,15 @@
                     <div class="island-icon">🔬</div>
                 </div>
                 <div class="island-nameplate">
-                    DISCOVERY LAB<br>
-                    <span style="font-size: 12px; color: #7F8C8D;">(Weer Leren)</span>
+                    <div class="island-title">DISCOVERY LAB</div>
+                    <div class="island-subtitle">Weer Leren</div>
                 </div>
             </div>
         </div>
 
         <!-- Bottom Info -->
         <div class="bottom-info">
-            👆 Tik op een eiland om je missie te beginnen
+            Tik op een eiland om je missie te beginnen
         </div>
     </div>
 

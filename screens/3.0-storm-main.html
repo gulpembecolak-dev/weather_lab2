@@ -9,51 +9,60 @@
     <script src="../js/analytics.js"></script>
     <script>window.SCREEN_NAME = 'Storm Lab';</script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
+
         .storm-screen {
             width: var(--screen-width);
             height: var(--screen-height);
-            background: linear-gradient(180deg, #4A235A 0%, #7D3C98 50%, #5B2C6F 100%);
+            background: linear-gradient(135deg, #87CEEB 0%, #E0F7FA 100%);
             position: relative;
             overflow: hidden;
+            font-family: 'Outfit', sans-serif;
         }
 
+        /* Modern Title Panel - Glassmorphism */
         .storm-title {
             position: absolute;
-            top: 20px;
+            top: 40px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(236, 240, 241, 0.95);
-            border: 6px solid var(--wood-dark);
-            padding: 16px 40px;
-            border-radius: 12px;
-            font-size: 24px;
-            color: #8E44AD;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            padding: 20px 60px;
+            border-radius: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            font-size: 28px;
+            font-weight: 900;
+            color: #2C3E50;
             z-index: 100;
         }
 
+        /* Modern Game Area */
         .game-area {
             position: absolute;
-            top: 120px;
+            top: 140px;
             left: 50%;
             transform: translateX(-50%);
-            width: 850px;
-            height: 500px;
-            background: linear-gradient(180deg, #2C3E50 0%, #34495E 100%);
-            border: 8px solid var(--wood-dark);
-            border-radius: 16px;
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+            width: 900px;
+            height: 480px;
+            background: linear-gradient(180deg, #E0F7FA 0%, #B2EBF2 100%);
+            border-radius: 40px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.05);
+            border: 4px solid white;
             position: relative;
             overflow: hidden;
         }
 
-        /* Grass/Ground in Game Area */
+        /* Modern Ground */
         .game-ground {
             position: absolute;
             bottom: 0;
             width: 100%;
             height: 100px;
-            background: #27AE60;
-            border-top: 4px solid #1E8449;
+            background: #2ECC71;
+            box-shadow: inset 0 10px 20px rgba(0,0,0,0.05);
         }
 
         .trees-container {
@@ -61,10 +70,11 @@
             bottom: 80px;
             left: 50%;
             transform: translateX(-50%);
-            width: 600px;
+            width: 700px;
             display: flex;
             justify-content: space-around;
             align-items: flex-end;
+            z-index: 5;
         }
 
         .tree-wrapper {
@@ -76,66 +86,75 @@
         }
 
         .tree-emoji {
-            font-size: 100px;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+            font-size: 120px;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1));
         }
 
         .cloud-storm {
             position: absolute;
-            top: 50px;
+            top: 40px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 120px;
-            transition: all 0.5s;
+            font-size: 140px;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             z-index: 10;
+            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.1));
         }
 
-        /* Wind Slider (Beaufort Scale) */
+        /* Modern Wind Slider Panel */
         .slider-panel {
             position: absolute;
             right: 40px;
             top: 50%;
             transform: translateY(-50%);
-            width: 120px;
-            height: 420px;
-            background: rgba(236, 240, 241, 0.95);
-            border: 6px solid var(--wood-dark);
-            border-radius: 20px;
-            padding: 20px;
+            width: 140px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            border: 2px solid white;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+            border-radius: 40px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            padding: 30px 20px;
+            z-index: 50;
         }
 
         .beaufort-number {
-            font-size: 32px;
-            color: var(--storm-purple);
+            font-size: 48px;
+            font-weight: 900;
+            color: #2C3E50;
             margin-bottom: 10px;
         }
 
         .slider-track {
             flex: 1;
-            width: 20px;
-            background: #ddd;
-            border: 3px solid var(--wood-dark);
+            width: 12px;
+            background: rgba(0,0,0,0.05);
             border-radius: 10px;
             position: relative;
             cursor: pointer;
+            margin: 20px 0;
         }
 
         .slider-handle {
             position: absolute;
             left: 50%;
             transform: translate(-50%, 50%);
-            width: 50px;
-            height: 50px;
-            background: var(--sun-yellow);
-            border: 4px solid var(--wood-dark);
-            border-radius: 8px;
-            box-shadow: 0 4px 0 var(--wood-dark);
+            width: 60px;
+            height: 60px;
+            background: white;
+            border: 4px solid #FFD966;
+            border-radius: 50%;
+            box-shadow: 0 10px 20px rgba(255, 217, 102, 0.3);
             bottom: 0;
             cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .slider-handle:hover {
+            transform: translate(-50%, 50%) scale(1.1);
         }
 
         .beaufort-label {
@@ -143,13 +162,17 @@
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 28px;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-            background: rgba(0,0,0,0.4);
-            padding: 10px 30px;
-            border-radius: 40px;
-            border: 2px solid rgba(255,255,255,0.2);
+            font-size: 24px;
+            font-weight: 900;
+            color: #2C3E50;
+            background: white;
+            padding: 15px 40px;
+            border-radius: 30px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            border: 2px solid rgba(0,0,0,0.05);
+            z-index: 60;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         /* Lightning Effect */
@@ -162,7 +185,7 @@
             background: white;
             opacity: 0;
             pointer-events: none;
-            z-index: 100;
+            z-index: 1000;
         }
 
         @keyframes flash {
@@ -176,16 +199,61 @@
         /* Wind Lines */
         .wind-line {
             position: absolute;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.3);
+            height: 3px;
+            background: rgba(255, 255, 255, 0.6);
             border-radius: 2px;
             animation: blow linear infinite;
+            z-index: 8;
         }
 
         @keyframes blow {
             0% { transform: translateX(-100px); opacity: 0; }
-            50% { opacity: 0.5; }
-            100% { transform: translateX(900px); opacity: 0; }
+            50% { transform: translateX(450px); opacity: 0.8; }
+            100% { transform: translateX(1000px); opacity: 0; }
+        }
+
+        /* Navigation Buttons */
+        .btn-back {
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            color: #2C3E50;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-weight: 700;
+            z-index: 100;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-back:hover {
+            background: white;
+            transform: translateX(-5px);
+        }
+
+        .btn-complete {
+            background: #2ECC71;
+            color: white;
+            padding: 20px 50px;
+            border-radius: 40px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 900;
+            font-size: 18px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 15px 30px rgba(46, 204, 113, 0.3);
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-complete:hover {
+            transform: scale(1.05) translateY(-5px);
+            background: #27AE60;
+            box-shadow: 0 20px 40px rgba(46, 204, 113, 0.4);
         }
     </style>
 </head>
@@ -194,14 +262,14 @@
         <div class="lightning-flash" id="lightning"></div>
 
         <!-- Back Button -->
-        <button class="btn-pixel btn-wood btn-back" onclick="goBackToHub()">
+        <button class="btn-back" onclick="goBackToHub()">
             ← EILANDEN
         </button>
 
-        <div class="storm-title">⚡ STORM LAB - Weer Maken</div>
+        <div class="storm-title">STORM LAB</div>
         
         <div class="game-area" id="gameArea">
-            <div class="cloud-storm" id="stormCloud">☁️</div>
+            <div class="cloud-storm" id="stormCloud">🌤️</div>
             
             <div class="trees-container" id="treesContainer">
                 <div class="tree-wrapper"><span class="tree-emoji">🌲</span></div>
@@ -216,15 +284,15 @@
                 <div class="slider-track" id="sliderTrack">
                     <div class="slider-handle" id="sliderHandle"></div>
                 </div>
-                <div style="font-size: 10px; margin-top: 10px; color: #7F8C8D;">BEAUFORT</div>
+                <div style="font-size: 12px; font-weight: 900; color: #7F8C8D; letter-spacing: 1px;">BEAUFORT</div>
             </div>
             
             <div class="beaufort-label" id="beaufortLabel">WINDSTIL</div>
         </div>
         
-        <div style="position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);">
-            <button class="btn-pixel btn-glow" onclick="completeAndReturn()">
-                ✅ MISSIE VOLTOOID
+        <div style="position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); z-index: 100;">
+            <button class="btn-complete" onclick="completeAndReturn()">
+                MISSIE VOLTOOID
             </button>
         </div>
     </div>

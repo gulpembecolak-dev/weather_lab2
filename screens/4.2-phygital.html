@@ -5,18 +5,103 @@
     <title>4.2 - Phygital Opdracht | Weather Lab Kids</title>
     <link rel="stylesheet" href="../design-system.css">
     <style>
-        .phygital-screen { width: var(--screen-width); height: var(--screen-height); background: linear-gradient(135deg, #F39C12 0%, #E67E22 100%); position: relative; overflow: hidden; }
-        .phygital-panel { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(236, 240, 241, 0.98); border: 8px solid var(--wood-dark); padding: 40px; width: 700px; border-radius: 16px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5); text-align: center; }
-        .phygital-title { font-size: 28px; color: #E67E22; margin-bottom: 24px; }
-        .qr-placeholder { width: 300px; height: 300px; background: white; border: 6px solid var(--wood-dark); margin: 24px auto; display: flex; align-items: center; justify-content: center; font-size: 120px; border-radius: 16px; }
-        .phygital-text { font-size: 16px; color: var(--text-dark); line-height: 2; }
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
+
+        .phygital-screen {
+            width: var(--screen-width);
+            height: var(--screen-height);
+            background: linear-gradient(135deg, var(--sky-blue) 0%, var(--sky-light) 100%);
+            position: relative;
+            overflow: hidden;
+            font-family: var(--font-modern);
+        }
+
+        /* Modern Phygital Panel - Glassmorphism */
+        .phygital-panel {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            padding: 60px;
+            width: 800px;
+            border-radius: 40px;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            z-index: 10;
+        }
+
+        .phygital-title {
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--text-dark);
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .qr-placeholder {
+            width: 280px;
+            height: 280px;
+            background: white;
+            border: 4px solid var(--sun-yellow);
+            margin: 30px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 120px;
+            border-radius: 30px;
+            box-shadow: 0 15px 30px var(--sun-glow);
+            animation: qr-bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes qr-bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .phygital-text {
+            font-size: 18px;
+            color: var(--text-dark);
+            line-height: 1.8;
+            font-weight: 400;
+        }
+
+        .phygital-text strong {
+            font-weight: 900;
+            color: #E67E22;
+        }
+
+        /* Modern Button Override */
+        .btn-confirm {
+            width: 100%;
+            padding: 30px;
+            font-size: 26px;
+            margin-top: 30px;
+        }
+
+        /* Back Button Override */
+        .btn-back {
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            z-index: 100;
+        }
     </style>
 </head>
 <body>
     <div class="screen-container phygital-screen">
-        <button class="btn-pixel btn-wood btn-back" onclick="history.back()">← TERUG</button>
+        <!-- Modern Clouds -->
+        <div class="soft-cloud" style="width: 200px; height: 60px; top: 10%; left: -200px; animation-duration: 45s;"></div>
+        <div class="soft-cloud" style="width: 150px; height: 45px; top: 25%; left: -150px; animation-duration: 60s; animation-delay: -10s;"></div>
+        <div class="soft-cloud" style="width: 250px; height: 75px; top: 80%; left: -300px; animation-duration: 50s; animation-delay: -25s;"></div>
+
+        <button class="btn-modern btn-secondary btn-back" onclick="history.back()">← TERUG</button>
+        
         <div class="phygital-panel">
-            <div class="phygital-title">🏠 MAAK THUIS JE EIGEN WINDMETER!</div>
+            <div class="phygital-title">🏠 MAAK JE EIGEN WINDMETER!</div>
             <div class="phygital-text">
                 Scan deze QR-code met je telefoon en krijg:<br><br>
                 ✅ Stap-voor-stap instructies<br>
@@ -26,10 +111,10 @@
             <div class="qr-placeholder">
                 📱
             </div>
-            <div class="phygital-text" style="font-size: 12px; color: #7F8C8D;">
+            <div class="phygital-text" style="font-size: 14px; color: var(--text-muted); margin-top: 10px;">
                 Je ouders krijgen de PDF per e-mail!
             </div>
-            <button class="btn-pixel btn-glow" style="margin-top: 24px; width: 100%;" onclick="history.back()">
+            <button class="btn-modern btn-primary btn-confirm" onclick="history.back()">
                 GESCAND! →
             </button>
         </div>
